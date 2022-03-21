@@ -27,12 +27,12 @@ public class UserServiceController : ControllerBase
     [HttpGet("GetByName/{name}")]
     public IActionResult GetByName(string name)
     {
-        return Ok();
+        return Ok("Name: " + name);
     }
 
-    [HttpGet("GetById/{Id}")]
-    public IActionResult GetById(Guid Id)
+    [HttpGet("GetById/{id}")]
+    public IActionResult GetById(Guid id)
     {
-        return Ok();
+        return Ok("Id: " + id);
     } 
 }

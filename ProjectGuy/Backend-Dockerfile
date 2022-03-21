@@ -1,11 +1,16 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+﻿
+# cd /ProjectGuy/
+# docker build -f Backend-Dockerfile -t backend .
+# docker run -p 8080:80 backend
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Backend/Backend.csproj", "Backend/"]
+COPY ["ClassLibrary/ClassLibrary.csproj", "ClassLibrary/"]
 RUN dotnet restore "Backend/Backend.csproj"
 COPY . .
 WORKDIR "/src/Backend"

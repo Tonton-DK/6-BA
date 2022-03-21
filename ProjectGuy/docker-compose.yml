@@ -1,0 +1,37 @@
+
+# docker compose build
+# docker compose up
+
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./
+      dockerfile: Frontend-Dockerfile
+    ports:
+      - 8080:80
+    networks:
+      - frontend
+    depends_on:
+      - backend
+  backend:
+    build:
+      context: ./
+      dockerfile: Backend-Dockerfile
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - database
+  database:
+    build:
+      context: ./../database
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - backend
+
+networks:
+  frontend:
+  backend:
+  

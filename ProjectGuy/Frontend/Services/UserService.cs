@@ -7,7 +7,7 @@ public class UserService
 {
     public IEnumerable<User>? GetUsers()
     {
-        var uri = "https://localhost:7255/UserService";
+        var uri = "http://backend:80/UserService";
         return new UserBroker().GetUsers(uri);
     }
 }
