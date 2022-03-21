@@ -1,6 +1,7 @@
 
 # docker compose build
 # docker compose up
+# go to http://localhost:8080/
 
 version: '3.8'
 
