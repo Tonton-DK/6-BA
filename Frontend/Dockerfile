@@ -1,6 +1,6 @@
 ﻿
-# cd /ProjectGuy/
-# docker build -f Frontend-Dockerfile -t frontend .
+# cd /
+# docker build -f Frontend/Dockerfile -t frontend .
 # docker run -p 8080:80 frontend
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
