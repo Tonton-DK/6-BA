@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{F42BC964-EC57-412C-8219-E6847599EFA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroService", "MicroService\MicroService.csproj", "{F42BC964-EC57-412C-8219-E6847599EFA9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend", "Frontend\Frontend.csproj", "{2CF13492-E2C6-407B-81F5-55435E47DE1F}"
 EndProject

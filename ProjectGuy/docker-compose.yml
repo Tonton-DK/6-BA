@@ -19,7 +19,7 @@ services:
   backend:
     build:
       context: ./
-      dockerfile: Backend-Dockerfile
+      dockerfile: MicroService-Dockerfile
     networks:
       - frontend
       - backend
@@ -35,4 +35,3 @@ services:
 networks:
   frontend:
   backend:
-  
