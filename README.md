@@ -1,7 +1,7 @@
 # BA
 Bachelor project
 
-# Local Docker Run
+# Local Docker Run With Local Images
 ```cd /```
 
 ```docker compose build```
@@ -12,6 +12,7 @@ go to http://localhost:8080/
 
 # Local Docker Run With External Images
 ```cd /```
+
 ```docker-compose -f docker-compose-github.yml up```
 
-# Local Kubernetes Run
+# Local Kubernetes Run With External Images

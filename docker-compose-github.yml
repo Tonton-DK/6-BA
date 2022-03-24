@@ -10,7 +10,7 @@ services:
     depends_on:
       - user-service
   user-service:
-    image: ghcr.io/antje12/ba/user-database:latest
+    image: ghcr.io/antje12/ba/user-service:latest
     networks:
       - frontend
       - user-service
