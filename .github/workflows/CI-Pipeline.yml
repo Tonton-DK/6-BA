@@ -17,5 +17,5 @@ jobs:
       - name: Login to container registry
         run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
 
-      - name: Build and push User-Database image to registry
-        run: docker buildx build --push --tag User-Database ./MicroService/Database/
+      - name: Build and push user-database image to registry
+        run: docker buildx build --push --tag user-database ./MicroService/Database/
