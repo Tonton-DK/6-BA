@@ -1,79 +1,121 @@
-# http://manjaro.stream.stud-srv.sdu.dk/
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: service01
+  name: frontend
 spec:
   ports:
     - name: http
       port: 80
-      targetPort: 8080
+      protocol: TCP
+      targetPort: 80
   selector:
-    app: server-pod
+    app: frontend-pod
+  type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-deployment
+  name: frontend-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: server-pod
+      app: frontend-pod
   template:
     metadata:
       labels:
-        app: server-pod
+        app: frontend-pod
     spec:
       containers:
-      - name: server
-        #image: gitlab.sdu.dk:5050/semester-project-e2020/team-09-media-acquisition/template:develop-server
-        image: IMAGE_IS_INSERTED_USING_GITLAB-server
+      - name: frontend
+        image: ghcr.io/antje12/ba/frontend:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 8080
+        - containerPort: 80
         resources:
           requests:
             cpu: "100m"
             memory: "100Mi"
           limits:
-            cpu: "550m"
-            memory: "500Mi"
+            cpu: "200m"
+            memory: "200Mi"
       imagePullSecrets:
-      - name: sdugitlab
+      - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: user-pod
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-pod
+  template:
+    metadata:
+      labels:
+        app: user-pod
+    spec:
+      containers:
+      - name: user-service
+        image: ghcr.io/antje12/ba/user-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "100Mi"
+          limits:
+            cpu: "200m"
+            memory: "200Mi"
+      imagePullSecrets:
+      - name: regcred
 ---
   apiVersion: v1
   kind: Service
   metadata:
-    name: service02
+    name: user-database
   spec:
     ports:
       - port: 3306
         targetPort: 3306
     selector:
-      app: mysql-pod
+      app: user-database-pod
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment
+  name: user-database-deployment
 spec:
   strategy:
     type: Recreate
   replicas: 1
   selector:
     matchLabels:
-      app: mysql-pod
+      app: user-database-pod
   template:
     metadata:
       labels:
-        app: mysql-pod
+        app: user-database-pod
     spec:
       containers:
         - name: mysql
-          #image: gitlab.sdu.dk:5050/semester-project-e2020/team-09-media-acquisition/template:develop-database
-          image: IMAGE_IS_INSERTED_USING_GITLAB-database
+          image: ghcr.io/antje12/ba/user-database:latest
           args: ["--default-authentication-plugin=mysql_native_password"]
           ports:
             - containerPort: 3306
@@ -82,24 +124,24 @@ spec:
               cpu: "100m"
               memory: "400Mi"
             limits:
-              cpu: "150m"
+              cpu: "200m"
               memory: "600Mi"              
           volumeMounts:
           - name: mysql-persistent-storage
             mountPath: /var/lib/mysql
-      imagePullSecrets:
-      - name: sdugitlab
       volumes:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
           claimName: mysql-pv-claim
+      imagePullSecrets:
+      - name: regcred
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
   labels:
-      app: mysql-pod
+      app: deployment-user-database
 spec:
   accessModes:
     - ReadWriteOnce
