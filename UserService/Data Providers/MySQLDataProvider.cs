@@ -1,8 +1,8 @@
 ﻿using ClassLibrary;
-using MicroService.Interfaces;
 using MySql.Data.MySqlClient;
+using UserService.Interfaces;
 
-namespace MicroService.Data_Providers;
+namespace UserService.Data_Providers;
 
 // Guide: https://zetcode.com/csharp/mysql/
 public class MySQLDataProvider : IDataProvider

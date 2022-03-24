@@ -1,8 +1,8 @@
 using ClassLibrary;
-using MicroService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using UserService.Interfaces;
 
-namespace MicroService.Controllers;
+namespace UserService.Controllers;
 
 [ApiController]
 [Route("[controller]")]

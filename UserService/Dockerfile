@@ -9,17 +9,17 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["MicroService/MicroService.csproj", "MicroService/"]
+COPY ["UserService/UserService.csproj", "UserService/"]
 COPY ["ClassLibrary/ClassLibrary.csproj", "ClassLibrary/"]
-RUN dotnet restore "MicroService/MicroService.csproj"
+RUN dotnet restore "UserService/UserService.csproj"
 COPY . .
-WORKDIR "/src/MicroService"
-RUN dotnet build "MicroService.csproj" -c Release -o /app/build
+WORKDIR "/src/UserService"
+RUN dotnet build "UserService.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "MicroService.csproj" -c Release -o /app/publish
+RUN dotnet publish "UserService.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "MicroService.dll"]
+ENTRYPOINT ["dotnet", "UserService.dll"]

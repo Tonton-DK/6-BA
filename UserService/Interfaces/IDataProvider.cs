@@ -1,6 +1,6 @@
 ﻿using ClassLibrary;
 
-namespace MicroService.Interfaces;
+namespace UserService.Interfaces;
 
 public interface IDataProvider
 {

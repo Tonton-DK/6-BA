@@ -10,11 +10,11 @@ services:
     networks:
       - frontend
     depends_on:
-      - backend
-  backend:
+      - user-service
+  user-service:
     build:
       context: ./
-      dockerfile: MicroService/Dockerfile
+      dockerfile: UserService/Dockerfile
     networks:
       - frontend
       - backend
@@ -22,7 +22,7 @@ services:
       - database
   database:
     build:
-      context: ./MicroService/Database
+      context: ./UserService/Database
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - backend

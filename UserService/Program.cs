@@ -1,5 +1,5 @@
-using MicroService.Data_Providers;
-using MicroService.Interfaces;
+using UserService.Data_Providers;
+using UserService.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
