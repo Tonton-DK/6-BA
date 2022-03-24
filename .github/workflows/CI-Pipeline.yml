@@ -21,7 +21,7 @@ jobs:
         run: docker buildx build --push --tag ghcr.io/antje12/ba/user-database ./UserService/Database/
 
       - name: Build and push user-service image to registry
-        run: docker buildx build --push --tag ghcr.io/antje12/ba/user-service ./UserService/
+        run: docker buildx build --push --file UserService/Dockerfile --tag ghcr.io/antje12/ba/user-service .
 
       - name: Build and push frontend image to registry
-        run: docker buildx build --push --tag ghcr.io/antje12/ba/frontend ./Frontend/
+        run: docker buildx build --push --file Frontend/Dockerfile --tag ghcr.io/antje12/ba/frontend .
