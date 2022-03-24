@@ -2,11 +2,11 @@
 Bachelor project
 
 # Local Docker Run
-cd /
+```cd /```
 
-docker compose build
+```docker compose build```
 
-docker compose up
+```docker compose up```
 
 go to http://localhost:8080/
 
