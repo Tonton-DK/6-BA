@@ -53,22 +53,22 @@ spec:
       protocol: TCP
       targetPort: 80
   selector:
-    app: user-pod
+    app: user-service-pod
   type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-deployment
+  name: user-service-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-pod
+      app: user-service-pod
   template:
     metadata:
       labels:
-        app: user-pod
+        app: user-service-pod
     spec:
       containers:
       - name: user-service
@@ -141,7 +141,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
   labels:
-      app: deployment-user-database
+      app: user-database-pod
 spec:
   accessModes:
     - ReadWriteOnce
