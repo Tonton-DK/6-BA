@@ -9,7 +9,7 @@ public class MySQLDataProvider : IDataProvider
 {
     public List<User> GetUsers()
     {
-        string cs = @"server=database;userid=root;password=;database=test";
+        string cs = @"server=user-database;userid=root;password=;database=test";
 
         using var con = new MySqlConnection(cs);
         con.Open();

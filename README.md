@@ -10,4 +10,8 @@ Bachelor project
 
 go to http://localhost:8080/
 
+# Local Docker Run With External Images
+```cd /```
+```docker-compose -f docker-compose-github.yml up```
+
 # Local Kubernetes Run

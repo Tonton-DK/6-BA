@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   frontend:
-    build:
-      context: ./
-      dockerfile: Frontend/Dockerfile
+    image: ghcr.io/antje12/ba/frontend:latest
     ports:
       - 8080:80
     networks:
@@ -12,17 +10,14 @@ services:
     depends_on:
       - user-service
   user-service:
-    build:
-      context: ./
-      dockerfile: UserService/Dockerfile
+    image: ghcr.io/antje12/ba/user-database:latest
     networks:
       - frontend
       - user-service
     depends_on:
       - user-database
   user-database:
-    build:
-      context: ./UserService/Database
+    image: ghcr.io/antje12/ba/user-database:latest
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - user-service
