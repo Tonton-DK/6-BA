@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ukskcpC+bkcF4T3moIDgGxeowraaKcJTvvC0h6/JWQOv+D04MrGd8CQcmsTvsFEdADY42LcpWsqAaOkF28ZipQ==",
+  "dgSpecHash": "sgn13PTrDoQ70Ssy5k+c1qJCwboKYGikap2FnphMhf9Xs43KblhVlijgmafc5I5uPlamnBuWEDskPC/slWU/Pg==",
   "success": true,
-  "projectFilePath": "D:\\Git\\BA\\ProjectGuy\\Frontend\\Frontend.csproj",
+  "projectFilePath": "D:\\Git\\BA\\Frontend\\Frontend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Bruger\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.7\\microsoft.aspnet.webapi.client.5.2.7.nupkg.sha512",
     "C:\\Users\\Bruger\\.nuget\\packages\\microsoft.csharp\\4.3.0\\microsoft.csharp.4.3.0.nupkg.sha512",

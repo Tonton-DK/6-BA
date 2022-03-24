@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qB1WxeaIiTPOMODnzqALKuLu5Z6lyl/ZsMZMCJ+qMkO32MtaONkHHaWve+8qJCuPLCL4+ThdLh9DnY0Ii8ELOg==",
+  "dgSpecHash": "SK3j2jBeZFWii8Z3fE+ntUo2uwpvv3i02FTLFgTed6BDMPlkm1Hpda/TMSsMP34kXT5wZhtoN/sI8J2W57U7Xw==",
   "success": true,
-  "projectFilePath": "D:\\Git\\BA\\ProjectGuy\\ClassLibrary\\ClassLibrary.csproj",
+  "projectFilePath": "D:\\Git\\BA\\ClassLibrary\\ClassLibrary.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

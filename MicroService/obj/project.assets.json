@@ -1071,11 +1071,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Git\\BA\\ProjectGuy\\MicroService\\MicroService.csproj",
+      "projectUniqueName": "D:\\Git\\BA\\MicroService\\MicroService.csproj",
       "projectName": "MicroService",
-      "projectPath": "D:\\Git\\BA\\ProjectGuy\\MicroService\\MicroService.csproj",
+      "projectPath": "D:\\Git\\BA\\MicroService\\MicroService.csproj",
       "packagesPath": "C:\\Users\\Bruger\\.nuget\\packages\\",
-      "outputPath": "D:\\Git\\BA\\ProjectGuy\\MicroService\\obj\\",
+      "outputPath": "D:\\Git\\BA\\MicroService\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Bruger\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -1090,8 +1090,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\Git\\BA\\ProjectGuy\\ClassLibrary\\ClassLibrary.csproj": {
-              "projectPath": "D:\\Git\\BA\\ProjectGuy\\ClassLibrary\\ClassLibrary.csproj"
+            "D:\\Git\\BA\\ClassLibrary\\ClassLibrary.csproj": {
+              "projectPath": "D:\\Git\\BA\\ClassLibrary\\ClassLibrary.csproj"
             }
           }
         }

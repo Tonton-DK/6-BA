@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "u7cdjjQaXaJFdU9llhQ0dXl2hYAM4OQjMDn98ZmkFTF8slRpcWtlRPhGHg72G4FjStczscBxyHAmLcYGdMTI4w==",
+  "dgSpecHash": "NhelxlQZt8Ibylm1iWDmvPMNcutwsWyqtslGQxUvYjnMW2aEr1h6/RW8BDgVStvgv27Ds9qJVpc5PhWKOFmftA==",
   "success": true,
-  "projectFilePath": "D:\\Git\\BA\\ProjectGuy\\MicroService\\MicroService.csproj",
+  "projectFilePath": "D:\\Git\\BA\\MicroService\\MicroService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Bruger\\.nuget\\packages\\bouncycastle.netcore\\1.8.5\\bouncycastle.netcore.1.8.5.nupkg.sha512",
     "C:\\Users\\Bruger\\.nuget\\packages\\google.protobuf\\3.14.0\\google.protobuf.3.14.0.nupkg.sha512",

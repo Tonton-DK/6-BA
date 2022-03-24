@@ -1,0 +1,109 @@
+# http://manjaro.stream.stud-srv.sdu.dk/
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service01
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  selector:
+    app: server-pod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server-pod
+  template:
+    metadata:
+      labels:
+        app: server-pod
+    spec:
+      containers:
+      - name: server
+        #image: gitlab.sdu.dk:5050/semester-project-e2020/team-09-media-acquisition/template:develop-server
+        image: IMAGE_IS_INSERTED_USING_GITLAB-server
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "100Mi"
+          limits:
+            cpu: "550m"
+            memory: "500Mi"
+      imagePullSecrets:
+      - name: sdugitlab
+---
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: service02
+  spec:
+    ports:
+      - port: 3306
+        targetPort: 3306
+    selector:
+      app: mysql-pod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-pod
+  template:
+    metadata:
+      labels:
+        app: mysql-pod
+    spec:
+      containers:
+        - name: mysql
+          #image: gitlab.sdu.dk:5050/semester-project-e2020/team-09-media-acquisition/template:develop-database
+          image: IMAGE_IS_INSERTED_USING_GITLAB-database
+          args: ["--default-authentication-plugin=mysql_native_password"]
+          ports:
+            - containerPort: 3306
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "400Mi"
+            limits:
+              cpu: "150m"
+              memory: "600Mi"              
+          volumeMounts:
+          - name: mysql-persistent-storage
+            mountPath: /var/lib/mysql
+      imagePullSecrets:
+      - name: sdugitlab
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+      app: mysql-pod
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi

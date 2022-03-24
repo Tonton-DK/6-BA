@@ -14,7 +14,6 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        
         var sql = "INSERT INTO User(Firstname, Lastname) VALUES(@fn, @ln)";
         using var cmd = new MySqlCommand(sql, con);
 
@@ -25,8 +24,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.ExecuteNonQuery();
 
         Console.WriteLine("row inserted");
-        
-        
+
         var stm = "SELECT * FROM User";
         using var new_cmd = new MySqlCommand(stm, con);
 

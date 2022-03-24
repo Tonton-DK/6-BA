@@ -5301,11 +5301,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Git\\BA\\ProjectGuy\\Frontend\\Frontend.csproj",
+      "projectUniqueName": "D:\\Git\\BA\\Frontend\\Frontend.csproj",
       "projectName": "Frontend",
-      "projectPath": "D:\\Git\\BA\\ProjectGuy\\Frontend\\Frontend.csproj",
+      "projectPath": "D:\\Git\\BA\\Frontend\\Frontend.csproj",
       "packagesPath": "C:\\Users\\Bruger\\.nuget\\packages\\",
-      "outputPath": "D:\\Git\\BA\\ProjectGuy\\Frontend\\obj\\",
+      "outputPath": "D:\\Git\\BA\\Frontend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Bruger\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -5320,8 +5320,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\Git\\BA\\ProjectGuy\\ClassLibrary\\ClassLibrary.csproj": {
-              "projectPath": "D:\\Git\\BA\\ProjectGuy\\ClassLibrary\\ClassLibrary.csproj"
+            "D:\\Git\\BA\\ClassLibrary\\ClassLibrary.csproj": {
+              "projectPath": "D:\\Git\\BA\\ClassLibrary\\ClassLibrary.csproj"
             }
           }
         }

@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Git\\BA\\ProjectGuy\\ClassLibrary\\ClassLibrary.csproj",
+      "projectUniqueName": "D:\\Git\\BA\\ClassLibrary\\ClassLibrary.csproj",
       "projectName": "ClassLibrary",
-      "projectPath": "D:\\Git\\BA\\ProjectGuy\\ClassLibrary\\ClassLibrary.csproj",
+      "projectPath": "D:\\Git\\BA\\ClassLibrary\\ClassLibrary.csproj",
       "packagesPath": "C:\\Users\\Bruger\\.nuget\\packages\\",
-      "outputPath": "D:\\Git\\BA\\ProjectGuy\\ClassLibrary\\obj\\",
+      "outputPath": "D:\\Git\\BA\\ClassLibrary\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Bruger\\AppData\\Roaming\\NuGet\\NuGet.Config"
