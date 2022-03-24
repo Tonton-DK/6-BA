@@ -1,0 +1,21 @@
+name: Build and deploy action
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build-and-deploy-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+
+      - name: Build and push User-Database image to registry
+        run: docker buildx build --push --tag User-Database ./MicroService/Database/
