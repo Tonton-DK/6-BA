@@ -25,3 +25,26 @@ jobs:
 
       - name: Build and push frontend image to registry
         run: docker buildx build --push --file Frontend/Dockerfile --tag ghcr.io/antje12/ba/frontend .
+  
+  #Production-Deploy:
+  #  name: production deploy job
+  #  runs-on: self-hosted
+  #  needs: [Test-Environment-Health-Test]
+  #  if: github.ref == 'refs/heads/main'
+  #  steps:
+  #    - name: Checkout
+  #      uses: actions/checkout@v2
+  #    - name: Change frotnend deploy file tags
+  #      run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" ./kubernetes/prod-env/deployment-frontend.yaml
+  #    - name: Change backend deploy file tags
+  #      run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" ./kubernetes/prod-env/deployment-backend.yaml
+  #    - name: Deploy to Kubernetes
+  #      run: >- 
+  #        kubectl apply 
+  #        -f ./kubernetes/prod-env/pvc-redis.yaml
+  #        -f ./kubernetes/prod-env/deployment-redis.yaml
+  #        -f ./kubernetes/prod-env/service-redis.yaml
+  #        -f ./kubernetes/prod-env/deployment-backend.yaml
+  #        -f ./kubernetes/prod-env/service-backend.yaml
+  #        -f ./kubernetes/prod-env/deployment-frontend.yaml
+  #        -f ./kubernetes/prod-env/service-frontend.yaml
