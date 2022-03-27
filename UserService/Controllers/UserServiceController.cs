@@ -1,4 +1,5 @@
 using ClassLibrary;
+using ClassLibrary.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using UserService.Interfaces;
 
@@ -6,7 +7,7 @@ namespace UserService.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserServiceController : ControllerBase
+public class UserServiceController : ControllerBase, IUserService
 {
     private readonly ILogger<UserServiceController> _logger;
     private readonly IDataProvider _dataProvider;

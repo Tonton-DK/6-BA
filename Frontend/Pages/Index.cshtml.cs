@@ -1,6 +1,5 @@
 ﻿using ClassLibrary;
-using Frontend.Data_Providers;
-using Frontend.Services;
+using ClassLibrary.Interfaces;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages;
@@ -8,11 +7,11 @@ namespace Frontend.Pages;
 public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
 
     public IEnumerable<User> Users { get; private set; }
     
-    public IndexModel(ILogger<IndexModel> logger, UserService userService)
+    public IndexModel(ILogger<IndexModel> logger, IUserService userService)
     {
         _logger = logger;
         _userService = userService;
@@ -20,7 +19,6 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
-        Users = _userService.GetUsers();
-        if (Users == null) return;
+        Users = _userService.Get();
     }
 }

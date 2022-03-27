@@ -1,14 +1,16 @@
 ﻿using ClassLibrary;
+using ClassLibrary.Interfaces;
 
-namespace Frontend.Data_Providers;
+namespace Frontend.Data_Brokers;
 
-public class UserBroker
+public class UserBroker : IUserService
 {
     private static readonly HttpClient Client = new HttpClient();
     
     // In order to display the forecasts on our page, we need to get them from the API
-    public IEnumerable<User>? GetUsers(string uri)
+    public IEnumerable<User> Get()
     {
+        var uri = "http://user-service:80/UserService";
         var t = WebApiClient(uri, Client);
         if (t != null) return new List<User>(t.Result);
         return null;

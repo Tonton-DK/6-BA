@@ -1,10 +1,11 @@
-using Frontend.Services;
+using ClassLibrary.Interfaces;
+using Frontend.Data_Brokers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddTransient<UserService>();
+builder.Services.AddTransient<IUserService, UserBroker>();
 
 var app = builder.Build();
 
