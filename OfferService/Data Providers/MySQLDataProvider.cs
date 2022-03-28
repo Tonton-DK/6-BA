@@ -1,8 +1,8 @@
 ﻿using ClassLibrary;
 using MySql.Data.MySqlClient;
-using UserService.Interfaces;
+using OfferService.Interfaces;
 
-namespace UserService.Data_Providers;
+namespace OfferService.Data_Providers;
 
 // Guide: https://zetcode.com/csharp/mysql/
 public class MySQLDataProvider : IDataProvider
@@ -14,17 +14,23 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        var sql = "INSERT INTO User(Firstname, Lastname) VALUES(@fn, @ln)";
+        // Insert test data
+        var sql = "INSERT INTO Offer(OfferId, JobId, ProviderId, Price, Duration, Date) VALUES(@OfferId, @JobId, @ProviderId, @Price, @Duration, @Date)";
         using var cmd = new MySqlCommand(sql, con);
 
-        cmd.Parameters.AddWithValue("@fn", "John");
-        cmd.Parameters.AddWithValue("@ln", "Doe");
+        cmd.Parameters.AddWithValue("@OfferId", Guid.NewGuid());
+        cmd.Parameters.AddWithValue("@JobId", Guid.NewGuid());
+        cmd.Parameters.AddWithValue("@ProviderId", Guid.NewGuid());
+        cmd.Parameters.AddWithValue("@Price", "400");
+        cmd.Parameters.AddWithValue("@Duration", "2 Hours");
+        cmd.Parameters.AddWithValue("@Date", DateTime.Today);
         cmd.Prepare();
 
         cmd.ExecuteNonQuery();
 
         Console.WriteLine("row inserted");
 
+        // Get test data
         var stm = "SELECT * FROM Offer";
         using var new_cmd = new MySqlCommand(stm, con);
 

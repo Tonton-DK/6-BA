@@ -1,9 +1,9 @@
 using ClassLibrary;
 using ClassLibrary.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using UserService.Interfaces;
+using OfferService.Interfaces;
 
-namespace UserService.Controllers;
+namespace OfferService.Controllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -23,12 +23,6 @@ public class OfferServiceController : ControllerBase, IOfferService
     {
         var offers = _dataProvider.GetOffers();
         return offers.ToArray();
-    }
-
-    [HttpGet("GetByName/{name}")]
-    public IActionResult GetByName(string name)
-    {
-        return Ok("Name: " + name);
     }
 
     [HttpGet("GetById/{id}")]

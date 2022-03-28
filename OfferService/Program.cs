@@ -1,5 +1,5 @@
-using UserService.Data_Providers;
-using UserService.Interfaces;
+using OfferService.Data_Providers;
+using OfferService.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,6 @@
 ﻿using ClassLibrary;
 
-namespace UserService.Interfaces;
+namespace OfferService.Interfaces;
 
 public interface IDataProvider
 {
