@@ -13,7 +13,7 @@ public class IndexModel : PageModel
 
     public IEnumerable<User> Users { get; private set; }
     public IEnumerable<Job> Jobs { get; private set; }
-    public IEnumerable<Offer> Offers { get; private set; }
+    public IEnumerable<Offer>? Offers { get; private set; }
     
     public IndexModel(ILogger<IndexModel> logger, IUserService userService, IJobService jobService, IOfferService offerService)
     {
@@ -27,6 +27,21 @@ public class IndexModel : PageModel
     {
         Users = _userService.Get();
         Jobs = _jobService.Get();
-        Offers = _offerService.Get();
+        Offers = TestOffers();
+    }
+
+    // Create test offer and load it afterwards
+    IEnumerable<Offer>? TestOffers()
+    {
+
+        _offerService.Create(new Offer(
+                Guid.Empty, 
+                Jobs.ToArray()[0].Id, 
+                Users.ToArray()[0].Id, 
+                400, 
+                "2 Hours", 
+                DateTime.Now));
+        
+        return _offerService.List(Jobs.ToArray()[0].Id);
     }
 }

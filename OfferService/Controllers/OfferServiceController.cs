@@ -18,20 +18,18 @@ public class OfferServiceController : ControllerBase, IOfferService
         _dataProvider = dataProvider;
     }
 
-    [HttpPut("Create/{offer}")]
-    public Offer? Create(Offer offer)
+    [HttpPost("Create")]
+    public Offer? Create([FromBody]Offer offer)
     {
         return _dataProvider.Create(offer);
     }
-
-    // Done
+    
     [HttpGet("Get/{id}")]
     public Offer? Get(Guid id)
     {
         return _dataProvider.Get(id);
     }
-
-    // Done
+    
     [HttpGet("List/{jobId}")]
     public IEnumerable<Offer> List(Guid jobId)
     {
@@ -39,13 +37,12 @@ public class OfferServiceController : ControllerBase, IOfferService
         return offers.ToArray();
     }
 
-    [HttpPost("Get/{offer}")]
-    public Offer? Update(Offer offer)
+    [HttpPut("Update")]
+    public Offer? Update([FromBody]Offer offer)
     {
         return _dataProvider.Update(offer);
     }
 
-    // Done
     [HttpDelete("Delete/{id}")]
     public bool Delete(Guid id)
     {
