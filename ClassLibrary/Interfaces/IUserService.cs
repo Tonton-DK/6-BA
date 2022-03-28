@@ -1,4 +1,6 @@
-﻿namespace ClassLibrary.Interfaces;
+﻿using ClassLibrary.Classes;
+
+namespace ClassLibrary.Interfaces;
 
 public interface IUserService
 {

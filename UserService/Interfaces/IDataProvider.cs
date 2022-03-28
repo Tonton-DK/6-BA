@@ -1,4 +1,4 @@
-﻿using ClassLibrary;
+﻿using ClassLibrary.Classes;
 
 namespace UserService.Interfaces;
 

@@ -2,7 +2,7 @@
 
 namespace ClassLibrary.Interfaces;
 
-public interface IJobService
+public interface IOfferService
 {
-    public IEnumerable<Job> Get();
+    public IEnumerable<Offer> Get();
 }

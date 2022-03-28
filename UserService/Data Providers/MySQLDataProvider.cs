@@ -1,4 +1,4 @@
-﻿using ClassLibrary;
+﻿using ClassLibrary.Classes;
 using MySql.Data.MySqlClient;
 using UserService.Interfaces;
 

@@ -1,4 +1,4 @@
-﻿using ClassLibrary;
+﻿using ClassLibrary.Classes;
 using JobService.Interfaces;
 using MySql.Data.MySqlClient;
 

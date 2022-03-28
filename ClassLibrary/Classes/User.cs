@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary;
+﻿namespace ClassLibrary.Classes;
 
 public class User
 {
