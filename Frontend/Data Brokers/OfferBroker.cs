@@ -1,4 +1,4 @@
-using ClassLibrary;
+using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
 
 namespace Frontend.Data_Brokers;

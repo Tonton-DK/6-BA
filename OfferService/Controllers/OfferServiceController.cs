@@ -1,4 +1,4 @@
-using ClassLibrary;
+using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using OfferService.Interfaces;

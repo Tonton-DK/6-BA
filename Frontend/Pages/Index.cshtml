@@ -50,3 +50,28 @@
         }
     </ul>
 </div>
+
+<div class="align-left">
+    <br/>
+    <h3>Offers from service:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.Offers != null)
+            {
+                foreach (var offer in Model.Offers)
+                {
+                    <li>
+                        <h4>@offer.Id</h4>
+                        <p>Job ID: @offer.JobId</p>
+                        <p>Provider ID: @offer.ProviderId</p>
+                        <p>Provider ID: @offer.PreviousOfferId</p>
+                        <p>Price: @offer.Price</p>
+                        <p>Duration: @offer.Duration</p>
+                        <p>Date: @offer.Date</p>
+                    </li>
+                }
+            }
+        }
+    </ul>
+</div>
