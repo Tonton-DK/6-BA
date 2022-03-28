@@ -1,6 +1,6 @@
 namespace ClassLibrary.Interfaces;
 
-public class IOfferService
+public interface IOfferService
 {
-    
+    public IEnumerable<Offer> Get();
 }

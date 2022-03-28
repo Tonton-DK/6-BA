@@ -10,7 +10,7 @@ public class UserBroker : IUserService
     // In order to display the forecasts on our page, we need to get them from the API
     public IEnumerable<User> Get()
     {
-        var uri = "http://user-service:80/UserService";
+        var uri = "http://user-service:80/OfferOfferService";
         var t = WebApiClient(uri, Client);
         if (t != null) return new List<User>(t.Result);
         return null;
