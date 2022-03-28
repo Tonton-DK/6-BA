@@ -9,34 +9,61 @@ public class MySQLDataProvider : IDataProvider
 {
     private static string cs = @"server=offer-database;userid=root;password=;database=test";
 
-    public Offer Create(Offer offer)
+    public Offer? Create(Offer offer)
     {
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        var sql = "INSERT INTO Offer(OfferId, ParentJobId, ProviderId, PreviousOfferId, Price, Duration, Date) VALUES(@OfferId, @ParentJobId, @ProviderId, @PreviousOfferId, @Price, @Duration, @Date)";
+        var sql = "INSERT INTO Offer(ID, JobId, ProviderId, PreviousOfferId, Price, Duration, Date) VALUES(@id, @jobId, @providerId, @previousOfferId, @price, @duration, @date)";
         using var cmd = new MySqlCommand(sql, con);
 
-        Guid id = Guid.NewGuid();
-        offer.Id = id; 
+        offer.Id = Guid.NewGuid(); 
         
-        cmd.Parameters.AddWithValue("@OfferId", offer.Id);
-        cmd.Parameters.AddWithValue("@ParentJobId", offer.JobId);
-        cmd.Parameters.AddWithValue("@ProviderId", offer.ProviderId);
-        cmd.Parameters.AddWithValue("@PreviousOfferId", offer.PreviousOfferId ?? (object) DBNull.Value);
-        cmd.Parameters.AddWithValue("@Price", offer.Price);
-        cmd.Parameters.AddWithValue("@Duration", offer.Duration);
-        cmd.Parameters.AddWithValue("@Date", offer.Date);
+        cmd.Parameters.AddWithValue("@id", offer.Id);
+        cmd.Parameters.AddWithValue("@jobId", offer.JobId);
+        cmd.Parameters.AddWithValue("@providerId", offer.ProviderId);
+        cmd.Parameters.AddWithValue("@previousOfferId", offer.PreviousOfferId ?? (object) DBNull.Value);
+        cmd.Parameters.AddWithValue("@price", offer.Price);
+        cmd.Parameters.AddWithValue("@duration", offer.Duration);
+        cmd.Parameters.AddWithValue("@date", offer.Date);
         cmd.Prepare();
 
-        cmd.ExecuteNonQuery();
+        var result = cmd.ExecuteNonQuery();
 
-        return offer;
+        return result > 0 ? offer : null;
     }
 
-    public Offer Get(Guid id)
+    public Offer? Get(Guid id)
     {
-        throw new NotImplementedException();
+        using var con = new MySqlConnection(cs);
+        con.Open();
+        
+        var sql = "SELECT * FROM Offer WHERE Offer.ID = @id";
+        using var cmd = new MySqlCommand(sql, con);
+        
+        cmd.Parameters.AddWithValue("@id", id);
+
+        using MySqlDataReader rdr = cmd.ExecuteReader();
+
+        if (rdr.Read())
+        {
+            var offer = new Offer(
+                rdr.GetGuid(0),
+                rdr.GetGuid(1),
+                rdr.GetGuid(2),
+                rdr.GetInt32(4), 
+                rdr.GetString(5), 
+                rdr.GetDateTime(6));
+            
+            if(!rdr.IsDBNull(3))
+            {
+                offer.PreviousOfferId = rdr.GetGuid(3);
+            }
+
+            return offer;
+        }
+
+        return null;
     }
 
     public List<Offer> List(Guid jobId)
@@ -44,12 +71,12 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        var stm = "SELECT * FROM Offer WHERE ParentJobId = @JobId";
-        using var new_cmd = new MySqlCommand(stm, con);
+        var sql = "SELECT * FROM Offer WHERE Offer.JobId = @jobId";
+        using var cmd = new MySqlCommand(sql, con);
         
-        new_cmd.Parameters.AddWithValue("@JobId", jobId);
+        cmd.Parameters.AddWithValue("@jobId", jobId);
 
-        using MySqlDataReader rdr = new_cmd.ExecuteReader();
+        using MySqlDataReader rdr = cmd.ExecuteReader();
 
         var offers = new List<Offer>();
         
@@ -74,9 +101,25 @@ public class MySQLDataProvider : IDataProvider
         return offers;
     }
 
-    public Offer Update(Offer offer)
+    public Offer? Update(Offer offer)
     {
-        throw new NotImplementedException();
+        using var con = new MySqlConnection(cs);
+        con.Open();
+        
+        var sql = "UPDATE Offer SET Offer.JobId = @jobId, Offer.ProviderId = @providerId, Offer.PreviousOfferId = @previousOfferId, Offer.Price = @price, Offer.Duration = @duration, Offer.Date = @date WHERE Offer.ID = @id";
+        using var cmd = new MySqlCommand(sql, con);
+        
+        cmd.Parameters.AddWithValue("@jobId", offer.JobId);
+        cmd.Parameters.AddWithValue("@providerId", offer.ProviderId);
+        cmd.Parameters.AddWithValue("@previousOfferId", offer.PreviousOfferId ?? (object) DBNull.Value);
+        cmd.Parameters.AddWithValue("@price", offer.Price);
+        cmd.Parameters.AddWithValue("@duration", offer.Duration);
+        cmd.Parameters.AddWithValue("@date", offer.Date);
+        cmd.Prepare();
+
+        var result = cmd.ExecuteNonQuery();
+
+        return result > 0 ? offer : null;
     }
 
     public bool Delete(Guid id)
