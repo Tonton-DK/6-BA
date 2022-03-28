@@ -42,6 +42,7 @@ public class MySQLDataProvider : IDataProvider
         using var cmd = new MySqlCommand(sql, con);
         
         cmd.Parameters.AddWithValue("@id", id);
+        cmd.Prepare();
 
         using MySqlDataReader rdr = cmd.ExecuteReader();
 
@@ -75,6 +76,7 @@ public class MySQLDataProvider : IDataProvider
         using var cmd = new MySqlCommand(sql, con);
         
         cmd.Parameters.AddWithValue("@jobId", jobId);
+        cmd.Prepare();
 
         using MySqlDataReader rdr = cmd.ExecuteReader();
 
@@ -124,6 +126,17 @@ public class MySQLDataProvider : IDataProvider
 
     public bool Delete(Guid id)
     {
-        throw new NotImplementedException();
+        using var con = new MySqlConnection(cs);
+        con.Open();
+        
+        var sql = "DELETE * FROM Offer WHERE Offer.ID = @id";
+        using var cmd = new MySqlCommand(sql, con);
+        
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Prepare();
+        
+        var result = cmd.ExecuteNonQuery();
+
+        return result > 0;
     }
 }
