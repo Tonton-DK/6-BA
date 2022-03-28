@@ -1,28 +1,28 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
+using JobService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using UserService.Interfaces;
 
-namespace UserService.Controllers;
+namespace JobService.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserServiceController : ControllerBase, IUserService
+public class JobServiceController : ControllerBase, IJobService
 {
-    private readonly ILogger<UserServiceController> _logger;
+    private readonly ILogger<JobServiceController> _logger;
     private readonly IDataProvider _dataProvider;
 
-    public UserServiceController(ILogger<UserServiceController> logger, IDataProvider dataProvider)
+    public JobServiceController(ILogger<JobServiceController> logger, IDataProvider dataProvider)
     {
         _logger = logger;
         _dataProvider = dataProvider;
     }
 
     [HttpGet]
-    public IEnumerable<User> Get()
+    public IEnumerable<Job> Get()
     {
-        var users = _dataProvider.GetUsers();
-        return users.ToArray();
+        var jobs = _dataProvider.GetJobs();
+        return jobs.ToArray();
     }
 
     [HttpGet("GetByName/{name}")]

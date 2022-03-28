@@ -2,7 +2,7 @@
 
 namespace ClassLibrary.Interfaces;
 
-public interface IUserService
+public interface IReviewService
 {
-    public IEnumerable<User> Get();
+    public IEnumerable<Review> Get();
 }

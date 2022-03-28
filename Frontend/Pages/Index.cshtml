@@ -11,7 +11,7 @@
 
 <div class="align-left">
     <br/>
-    <h3>Data received from the Weather API:</h3>
+    <h3>Users from service:</h3>
     <br/>
     <ul>
         @{
@@ -23,6 +23,27 @@
                         <h4>@user.Id</h4>
                         <p>First Name: @user.FirstName</p>
                         <p>Last Name: @user.LastName</p>
+                    </li>
+                }
+            }
+        }
+    </ul>
+</div>
+
+<div class="align-left">
+    <br/>
+    <h3>Jobs from service:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.Jobs != null)
+            {
+                foreach (var job in Model.Jobs)
+                {
+                    <li>
+                        <h4>@job.Id</h4>
+                        <p>First Name: @job.Title</p>
+                        <p>Last Name: @job.Description</p>
                     </li>
                 }
             }
