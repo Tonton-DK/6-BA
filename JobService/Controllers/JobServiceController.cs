@@ -31,7 +31,7 @@ public class JobServiceController : ControllerBase//, IJobService
     }
     
     [HttpPost("CreateJob")]
-    public Job? CreateJob(Job job)
+    public Job? CreateJob([FromBody] Job job)
     {
         return null;
     }
@@ -42,14 +42,14 @@ public class JobServiceController : ControllerBase//, IJobService
         return null;
     }
 
-    [HttpGet("ListJobs")]
-    public IEnumerable<Job> ListJobs(Filter filter)
+    [HttpPost("ListJobs")]
+    public IEnumerable<Job> ListJobs([FromBody] Filter filter)
     {
         return null;
     }
     
     [HttpPut("UpdateJob")]
-    public Job? UpdateJob(Job job)
+    public Job? UpdateJob([FromBody] Job job)
     {
         return null;
     }
