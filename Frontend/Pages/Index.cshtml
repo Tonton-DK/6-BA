@@ -65,7 +65,7 @@
                         <h4>@offer.Id</h4>
                         <p>Job ID: @offer.JobId</p>
                         <p>Provider ID: @offer.ProviderId</p>
-                        <p>Provider ID: @offer.PreviousOfferId</p>
+                        <p>Previous Offer ID: @(offer.PreviousOfferId?.ToString() ?? "No previous offer")</p>
                         <p>Price: @offer.Price</p>
                         <p>Duration: @offer.Duration</p>
                         <p>Date: @offer.Date</p>

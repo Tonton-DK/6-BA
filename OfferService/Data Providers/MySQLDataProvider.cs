@@ -7,7 +7,7 @@ namespace OfferService.Data_Providers;
 // Guide: https://zetcode.com/csharp/mysql/
 public class MySQLDataProvider : IDataProvider
 {
-    public List<Offer> GetOffers()
+    public List<Offer> GetOffers(Guid JobId)
     {
         string cs = @"server=offer-database;userid=root;password=;database=test";
 
@@ -15,11 +15,11 @@ public class MySQLDataProvider : IDataProvider
         con.Open();
         
         // Insert test data
-        var sql = "INSERT INTO Offer(OfferId, JobId, ProviderId, Price, Duration, Date) VALUES(@OfferId, @JobId, @ProviderId, @Price, @Duration, @Date)";
+        var sql = "INSERT INTO Offer(OfferId, ParentJobId, ProviderId, Price, Duration, Date) VALUES(@OfferId, @ParentJobId, @ProviderId, @Price, @Duration, @Date)";
         using var cmd = new MySqlCommand(sql, con);
 
         cmd.Parameters.AddWithValue("@OfferId", Guid.NewGuid());
-        cmd.Parameters.AddWithValue("@JobId", Guid.NewGuid());
+        cmd.Parameters.AddWithValue("@ParentJobId", JobId);
         cmd.Parameters.AddWithValue("@ProviderId", Guid.NewGuid());
         cmd.Parameters.AddWithValue("@Price", "400");
         cmd.Parameters.AddWithValue("@Duration", "2 Hours");
@@ -31,8 +31,10 @@ public class MySQLDataProvider : IDataProvider
         Console.WriteLine("row inserted");
 
         // Get test data
-        var stm = "SELECT * FROM Offer";
+        var stm = "SELECT * FROM Offer WHERE ParentJobId = @JobId";
         using var new_cmd = new MySqlCommand(stm, con);
+        
+        new_cmd.Parameters.AddWithValue("@JobId", JobId);
 
         using MySqlDataReader rdr = new_cmd.ExecuteReader();
 
@@ -41,12 +43,18 @@ public class MySQLDataProvider : IDataProvider
         while (rdr.Read())
         {
             var offer = new Offer(
-                rdr.GetInt32(0),
-                rdr.GetInt32(0),
-                rdr.GetInt32(0),
-                rdr.GetInt32(0), 
-                rdr.GetString(1), 
-                rdr.GetDateTime(2));
+                rdr.GetGuid(0),
+                rdr.GetGuid(1),
+                rdr.GetGuid(2),
+                rdr.GetInt32(4), 
+                rdr.GetString(5), 
+                rdr.GetDateTime(6));
+            
+            if(!rdr.IsDBNull(3))
+            {
+                offer.PreviousOfferId = rdr.GetGuid(3);
+            }
+            
             offers.Add(offer);
         }
 
