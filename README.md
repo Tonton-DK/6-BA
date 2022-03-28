@@ -15,6 +15,8 @@ go to http://localhost:8080/
 
 ```docker-compose -f docker-compose-github.yml up```
 
+go to http://localhost:8080/
+
 # Local Kubernetes Run With External Images
 Install Docker Desktop + Kind
 
