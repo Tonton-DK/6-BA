@@ -6,7 +6,7 @@ Bachelor project
 
 ```docker compose build```
 
-```docker compose up```
+```docker compose up --build```
 
 go to http://localhost:8080/
 

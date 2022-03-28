@@ -11,7 +11,7 @@ public class IndexModel : PageModel
     private readonly IJobService _jobService;
 
     public IEnumerable<User> Users { get; private set; }
-    public IEnumerable<Job> Jobs { get; private set; }
+    public IEnumerable<Category> Categories { get; private set; }
     
     public IndexModel(ILogger<IndexModel> logger, IUserService userService, IJobService jobService)
     {
@@ -23,6 +23,6 @@ public class IndexModel : PageModel
     public void OnGet()
     {
         Users = _userService.Get();
-        Jobs = _jobService.Get();
+        Categories = _jobService.ListCategories();
     }
 }
