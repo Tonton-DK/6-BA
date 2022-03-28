@@ -6,16 +6,38 @@ namespace Frontend.Data_Brokers;
 public class OfferBroker : IOfferService
 {
     private static readonly HttpClient Client = new HttpClient();
-    
+    private const string Uri = "http://offer-service:80/OfferService";
+
     // In order to display the forecasts on our page, we need to get them from the API
-    public IEnumerable<Offer> Get()
+    public Offer? Create(Offer offer)
     {
-        var uri = "http://offer-service:80/OfferService";
-        var t = WebApiClient(uri, Client);
+        throw new NotImplementedException();
+    }
+
+    public Offer? Get(Guid id)
+    {
+        var t = WebApiClient(Uri+id, Client);
+        if (t != null) return t.Result;
+        return null;
+    }
+
+    public IEnumerable<Offer> List(Guid jobId)
+    {
+        var t = WebApiClient(Uri+jobId, Client);
         if (t != null) return new List<Offer>(t.Result);
         return null;
     }
-    
+
+    public Offer? Update(Offer offer)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool Delete(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     private static async Task<Offer[]>? WebApiClient(string uri, HttpClient httpClient)
     {
         HttpClientHandler clientHandler = new HttpClientHandler();
