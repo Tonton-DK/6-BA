@@ -19,9 +19,9 @@ public class OfferServiceController : ControllerBase, IOfferService
     }
 
     [HttpGet]
-    public IEnumerable<Offer> Get()
+    public IEnumerable<Offer> Get(Guid jobId)
     {
-        var offers = _dataProvider.GetOffers();
+        var offers = _dataProvider.List(jobId);
         return offers.ToArray();
     }
 
@@ -29,5 +29,10 @@ public class OfferServiceController : ControllerBase, IOfferService
     public IActionResult GetById(Guid id)
     {
         return Ok("Id: " + id);
-    } 
+    }
+
+    public IEnumerable<Offer> Get()
+    {
+        throw new NotImplementedException();
+    }
 }
