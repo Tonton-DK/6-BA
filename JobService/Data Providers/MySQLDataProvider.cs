@@ -24,7 +24,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@id", job.Id);
         cmd.Parameters.AddWithValue("@title", job.Title);
         cmd.Parameters.AddWithValue("@description", job.Description);
-        cmd.Parameters.AddWithValue("@deadline", job.Deadline.Ticks);
+        cmd.Parameters.AddWithValue("@deadline", job.Deadline.ToString("yyyy-MM-dd HH:mm:ss"));
         cmd.Parameters.AddWithValue("@client", job.ClientId);
         cmd.Parameters.AddWithValue("@category", job.Category.Id);
         cmd.Parameters.AddWithValue("@road", job.Location.Road);
@@ -60,7 +60,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetGuid(0),
                 rdr.GetString(1), 
                 rdr.GetString(2), 
-                rdr.GetDateTime(3),
+                rdr.GetMySqlDateTime(3).Value,
                 new Category(rdr.GetGuid(8), rdr.GetString(9), rdr.GetString(10)),
                 new Address(rdr.GetString(4), rdr.GetString(5), rdr.GetString(6)),
                 rdr.GetGuid(7));
@@ -78,9 +78,9 @@ public class MySQLDataProvider : IDataProvider
         
         var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
                         Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription 
-                    FROM Job join Category on Job.CategoryID = Category.ID 
-                    WHERE Job.CategoryID = @cat AND @from <= Job.Deadline AND Job.Deadline <= @to AND Job.Zip = @zip 
-                        AND (Job.Title LIKE @query OR Job.Description LIKE @query)";
+                    FROM Job join Category on Job.CategoryID = Category.ID"; 
+                    //WHERE Job.CategoryID = @cat AND @from <= Job.Deadline AND Job.Deadline <= @to AND Job.Zip = @zip 
+                    //    AND (Job.Title LIKE @query OR Job.Description LIKE @query)";
         using var cmd = new MySqlCommand(stm, con);
 
         cmd.Parameters.AddWithValue("@cat", filter.CategoryId);

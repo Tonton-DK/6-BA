@@ -45,7 +45,7 @@ public class JobServiceController : ControllerBase//, IJobService
     [HttpPost("ListJobs")]
     public IEnumerable<Job> ListJobs([FromBody] Filter filter)
     {
-        return null;
+        return _dataProvider.ListJobs(filter);
     }
     
     [HttpPut("UpdateJob")]
