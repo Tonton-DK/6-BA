@@ -41,8 +41,24 @@ services:
       command: --default-authentication-plugin=mysql_native_password
       networks:
         - job-service
+  offer-service:
+    build:
+      context: ./
+      dockerfile: OfferService/Dockerfile
+    networks:
+      - frontend
+      - offer-service
+    depends_on:
+      - offer-database
+  offer-database:
+    build:
+      context: ./OfferService/Database
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - offer-service
 
 networks:
   frontend:
   user-service:
   job-service:
+  offer-service:

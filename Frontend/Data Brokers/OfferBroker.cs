@@ -1,22 +1,22 @@
-﻿using ClassLibrary.Classes;
+using ClassLibrary;
 using ClassLibrary.Interfaces;
 
 namespace Frontend.Data_Brokers;
 
-public class UserBroker : IUserService
+public class OfferBroker : IOfferService
 {
     private static readonly HttpClient Client = new HttpClient();
     
     // In order to display the forecasts on our page, we need to get them from the API
-    public IEnumerable<User> Get()
+    public IEnumerable<Offer> Get()
     {
-        var uri = "http://user-service:80/UserService";
+        var uri = "http://offer-service:80/OfferService";
         var t = WebApiClient(uri, Client);
-        if (t != null) return new List<User>(t.Result);
+        if (t != null) return new List<Offer>(t.Result);
         return null;
     }
     
-    private static async Task<User[]>? WebApiClient(string uri, HttpClient httpClient)
+    private static async Task<Offer[]>? WebApiClient(string uri, HttpClient httpClient)
     {
         HttpClientHandler clientHandler = new HttpClientHandler();
         clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
@@ -27,7 +27,7 @@ public class UserBroker : IUserService
 
         try
         {
-            return await httpResponse.Content.ReadAsAsync<User[]>();
+            return await httpResponse.Content.ReadAsAsync<Offer[]>();
         }
         catch // Could be ArgumentNullException or UnsupportedMediaTypeException
         {
