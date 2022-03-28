@@ -2,14 +2,14 @@
 
 public class User
 {
-    public User(int id, string firstName, string lastName)
+    public User(Guid id, string firstName, string lastName)
     {
         Id = id;
         FirstName = firstName;
         LastName = lastName;
     }
 
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public string FirstName { get; set; }
     

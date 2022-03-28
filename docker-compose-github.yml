@@ -21,7 +21,20 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - user-service
+  job-service:
+    image: ghcr.io/antje12/ba/job-service:latest
+    networks:
+      - frontend
+      - job-service
+    depends_on:
+      - job-database
+  job-database:
+      image: ghcr.io/antje12/ba/job-database:latest
+      command: --default-authentication-plugin=mysql_native_password
+      networks:
+        - job-service
 
 networks:
   frontend:
   user-service:
+  job-service:

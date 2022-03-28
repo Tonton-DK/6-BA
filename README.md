@@ -26,7 +26,8 @@ Install Docker Desktop + Kind
 
 ```kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-username=antje12 --docker-password=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 --docker-email=antje12@student.sdu.dk```
 
-```kubectl apply kubernetes-deploy.yml```
+```kubectl apply Kubernetes/kubernetes-deploy-frontend.yml```
+```kubectl apply Kubernetes/kubernetes-deploy-user.yml```~~~~
 
 ```kubectl port-forward services/frontend 80:80```
 

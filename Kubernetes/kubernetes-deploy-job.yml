@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: job-service
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: job-service-pod
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: job-service-pod
+  template:
+    metadata:
+      labels:
+        app: job-service-pod
+    spec:
+      containers:
+        - name: job-service
+          image: ghcr.io/antje12/ba/job-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "100Mi"
+            limits:
+              cpu: "200m"
+              memory: "200Mi"
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: job-database
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+  selector:
+    app: job-database-pod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job-database-deployment
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: job-database-pod
+  template:
+    metadata:
+      labels:
+        app: job-database-pod
+    spec:
+      containers:
+        - name: mysql
+          image: ghcr.io/antje12/ba/job-database:latest
+          args: ["--default-authentication-plugin=mysql_native_password"]
+          ports:
+            - containerPort: 3306
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "400Mi"
+            limits:
+              cpu: "200m"
+              memory: "600Mi"
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: job-database-pod
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
