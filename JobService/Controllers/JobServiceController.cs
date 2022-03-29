@@ -33,13 +33,13 @@ public class JobServiceController : ControllerBase//, IJobService
     [HttpPost("CreateJob")]
     public Job? CreateJob([FromBody] Job job)
     {
-        return null;
+        return _dataProvider.CreateJob(job);
     }
     
     [HttpGet("GetJobById/{id}")]
     public Job? GetJobById(Guid id)
     {
-        return null;
+        return _dataProvider.GetJob(id);
     }
 
     [HttpPost("ListJobs")]
@@ -51,12 +51,12 @@ public class JobServiceController : ControllerBase//, IJobService
     [HttpPut("UpdateJob")]
     public Job? UpdateJob([FromBody] Job job)
     {
-        return null;
+        return _dataProvider.UpdateJob(job);
     }
 
     [HttpDelete("DeleteJobById/{id}")]
     public bool DeleteJobById(Guid id)
     {
-        return false;
+        return _dataProvider.DeleteJob(id);
     }
 }
