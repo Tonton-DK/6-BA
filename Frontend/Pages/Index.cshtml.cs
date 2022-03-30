@@ -12,6 +12,7 @@ public class IndexModel : PageModel
     private readonly IOfferService _offerService;
 
     public IEnumerable<User> Users { get; private set; }
+    public IEnumerable<Category> Categories { get; private set; }
     public IEnumerable<Job> Jobs { get; private set; }
     public IEnumerable<Offer>? Offers { get; private set; }
     
@@ -26,7 +27,14 @@ public class IndexModel : PageModel
     public void OnGet()
     {
         Users = _userService.Get();
-        Jobs = _jobService.Get();
+        Categories = _jobService.ListCategories();
+        var data = new Filter(
+            Guid.Parse("0ebbe367-300a-4c86-9070-d6e106d7e4b9"), 
+            DateTime.Now.AddDays(-7), 
+            DateTime.Now.AddDays(7), 
+            "5000",
+            "");
+        Jobs = _jobService.ListJobs(data);
         Offers = TestOffers();
     }
 

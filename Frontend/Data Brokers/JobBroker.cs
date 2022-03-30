@@ -1,39 +1,71 @@
-﻿using ClassLibrary.Classes;
+﻿using System.Text;
+using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
+using Newtonsoft.Json;
 
 namespace Frontend.Data_Brokers;
 
-public class JobBroker : IJobService
+public class JobBroker : BaseBroker, IJobService
 {
+    private static readonly string baseUri = "http://job-service:80/JobService";
     private static readonly HttpClient Client = new HttpClient();
     
-    // In order to display the forecasts on our page, we need to get them from the API
     public IEnumerable<Job> Get()
     {
-        var uri = "http://job-service:80/JobService";
-        var t = WebApiClient(uri, Client);
+        var uri = baseUri;
+        var t = Get<Job[]>(uri, Client);
         if (t != null) return new List<Job>(t.Result);
         return null;
     }
-    
-    private static async Task<Job[]>? WebApiClient(string uri, HttpClient httpClient)
+
+    public IEnumerable<Category> ListCategories()
     {
-        HttpClientHandler clientHandler = new HttpClientHandler();
-        clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-        HttpClient client = new HttpClient(clientHandler);
-            
-        using var httpResponse = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
-        httpResponse.EnsureSuccessStatusCode(); // throws if not 200-299
-
-        try
-        {
-            return await httpResponse.Content.ReadAsAsync<Job[]>();
-        }
-        catch // Could be ArgumentNullException or UnsupportedMediaTypeException
-        {
-            Console.WriteLine("HTTP Response was invalid or could not be deserialized.");
-        }
-
+        var uri = baseUri + "/ListCategories";
+        var t = Get<Category[]>(uri, Client);
+        if (t != null) return new List<Category>(t.Result);
         return null;
+    }
+
+    public Job? CreateJob(Job job)
+    {
+        var uri = baseUri + "/CreateJob";
+        var content = new StringContent(JsonConvert.SerializeObject(job), Encoding.UTF8, "application/json");
+        var t = Post<Job?>(uri, Client, content);
+        if (t != null) return t.Result;
+        return null;
+    }
+
+    public Job? GetJobById(Guid id)
+    {
+        var uri = baseUri + "/GetJobById/" + id;
+        var t = Get<Job?>(uri, Client);
+        if (t != null) return t.Result;
+        return null;
+    }
+
+    public IEnumerable<Job> ListJobs(Filter filter)
+    {
+        var uri = baseUri + "/ListJobs";
+        var content = new StringContent(JsonConvert.SerializeObject(filter), Encoding.UTF8, "application/json");
+        var t = Post<Job[]>(uri, Client, content);
+        if (t != null) return new List<Job>(t.Result);
+        return null;
+    }
+
+    public Job? UpdateJob(Job job)
+    {
+        var uri = baseUri + "/UpdateJob";
+        var content = new StringContent(JsonConvert.SerializeObject(job), Encoding.UTF8, "application/json");
+        var t = Put<Job?>(uri, Client, content);
+        if (t != null) return t.Result;
+        return null;
+    }
+
+    public bool DeleteJobById(Guid id)
+    {
+        var uri = baseUri + "/DeleteJobById/" + id;
+        var t = Delete<bool>(uri, Client);
+        if (t != null) return t.Result;
+        return false;
     }
 }

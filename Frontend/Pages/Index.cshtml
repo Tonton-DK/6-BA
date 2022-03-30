@@ -32,6 +32,27 @@
 
 <div class="align-left">
     <br/>
+    <h3>Categories from service:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.Categories != null)
+            {
+                foreach (var category in Model.Categories)
+                {
+                    <li>
+                        <h4>@category.Id</h4>
+                        <p>Name: @category.Name</p>
+                        <p>Description: @category.Description</p>
+                    </li>
+                }
+            }
+        }
+    </ul>
+</div>
+
+<div class="align-left">
+    <br/>
     <h3>Jobs from service:</h3>
     <br/>
     <ul>
@@ -42,8 +63,8 @@
                 {
                     <li>
                         <h4>@job.Id</h4>
-                        <p>First Name: @job.Title</p>
-                        <p>Last Name: @job.Description</p>
+                        <p>Name: @job.Title</p>
+                        <p>Description: @job.Description</p>
                     </li>
                 }
             }
