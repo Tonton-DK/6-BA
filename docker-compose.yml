@@ -36,13 +36,29 @@ services:
     depends_on:
       - job-database
   job-database:
-      build:
-        context: ./JobService/Database
-      command: --default-authentication-plugin=mysql_native_password
-      networks:
-        - job-service
+    build:
+      context: ./JobService/Database
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - job-service
+  offer-service:
+    build:
+      context: ./
+      dockerfile: OfferService/Dockerfile
+    networks:
+      - frontend
+      - offer-service
+    depends_on:
+      - offer-database
+  offer-database:
+    build:
+      context: ./OfferService/Database
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - offer-service
 
 networks:
   frontend:
   user-service:
   job-service:
+  offer-service:
