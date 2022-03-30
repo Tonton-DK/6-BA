@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<IUserService, UserBroker>();
 builder.Services.AddTransient<IJobService, JobBroker>();
+builder.Services.AddTransient<IOfferService, OfferBroker>();
 
 var app = builder.Build();
 

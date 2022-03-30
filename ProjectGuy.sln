@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend", "Frontend\Fronte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary", "ClassLibrary\ClassLibrary.csproj", "{655B2947-674F-47FB-9E09-C23A75BACA7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfferService", "OfferService\OfferService.csproj", "{463D4472-7742-4E44-9C0B-575E7914364E}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobService", "JobService\JobService.csproj", "{8C47178B-28B3-42E1-B69A-1105C12BF616}"
 EndProject
 Global
@@ -26,6 +28,10 @@ Global
 		{655B2947-674F-47FB-9E09-C23A75BACA7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{655B2947-674F-47FB-9E09-C23A75BACA7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{655B2947-674F-47FB-9E09-C23A75BACA7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{463D4472-7742-4E44-9C0B-575E7914364E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{463D4472-7742-4E44-9C0B-575E7914364E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{463D4472-7742-4E44-9C0B-575E7914364E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{463D4472-7742-4E44-9C0B-575E7914364E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C47178B-28B3-42E1-B69A-1105C12BF616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C47178B-28B3-42E1-B69A-1105C12BF616}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C47178B-28B3-42E1-B69A-1105C12BF616}.Release|Any CPU.ActiveCfg = Release|Any CPU
