@@ -6,7 +6,7 @@ namespace Frontend.Data_Brokers;
 public class UserBroker : IUserService
 {
     private static readonly HttpClient Client = new HttpClient();
-    
+    //test
     // In order to display the forecasts on our page, we need to get them from the API
     public IEnumerable<User> Get()
     {
