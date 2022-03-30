@@ -18,22 +18,33 @@ public class ContractServiceController : ControllerBase, IContractService
         _dataProvider = dataProvider;
     }
 
-    [HttpGet]
-    public IEnumerable<Contract> Get()
+    [HttpPost("Create")]
+    public Contract? Create([FromBody]Contract contract)
     {
-        var contracts = _dataProvider.GetContracts();
-        return contracts.ToArray();
+        return _dataProvider.Create(contract);
     }
 
-    [HttpGet("GetByName/{name}")]
-    public IActionResult GetByName(string name)
+    [HttpGet("Get/{id}")]
+    public Contract? Get(Guid id)
     {
-        return Ok("Name: " + name);
+        return _dataProvider.Get(id);
     }
 
-    [HttpGet("GetById/{id}")]
-    public IActionResult GetById(Guid id)
+    [HttpGet("List/{userId}")]
+    public IEnumerable<Contract> List(Guid userId)
     {
-        return Ok("Id: " + id);
-    } 
+        return _dataProvider.List(userId);
+    }
+
+    [HttpPut("Update")]
+    public Contract? Update([FromBody]Contract contract)
+    {
+        return _dataProvider.Update(contract);
+    }
+
+    [HttpDelete("Delete/{id}")]
+    public bool Delete(Guid id)
+    {
+        return _dataProvider.Delete(id);
+    }
 }
