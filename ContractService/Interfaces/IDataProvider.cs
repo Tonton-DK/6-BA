@@ -1,8 +1,8 @@
 ﻿using ClassLibrary.Classes;
 
-namespace UserService.Interfaces;
+namespace ContractService.Interfaces;
 
 public interface IDataProvider
 {
-    public List<User> GetUsers();
+    public List<Contract> GetContracts();
 }

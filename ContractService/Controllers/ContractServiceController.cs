@@ -1,13 +1,13 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using UserService.Interfaces;
+using ContractService.Interfaces;
 
-namespace UserService.Controllers;
+namespace ContractService.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ContractServiceController : ControllerBase, IUserService
+public class ContractServiceController : ControllerBase, IContractService
 {
     private readonly ILogger<ContractServiceController> _logger;
     private readonly IDataProvider _dataProvider;
@@ -19,10 +19,10 @@ public class ContractServiceController : ControllerBase, IUserService
     }
 
     [HttpGet]
-    public IEnumerable<User> Get()
+    public IEnumerable<Contract> Get()
     {
-        var users = _dataProvider.GetUsers();
-        return users.ToArray();
+        var contracts = _dataProvider.GetContracts();
+        return contracts.ToArray();
     }
 
     [HttpGet("GetByName/{name}")]

@@ -1,5 +1,5 @@
-using UserService.Data_Providers;
-using UserService.Interfaces;
+using ContractService.Data_Providers;
+using ContractService.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
