@@ -96,3 +96,29 @@
         }
     </ul>
 </div>
+
+<div class="align-left">
+    <br/>
+    <h3>Contracts from service:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.Contracts != null)
+            {
+                foreach (var contract in Model.Contracts)
+                {
+                    <li>
+                        <h4>@contract.Id</h4>
+                        <p>Job ID: @contract.JobId</p>
+                        <p>Offer ID: @contract.OfferId</p>
+                        <p>Client ID: @contract.ClientId</p>
+                        <p>Provider ID: @contract.ProviderId</p>
+                        <p>Creation date: @contract.CreationDate</p>
+                        <p>Previous Offer ID: @(contract.ClosedDate?.ToString() ?? "No previous offer")</p>
+                        <p>State: @contract.ContractState</p>
+                    </li>
+                }
+            }
+        }
+    </ul>
+</div>

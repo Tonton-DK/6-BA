@@ -10,12 +10,14 @@ public class IndexModel : PageModel
     private readonly IUserService _userService;
     private readonly IJobService _jobService;
     private readonly IOfferService _offerService;
+    private readonly IContractService _contractService;
 
     public IEnumerable<User> Users { get; private set; }
     public IEnumerable<Category> Categories { get; private set; }
     public IEnumerable<Job> Jobs { get; private set; }
     public IEnumerable<Offer>? Offers { get; private set; }
-    
+    public IEnumerable<Contract>? Contracts { get; private set; }
+
     public IndexModel(ILogger<IndexModel> logger, IUserService userService, IJobService jobService, IOfferService offerService)
     {
         _logger = logger;
@@ -36,6 +38,7 @@ public class IndexModel : PageModel
             "");
         Jobs = _jobService.ListJobs(data);
         Offers = TestOffers();
+        Contracts = TestContracts();
     }
 
     // Create test offer and load it afterwards
@@ -51,5 +54,21 @@ public class IndexModel : PageModel
                 DateTime.Now));
         
         return _offerService.List(Jobs.ToArray()[0].Id);
+    }
+    
+    // Create test contracts and load it afterwards
+    IEnumerable<Contract>? TestContracts()
+    {
+
+        _contractService.Create(new Contract(
+            Guid.Empty, 
+            Jobs.ToArray()[0].Id, 
+            Offers.ToArray()[0].Id, 
+            Users.ToArray()[0].Id, 
+            Users.ToArray()[1].Id, 
+            DateTime.Now,
+            Contract.State.Open));
+        
+        return _contractService.List(Jobs.ToArray()[0].Id);
     }
 }
