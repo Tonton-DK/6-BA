@@ -45,13 +45,13 @@ public class JobServiceController : ControllerBase, IJobService
     [HttpGet("ListJobsByUser/{id}")]
     public IEnumerable<Job> ListJobsByUser(Guid userId)
     {
-        throw new NotImplementedException();
+        return _dataProvider.ListJobsByUser(userId);
     }
 
     [HttpPost("ListJobsByIDs")]
     public IEnumerable<Job> ListJobsByIDs(IEnumerable<Guid> jobIds)
     {
-        throw new NotImplementedException();
+        return _dataProvider.ListJobsByIDs(jobIds);
     }
 
     [HttpPut("UpdateJob")]

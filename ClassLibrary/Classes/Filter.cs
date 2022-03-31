@@ -2,7 +2,7 @@
 
 public class Filter
 {
-    public Filter(Guid categoryId, DateTime startDate, DateTime endDate, string zip, string searchQuery)
+    public Filter(Guid? categoryId, DateTime? startDate, DateTime? endDate, string zip, string searchQuery)
     {
         CategoryId = categoryId;
         StartDate = startDate;
@@ -11,11 +11,11 @@ public class Filter
         SearchQuery = searchQuery;
     }
 
-    public Guid CategoryId { get; set; }
+    public Guid? CategoryId { get; set; }
     
-    public DateTime StartDate { get; set; }
+    public DateTime? StartDate { get; set; }
     
-    public DateTime EndDate { get; set; }
+    public DateTime? EndDate { get; set; }
     
     public string Zip { get; set; }
     

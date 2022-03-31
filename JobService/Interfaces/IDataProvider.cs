@@ -7,6 +7,8 @@ public interface IDataProvider
     public Job? CreateJob(Job job);
     public Job? GetJob(Guid id);
     public List<Job> ListJobs(Filter filter);
+    IEnumerable<Job> ListJobsByUser(Guid userId);
+    IEnumerable<Job> ListJobsByIDs(IEnumerable<Guid> jobIds);
     public Job? UpdateJob(Job job);
     public bool DeleteJob(Guid id);
     public Category? CreateCategory(Category category);

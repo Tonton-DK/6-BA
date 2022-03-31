@@ -51,7 +51,8 @@ public class MySQLDataProvider : IDataProvider
         using var cmd = new MySqlCommand(stm, con);
 
         cmd.Parameters.AddWithValue("@id", id);
-
+        cmd.Prepare();
+        
         using MySqlDataReader rdr = cmd.ExecuteReader();
         
         if (rdr.Read())
@@ -78,14 +79,34 @@ public class MySQLDataProvider : IDataProvider
         
         var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
                         Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription 
-                    FROM Job join Category on Job.CategoryID = Category.ID"; 
-                    //WHERE Job.CategoryID = @cat AND @from <= Job.Deadline AND Job.Deadline <= @to AND Job.Zip = @zip 
-                    //    AND (Job.Title LIKE @query OR Job.Description LIKE @query)";
+                    FROM Job join Category on Job.CategoryID = Category.ID";
+
+        // Apply generic filter start
+        if (filter.CategoryId != null ||
+            filter.StartDate != null ||
+            filter.EndDate != null ||
+            filter.Zip.Length > 0 ||
+            filter.SearchQuery.Length > 0)
+        {
+            stm += " WHERE 1=1 ";
+        }
+        
+        if (filter.CategoryId != null)
+            stm += "AND Job.CategoryID = @cat ";
+        if (filter.StartDate != null)
+            stm += "AND @from <= Job.Deadline ";
+        if (filter.EndDate != null)
+            stm += "AND Job.Deadline <= @to ";
+        if (filter.Zip.Length > 0)
+            stm += "AND Job.Zip = @zip ";
+        if (filter.SearchQuery.Length > 0)
+            stm += "AND (Job.Title LIKE @query OR Job.Description LIKE @query)";
+
         using var cmd = new MySqlCommand(stm, con);
 
         cmd.Parameters.AddWithValue("@cat", filter.CategoryId);
-        cmd.Parameters.AddWithValue("@from", filter.StartDate.Ticks);
-        cmd.Parameters.AddWithValue("@to", filter.EndDate.Ticks);
+        cmd.Parameters.AddWithValue("@from", filter.StartDate?.Ticks);
+        cmd.Parameters.AddWithValue("@to", filter.EndDate?.Ticks);
         cmd.Parameters.AddWithValue("@Zip", filter.Zip);
         cmd.Parameters.AddWithValue("@query", filter.SearchQuery);
         cmd.Prepare();
@@ -109,7 +130,74 @@ public class MySQLDataProvider : IDataProvider
 
         return jobs;
     }
-    
+
+    public IEnumerable<Job> ListJobsByUser(Guid userId)
+    {
+        using var con = new MySqlConnection(cs);
+        con.Open();
+        
+        var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
+                        Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription 
+                    FROM Job join Category on Job.CategoryID = Category.ID
+                    WHERE Job.ClientID = @clientID";
+        
+        using var cmd = new MySqlCommand(stm, con);
+
+        cmd.Parameters.AddWithValue("@clientID", userId);
+        cmd.Prepare();
+        
+        using MySqlDataReader rdr = cmd.ExecuteReader();
+
+        var jobs = new List<Job>();
+        
+        while (rdr.Read())
+        {
+            var job = new Job(
+                rdr.GetGuid(0),
+                rdr.GetString(1), 
+                rdr.GetString(2), 
+                rdr.GetDateTime(3),
+                new Category(rdr.GetGuid(8), rdr.GetString(9), rdr.GetString(10)),
+                new Address(rdr.GetString(4), rdr.GetString(5), rdr.GetString(6)),
+                rdr.GetGuid(7));
+            jobs.Add(job);
+        }
+
+        return jobs;
+    }
+
+    public IEnumerable<Job> ListJobsByIDs(IEnumerable<Guid> jobIds)
+    {
+        using var con = new MySqlConnection(cs);
+        con.Open();
+        
+        var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
+                        Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription 
+                    FROM Job join Category on Job.CategoryID = Category.ID
+                    WHERE Job.ID in (" + string.Join(",", jobIds) + ")";
+
+        using var cmd = new MySqlCommand(stm, con);
+        
+        using MySqlDataReader rdr = cmd.ExecuteReader();
+
+        var jobs = new List<Job>();
+        
+        while (rdr.Read())
+        {
+            var job = new Job(
+                rdr.GetGuid(0),
+                rdr.GetString(1), 
+                rdr.GetString(2), 
+                rdr.GetDateTime(3),
+                new Category(rdr.GetGuid(8), rdr.GetString(9), rdr.GetString(10)),
+                new Address(rdr.GetString(4), rdr.GetString(5), rdr.GetString(6)),
+                rdr.GetGuid(7));
+            jobs.Add(job);
+        }
+
+        return jobs;
+    }
+
     public Job? UpdateJob(Job job)
     {
         using var con = new MySqlConnection(cs);
@@ -192,7 +280,8 @@ public class MySQLDataProvider : IDataProvider
         using var cmd = new MySqlCommand(stm, con);
 
         cmd.Parameters.AddWithValue("@id", id);
-
+        cmd.Prepare();
+        
         using MySqlDataReader rdr = cmd.ExecuteReader();
         
         if (rdr.Read())
