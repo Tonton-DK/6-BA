@@ -7,63 +7,132 @@ namespace ReviewService.Data_Providers;
 // Guide: https://zetcode.com/csharp/mysql/
 public class MySQLDataProvider : IDataProvider
 {
-    public List<Review> GetReviews()
-    {
-        string cs = @"server=user-database;userid=root;password=;database=test";
+    private static string cs = @"server=review-database;userid=root;password=;database=test";
 
+    public Review? Create(Review review)
+    {
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        var sql = "INSERT INTO Review(UserID, Firstname, Lastname) VALUES(@id, @fn, @ln)";
+        var sql = "INSERT INTO Review(ID, ContractId, CreatorId, TargetId, Comment, Rating, Type) VALUES(@id, @contractId, @creatorId, @targetId, @comment, @rating, @type)";
         using var cmd = new MySqlCommand(sql, con);
 
-        cmd.Parameters.AddWithValue("@id", Guid.NewGuid());
-        cmd.Parameters.AddWithValue("@fn", "John");
-        cmd.Parameters.AddWithValue("@ln", "Doe");
+        review.Id = Guid.NewGuid();
+        
+        cmd.Parameters.AddWithValue("@id", review.Id);
+        cmd.Parameters.AddWithValue("@contractId", review.ContractId);
+        cmd.Parameters.AddWithValue("@creatorId", review.CreatorId);
+        cmd.Parameters.AddWithValue("@targetId", review.TargetId);
+        cmd.Parameters.AddWithValue("@comment", review.Comment);
+        cmd.Parameters.AddWithValue("@rating", review.Rating);
+        cmd.Parameters.AddWithValue("@type", (int)review.Type);
         cmd.Prepare();
 
         cmd.ExecuteNonQuery();
 
-        Console.WriteLine("row inserted");
-
-        var stm = "SELECT * FROM Review";
-        using var new_cmd = new MySqlCommand(stm, con);
-
-        using MySqlDataReader rdr = new_cmd.ExecuteReader();
-
-        var users = new List<Review>();
-        
-        while (rdr.Read())
-        {
-            var user = new Review(rdr.GetGuid(0), rdr.GetString(1), rdr.GetString(2));
-            users.Add(user);
-        }
-
-        return users;
-    }
-
-    public Review? Create(Review review)
-    {
-        throw new NotImplementedException();
+        return review;
     }
 
     public Review? Get(Guid id)
     {
-        throw new NotImplementedException();
+        using var con = new MySqlConnection(cs);
+        con.Open();
+        
+        var sql = "SELECT * FROM Review WHERE Review.ID = @id";
+        using var cmd = new MySqlCommand(sql, con);
+        
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Prepare();
+
+        using MySqlDataReader rdr = cmd.ExecuteReader();
+
+        if (rdr.Read())
+        {
+            var review = new Review(
+                rdr.GetGuid(0),
+                rdr.GetGuid(1),
+                rdr.GetGuid(2),
+                rdr.GetGuid(3),
+                rdr.GetString(4),
+                rdr.GetInt32(5),
+                (ReviewType) rdr.GetInt32(6)
+            );
+
+            return review;
+        }
+
+        return null;
     }
 
     public List<Review> List(Guid userId)
     {
-        throw new NotImplementedException();
+        using var con = new MySqlConnection(cs);
+        con.Open();
+        
+        var sql = "SELECT * FROM Review WHERE Review.CreatorId = @userId OR Contract.TargetId = @userId";
+        using var cmd = new MySqlCommand(sql, con);
+        
+        cmd.Parameters.AddWithValue("@userId", userId);
+        cmd.Prepare();
+
+        using MySqlDataReader rdr = cmd.ExecuteReader();
+
+        var reviews = new List<Review>();
+        
+        while (rdr.Read())
+        {
+            var review = new Review(
+                rdr.GetGuid(0),
+                rdr.GetGuid(1),
+                rdr.GetGuid(2),
+                rdr.GetGuid(3),
+                rdr.GetString(4),
+                rdr.GetInt32(5),
+                (ReviewType) rdr.GetInt32(6)
+            );
+
+            reviews.Add(review);
+        }
+
+        return reviews;
     }
 
     public Review? Update(Review review)
     {
-        throw new NotImplementedException();
+        using var con = new MySqlConnection(cs);
+        con.Open();
+        
+        var sql = "UPDATE Review SET Review.ContractId = @contractId, Review.CreatorId = @creatorId, Review.TargetId = @targetId, Review.Comment = @comment, Review.Rating = @rating, Review.Type = @type WHERE Review.ID = @id";
+
+        using var cmd = new MySqlCommand(sql, con);
+
+        cmd.Parameters.AddWithValue("@id", review.Id);
+        cmd.Parameters.AddWithValue("@contractId", review.ContractId);
+        cmd.Parameters.AddWithValue("@creatorId", review.CreatorId);
+        cmd.Parameters.AddWithValue("@targetId", review.TargetId);
+        cmd.Parameters.AddWithValue("@comment", review.Comment);
+        cmd.Parameters.AddWithValue("@rating", review.Rating);
+        cmd.Parameters.AddWithValue("@type", (int)review.Type);
+        cmd.Prepare();
+
+        var result = cmd.ExecuteNonQuery();
+
+        return result > 1 ? review : null;
     }
 
     public bool Delete(Guid id)
     {
-        throw new NotImplementedException();
+        using var con = new MySqlConnection(cs);
+        con.Open();
+        
+        var sql = "DELETE * FROM Review WHERE Review.ID = @id";
+        using var cmd = new MySqlCommand(sql, con);
+        
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Prepare();
+        
+        var result = cmd.ExecuteNonQuery();
+
+        return result > 0;
     }
 }

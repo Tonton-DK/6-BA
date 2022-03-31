@@ -75,7 +75,6 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        // TODO: List for both client and provider
         var sql = "SELECT * FROM Contract WHERE Contract.ClientId = @userId OR Contract.ProviderId = @userId";
         using var cmd = new MySqlCommand(sql, con);
         
