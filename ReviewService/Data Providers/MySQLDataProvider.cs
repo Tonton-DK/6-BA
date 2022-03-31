@@ -69,7 +69,7 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        var sql = "SELECT * FROM Review WHERE Review.CreatorId = @userId OR Contract.TargetId = @userId";
+        var sql = "SELECT * FROM Review WHERE Review.TargetId = @userId";
         using var cmd = new MySqlCommand(sql, con);
         
         cmd.Parameters.AddWithValue("@userId", userId);

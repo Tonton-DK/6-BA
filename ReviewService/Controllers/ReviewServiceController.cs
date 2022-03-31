@@ -18,33 +18,41 @@ public class ReviewServiceController : ControllerBase, IReviewService
         _dataProvider = dataProvider;
     }
 
-    public Review? CreateReview(Review review)
+    [HttpPost("CreateReview")]
+    public Review? CreateReview([FromBody]Review review)
     {
-        throw new NotImplementedException();
+        return _dataProvider.Create(review);
     }
 
+    [HttpGet("GetReviewById/{id}")]
     public Review? GetReviewById(Guid id)
     {
-        throw new NotImplementedException();
+        return _dataProvider.Get(id);
     }
 
-    public IEnumerable<Review> ListReviews(Guid userId, ReviewType type)
+    [HttpGet("ListReviews/{id}")]
+    public IEnumerable<Review> ListReviews(Guid userId, [FromBody]ReviewType type)
     {
-        throw new NotImplementedException();
+        return _dataProvider.List(userId).Where(review => review.Type == type).ToList();
     }
 
-    public double GetRating(Guid userId, ReviewType type)
+    [HttpGet("GetRating/{id}")]
+    public double GetRating(Guid userId, [FromBody]ReviewType type)
     {
-        throw new NotImplementedException();
+        var reviews = _dataProvider.List(userId).Where(review => review.Type == type).ToList();
+        return reviews.Aggregate<Review, double>(0, (current, review) => current + review.Rating) /reviews.Count;
     }
 
+    [HttpPut("UpdateReview/{id}")]
     public Review? UpdateReview(Review review)
     {
-        throw new NotImplementedException();
+        return _dataProvider.Update(review);
     }
 
+    [HttpDelete("DeleteReview/{id}")]
     public bool DeleteReview(Guid id)
     {
-        throw new NotImplementedException();
+        return _dataProvider.Delete(id);
+        
     }
 }
