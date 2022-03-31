@@ -18,33 +18,35 @@ public class ContractServiceController : ControllerBase, IContractService
         _dataProvider = dataProvider;
     }
 
-    [HttpPost("Create")]
-    public Contract? Create([FromBody]Contract contract)
+    [HttpPost("CreateContract")]
+    public Contract? CreateContract([FromBody]Contract contract)
     {
         return _dataProvider.Create(contract);
     }
 
-    [HttpGet("Get/{id}")]
-    public Contract? Get(Guid id)
+    [HttpGet("GetContractById/{id}")]
+    public Contract? GetContractById(Guid id)
     {
         return _dataProvider.Get(id);
     }
 
-    [HttpGet("List/{userId}")]
-    public IEnumerable<Contract> List(Guid userId)
+    [HttpGet("ListContracts/{userId}")]
+    public IEnumerable<Contract> ListContracts(Guid userId)
     {
         return _dataProvider.List(userId);
     }
 
-    [HttpPut("Update")]
-    public Contract? Update([FromBody]Contract contract)
+    [HttpPut("ConcludeContract/{id}")]
+    public Contract? ConcludeContract(Guid id)
     {
-        return _dataProvider.Update(contract);
+        // ToDo: Fix
+        throw new NotImplementedException();
     }
 
-    [HttpDelete("Delete/{id}")]
-    public bool Delete(Guid id)
+    [HttpDelete("CancelContract/{id}")]
+    public Contract? CancelContract(Guid id)
     {
-        return _dataProvider.Delete(id);
+        // ToDo: Fix
+        throw new NotImplementedException();
     }
 }

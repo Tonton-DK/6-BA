@@ -35,5 +35,35 @@ public class UserServiceController : ControllerBase, IUserService
     public IActionResult GetById(Guid id)
     {
         return Ok("Id: " + id);
-    } 
+    }
+
+    public User? CreateProfile(User profile)
+    {
+        throw new NotImplementedException();
+    }
+
+    public User? GetProfileById(Guid id, bool withCV)
+    {
+        throw new NotImplementedException();
+    }
+
+    public User? UpdateProfile(User profile)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool DeleteProfileById(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool ValidateProfile(string email, string password)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool ChangePassword(Guid id, string oldPassword, string newPassword)
+    {
+        throw new NotImplementedException();
+    }
 }

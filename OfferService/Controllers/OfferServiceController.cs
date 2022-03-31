@@ -18,34 +18,58 @@ public class OfferServiceController : ControllerBase, IOfferService
         _dataProvider = dataProvider;
     }
 
-    [HttpPost("Create")]
-    public Offer? Create([FromBody]Offer offer)
+    [HttpPost("CreateOffer")]
+    public Offer? CreateOffer([FromBody]Offer offer)
     {
         return _dataProvider.Create(offer);
     }
     
-    [HttpGet("Get/{id}")]
-    public Offer? Get(Guid id)
+    [HttpGet("GetOfferById/{id}")]
+    public Offer? GetOfferById(Guid id)
     {
         return _dataProvider.Get(id);
     }
     
-    [HttpGet("List/{jobId}")]
-    public IEnumerable<Offer> List(Guid jobId)
+    [HttpGet("ListOffersForJob/{jobId}")]
+    public IEnumerable<Offer> ListOffersForJob(Guid jobId)
     {
         var offers = _dataProvider.List(jobId);
         return offers.ToArray();
     }
 
-    [HttpPut("Update")]
-    public Offer? Update([FromBody]Offer offer)
+    [HttpGet("ListOffersForUser/{userId}")]
+    public IEnumerable<Offer> ListOffersForUser(Guid userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPut("UpdateOffer")]
+    public Offer? UpdateOffer([FromBody]Offer offer)
     {
         return _dataProvider.Update(offer);
     }
 
-    [HttpDelete("Delete/{id}")]
-    public bool Delete(Guid id)
+    [HttpDelete("DeleteOffer/{id}")]
+    public bool DeleteOffer(Guid id)
     {
         return _dataProvider.Delete(id);
+    }
+
+    [HttpDelete("AcceptOffer/{id}")]
+    public bool AcceptOffer(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpDelete("CreateCounterOffer/{id}")]
+    public Offer? CreateCounterOffer(Guid id, Offer counterOffer)
+    {
+        throw new NotImplementedException();
+    }
+    
+    [HttpDelete("DeclineOffer/{id}")]
+    public bool DeclineOffer(Guid id)
+    {
+        throw new NotImplementedException();
     }
 }
