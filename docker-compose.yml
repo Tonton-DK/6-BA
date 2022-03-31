@@ -71,6 +71,21 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - contract-service
+  review-service:
+    build:
+      context: ./
+      dockerfile: ReviewService/Dockerfile
+    networks:
+      - frontend
+      - review-service
+    depends_on:
+      - review-database
+  review-database:
+    build:
+      context: ./ReviewService/Database
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - review-service
 
 networks:
   frontend:
@@ -78,3 +93,4 @@ networks:
   job-service:
   offer-service:
   contract-service:
+  review-service:
