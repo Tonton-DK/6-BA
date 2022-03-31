@@ -21,11 +21,10 @@ public class Contract
     public DateTime CreationDate { get; set; }
     public DateTime? ClosedDate { get; set; }
     public State ContractState { get; set; }
-
-    public enum State
-    {
-        Open,
-        Concluded,
-        Cancelled
-    }
+}
+public enum State
+{
+    Open,
+    Concluded,
+    Cancelled
 }
