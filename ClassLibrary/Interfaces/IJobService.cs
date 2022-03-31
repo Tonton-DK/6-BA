@@ -8,6 +8,8 @@ public interface IJobService
     public Job? CreateJob(Job job);
     public Job? GetJobById(Guid id);
     public IEnumerable<Job> ListJobs(Filter filter);
+    public IEnumerable<Job> ListJobsByUser(Guid userId);
+    public IEnumerable<Job> ListJobsByIDs(IEnumerable<Guid> jobIds);
     public Job? UpdateJob(Job job);
     public bool DeleteJobById(Guid id);
 }

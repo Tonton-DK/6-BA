@@ -12,39 +12,70 @@ public class OfferBroker : BaseBroker, IOfferService
 
     // In order to display the forecasts on our page, we need to get them from the API
 
-    public Offer? Create(Offer offer)
+    public Offer? CreateOffer(Offer offer)
     {
         var content = new StringContent(JsonConvert.SerializeObject(offer), Encoding.UTF8, "application/json");
-        var t = Post<Offer>(Uri+"/Create", Client, content);
+        var t = Post<Offer>(Uri+"/CreateOffer", Client, content);
         if (t != null) return t.Result;
         return null;
     }
 
-    public Offer? Get(Guid id)
+    public Offer? GetOfferById(Guid id)
     {
-        var t = Get<Offer>(Uri+"/Get/"+id, Client);
+        var t = Get<Offer>(Uri+"/GetOfferById/"+id, Client);
         if (t != null) return t.Result;
         return null;
     }
 
-    public IEnumerable<Offer> List(Guid jobId)
+    public IEnumerable<Offer> ListOffersForJob(Guid jobId)
     {
-        var t = Get<Offer[]>(Uri+"/List/"+jobId, Client);
+        var t = Get<Offer[]>(Uri+"/ListOffersForJob/"+jobId, Client);
         if (t != null) return new List<Offer>(t.Result);
         return null;
     }
 
-    public Offer? Update(Offer offer)
+    public IEnumerable<Offer> ListOffersForUser(Guid userId)
+    {
+        var t = Get<Offer[]>(Uri+"/ListOffersForUser/"+userId, Client);
+        if (t != null) return new List<Offer>(t.Result);
+        return null;
+    }
+
+    public Offer? UpdateOffer(Offer offer)
     {
         var content = new StringContent(JsonConvert.SerializeObject(offer), Encoding.UTF8, "application/json");
-        var t = Put<Offer>(Uri+"/Update", Client, content);
+        var t = Put<Offer>(Uri+"/UpdateOffer", Client, content);
         if (t != null) return t.Result;
         return null;
     }
 
-    public bool Delete(Guid id)
+    public bool DeleteOffer(Guid id)
     {
-        var t = Delete<bool>(Uri+"/Delete/"+id, Client);
+        var t = Delete<bool>(Uri+"/DeleteOffer/"+id, Client);
+        if (t != null) return t.Result;
+        return false;
+    }
+
+    public bool AcceptOffer(Guid id)
+    {
+        var content = new StringContent("", Encoding.UTF8, "application/json");
+        var t = Put<bool>(Uri+"/AcceptOffer/"+id, Client, content);
+        if (t != null) return t.Result;
+        return false;
+    }
+
+    public Offer? CreateCounterOffer(Guid id, Offer counterOffer)
+    {
+        var content = new StringContent(JsonConvert.SerializeObject(counterOffer), Encoding.UTF8, "application/json");
+        var t = Put<Offer?>(Uri+"/AcceptOffer/"+id, Client, content);
+        if (t != null) return t.Result;
+        return null;
+    }
+
+    public bool DeclineOffer(Guid id)
+    {
+        var content = new StringContent("", Encoding.UTF8, "application/json");
+        var t = Put<bool>(Uri+"/DeclineOffer/"+id, Client, content);
         if (t != null) return t.Result;
         return false;
     }

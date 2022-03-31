@@ -10,14 +10,6 @@ public class JobBroker : BaseBroker, IJobService
     private static readonly string baseUri = "http://job-service:80/JobService";
     private static readonly HttpClient Client = new HttpClient();
     
-    public IEnumerable<Job> Get()
-    {
-        var uri = baseUri;
-        var t = Get<Job[]>(uri, Client);
-        if (t != null) return new List<Job>(t.Result);
-        return null;
-    }
-
     public IEnumerable<Category> ListCategories()
     {
         var uri = baseUri + "/ListCategories";
@@ -47,6 +39,23 @@ public class JobBroker : BaseBroker, IJobService
     {
         var uri = baseUri + "/ListJobs";
         var content = new StringContent(JsonConvert.SerializeObject(filter), Encoding.UTF8, "application/json");
+        var t = Post<Job[]>(uri, Client, content);
+        if (t != null) return new List<Job>(t.Result);
+        return null;
+    }
+
+    public IEnumerable<Job> ListJobsByUser(Guid userId)
+    {
+        var uri = baseUri + "/ListJobsByUser/" + userId;
+        var t = Get<Job[]>(uri, Client);
+        if (t != null) return new List<Job>(t.Result);
+        return null;
+    }
+
+    public IEnumerable<Job> ListJobsByIDs(IEnumerable<Guid> jobIds)
+    {
+        var uri = baseUri + "/ListJobsByIDs";
+        var content = new StringContent(JsonConvert.SerializeObject(jobIds), Encoding.UTF8, "application/json");
         var t = Post<Job[]>(uri, Client, content);
         if (t != null) return new List<Job>(t.Result);
         return null;
