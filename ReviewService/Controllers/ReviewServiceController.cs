@@ -18,51 +18,32 @@ public class ReviewServiceController : ControllerBase, IReviewService
         _dataProvider = dataProvider;
     }
 
-    [HttpGet]
-    public IEnumerable<Review> Get()
-    {
-        var reviews = _dataProvider.GetReviews();
-        return reviews.ToArray();
-    }
-
-    [HttpGet("GetByName/{name}")]
-    public IActionResult GetByName(string name)
-    {
-        return Ok("Name: " + name);
-    }
-
-    [HttpGet("GetById/{id}")]
-    public IActionResult GetById(Guid id)
-    {
-        return Ok("Id: " + id);
-    }
-
-    public Review? CreateProfile(Review profile)
+    public Review? CreateReview(Review review)
     {
         throw new NotImplementedException();
     }
 
-    public Review? GetProfileById(Guid id, bool withCV)
+    public Review? GetReviewById(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Review? UpdateProfile(Review profile)
+    public IEnumerable<Review> ListReviews(Guid userId, ReviewType type)
     {
         throw new NotImplementedException();
     }
 
-    public bool DeleteProfileById(Guid id)
+    public double GetRating(Guid userId, ReviewType type)
     {
         throw new NotImplementedException();
     }
 
-    public bool ValidateProfile(string email, string password)
+    public Review? UpdateReview(Review review)
     {
         throw new NotImplementedException();
     }
 
-    public bool ChangePassword(Guid id, string oldPassword, string newPassword)
+    public bool DeleteReview(Guid id)
     {
         throw new NotImplementedException();
     }
