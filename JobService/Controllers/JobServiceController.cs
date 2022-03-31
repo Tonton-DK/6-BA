@@ -1,4 +1,5 @@
 using ClassLibrary.Classes;
+using ClassLibrary.Interfaces;
 using JobService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace JobService.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class JobServiceController : ControllerBase//, IJobService
+public class JobServiceController : ControllerBase, IJobService
 {
     private readonly ILogger<JobServiceController> _logger;
     private readonly IDataProvider _dataProvider;
@@ -17,13 +18,6 @@ public class JobServiceController : ControllerBase//, IJobService
         _dataProvider = dataProvider;
     }
 
-    [HttpGet]
-    public IEnumerable<Job> Get()
-    {
-        var jobs = new List<Job>();
-        return jobs.ToArray();
-    }
-    
     [HttpGet("ListCategories")]
     public IEnumerable<Category> ListCategories()
     {
@@ -47,7 +41,19 @@ public class JobServiceController : ControllerBase//, IJobService
     {
         return _dataProvider.ListJobs(filter);
     }
-    
+
+    [HttpGet("ListJobsByUser/{id}")]
+    public IEnumerable<Job> ListJobsByUser(Guid userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPost("ListJobsByIDs")]
+    public IEnumerable<Job> ListJobsByIDs(IEnumerable<Guid> jobIds)
+    {
+        throw new NotImplementedException();
+    }
+
     [HttpPut("UpdateJob")]
     public Job? UpdateJob([FromBody] Job job)
     {

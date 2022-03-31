@@ -28,7 +28,7 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
-        Users = _userService.Get();
+        //Users = _userService.Get();
         Categories = _jobService.ListCategories();
         var data = new Filter(
             Guid.Parse("0ebbe367-300a-4c86-9070-d6e106d7e4b9"), 
@@ -45,7 +45,7 @@ public class IndexModel : PageModel
     IEnumerable<Offer>? TestOffers()
     {
 
-        _offerService.Create(new Offer(
+        _offerService.CreateOffer(new Offer(
                 Guid.Empty, 
                 Jobs.ToArray()[0].Id, 
                 Users.ToArray()[0].Id, 
@@ -53,14 +53,14 @@ public class IndexModel : PageModel
                 "2 Hours", 
                 DateTime.Now));
         
-        return _offerService.List(Jobs.ToArray()[0].Id);
+        return _offerService.ListOffersForJob(Jobs.ToArray()[0].Id);
     }
     
     // Create test contracts and load it afterwards
     IEnumerable<Contract>? TestContracts()
     {
 
-        _contractService.Create(new Contract(
+        _contractService.CreateContract(new Contract(
             Guid.Empty, 
             Jobs.ToArray()[0].Id, 
             Offers.ToArray()[0].Id, 
@@ -69,6 +69,6 @@ public class IndexModel : PageModel
             DateTime.Now,
             Contract.State.Open));
         
-        return _contractService.List(Jobs.ToArray()[0].Id);
+        return _contractService.ListContracts(Jobs.ToArray()[0].Id);
     }
 }
