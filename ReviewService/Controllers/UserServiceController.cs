@@ -1,28 +1,28 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using UserService.Interfaces;
+using ReviewService.Interfaces;
 
-namespace UserService.Controllers;
+namespace ReviewService.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserServiceController : ControllerBase, IUserService
+public class ReviewServiceController : ControllerBase, IReviewService
 {
-    private readonly ILogger<UserServiceController> _logger;
+    private readonly ILogger<ReviewServiceController> _logger;
     private readonly IDataProvider _dataProvider;
 
-    public UserServiceController(ILogger<UserServiceController> logger, IDataProvider dataProvider)
+    public ReviewServiceController(ILogger<ReviewServiceController> logger, IDataProvider dataProvider)
     {
         _logger = logger;
         _dataProvider = dataProvider;
     }
 
     [HttpGet]
-    public IEnumerable<User> Get()
+    public IEnumerable<Review> Get()
     {
-        var users = _dataProvider.GetUsers();
-        return users.ToArray();
+        var reviews = _dataProvider.GetReviews();
+        return reviews.ToArray();
     }
 
     [HttpGet("GetByName/{name}")]
@@ -37,17 +37,17 @@ public class UserServiceController : ControllerBase, IUserService
         return Ok("Id: " + id);
     }
 
-    public User? CreateProfile(User profile)
+    public Review? CreateProfile(Review profile)
     {
         throw new NotImplementedException();
     }
 
-    public User? GetProfileById(Guid id, bool withCV)
+    public Review? GetProfileById(Guid id, bool withCV)
     {
         throw new NotImplementedException();
     }
 
-    public User? UpdateProfile(User profile)
+    public Review? UpdateProfile(Review profile)
     {
         throw new NotImplementedException();
     }
