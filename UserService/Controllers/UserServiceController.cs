@@ -18,25 +18,6 @@ public class UserServiceController : ControllerBase, IUserService
         _dataProvider = dataProvider;
     }
 
-    [HttpGet]
-    public IEnumerable<User> Get()
-    {
-        var users = _dataProvider.GetUsers();
-        return users.ToArray();
-    }
-
-    [HttpGet("GetByName/{name}")]
-    public IActionResult GetByName(string name)
-    {
-        return Ok("Name: " + name);
-    }
-
-    [HttpGet("GetById/{id}")]
-    public IActionResult GetById(Guid id)
-    {
-        return Ok("Id: " + id);
-    }
-
     public User? CreateProfile(User profile)
     {
         throw new NotImplementedException();
