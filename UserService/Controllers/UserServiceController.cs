@@ -18,34 +18,34 @@ public class UserServiceController : ControllerBase, IUserService
         _dataProvider = dataProvider;
     }
 
-    [HttpPost("CreateProfile")]
-    public User? CreateProfile([FromBody] User profile)
+    [HttpPost("CreateUser")]
+    public User? CreateUser([FromBody] User user)
     {
-        return _dataProvider.CreateProfile(profile);
+        return _dataProvider.CreateUser(user);
     }
 
-    [HttpGet("GetProfileById/{id}")]
-    public User? GetProfileById(Guid id, bool withCV)
+    [HttpGet("GetUserById/{id}")]
+    public User? GetUserById(Guid id, bool withCV)
     {
-        return _dataProvider.GetProfileById(id, withCV);
+        return _dataProvider.GetUserById(id, withCV);
     }
 
-    [HttpPut("UpdateProfile")]
-    public User? UpdateProfile([FromBody] User profile)
+    [HttpPut("UpdateUser")]
+    public User? UpdateUser([FromBody] User user)
     {
-        return _dataProvider.UpdateProfile(profile);
+        return _dataProvider.UpdateUser(user);
     }
 
-    [HttpDelete("DeleteProfileById/{id}")]
-    public bool DeleteProfileById(Guid id)
+    [HttpDelete("DeleteUserById/{id}")]
+    public bool DeleteUserById(Guid id)
     {
-        return _dataProvider.DeleteProfileById(id);
+        return _dataProvider.DeleteUserById(id);
     }
 
-    [HttpPost("ValidateProfile")]
-    public User? ValidateProfile([FromBody] LoginData loginData)
+    [HttpPost("ValidateUser")]
+    public User? ValidateUser([FromBody] LoginData loginData)
     {
-        return _dataProvider.GetProfileByLogin(loginData.Email, loginData.Password);
+        return _dataProvider.GetUserByLogin(loginData.Email, loginData.Password);
     }
 
     [HttpPost("ChangePassword")]

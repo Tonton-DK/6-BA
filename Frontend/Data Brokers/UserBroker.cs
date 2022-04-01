@@ -10,43 +10,43 @@ public class UserBroker : BaseBroker, IUserService
     private static readonly HttpClient Client = new HttpClient();
     private const string baseUri = "http://user-service:80/UserService";
 
-    public User? CreateProfile(User profile)
+    public User? CreateUser(User user)
     {
-        var uri = baseUri + "/CreateProfile";
-        var content = new StringContent(JsonConvert.SerializeObject(profile), Encoding.UTF8, "application/json");
+        var uri = baseUri + "/CreateUser";
+        var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
         var t = Post<User?>(uri, Client, content);
         if (t != null) return t.Result;
         return null;
     }
 
-    public User? GetProfileById(Guid id, bool withCV)
+    public User? GetUserById(Guid id, bool withCV)
     {
-        var uri = baseUri + "/GetProfileById/" + id;
+        var uri = baseUri + "/GetUserById/" + id;
         var t = Get<User?>(uri, Client);
         if (t != null) return t.Result;
         return null;
     }
 
-    public User? UpdateProfile(User profile)
+    public User? UpdateUser(User user)
     {
-        var uri = baseUri + "/UpdateProfile";
-        var content = new StringContent(JsonConvert.SerializeObject(profile), Encoding.UTF8, "application/json");
+        var uri = baseUri + "/UpdateUser";
+        var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
         var t = Put<User?>(uri, Client, content);
         if (t != null) return t.Result;
         return null;
     }
 
-    public bool DeleteProfileById(Guid id)
+    public bool DeleteUserById(Guid id)
     {
-        var uri = baseUri + "/DeleteProfileById/" + id;
+        var uri = baseUri + "/DeleteUserById/" + id;
         var t = Delete<bool>(uri, Client);
         if (t != null) return t.Result;
         return false;
     }
 
-    public User? ValidateProfile(LoginData loginData)
+    public User? ValidateUser(LoginData loginData)
     {
-        var uri = baseUri + "/ValidateProfile";
+        var uri = baseUri + "/ValidateUser";
         var content = new StringContent(JsonConvert.SerializeObject(loginData), Encoding.UTF8, "application/json");
         var t = Post<User?>(uri, Client, content);
         if (t != null) return t.Result;

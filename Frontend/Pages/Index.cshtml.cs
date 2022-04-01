@@ -28,7 +28,7 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
-        User = _userService.ValidateProfile(new LoginData("test@mail.dk", "secret"));
+        User = _userService.ValidateUser(new LoginData("test@mail.dk", "secret"));
         Categories = _jobService.ListCategories();
         var data = new Filter(
             Guid.Parse("0ebbe367-300a-4c86-9070-d6e106d7e4b9"), 

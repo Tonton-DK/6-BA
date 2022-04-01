@@ -9,7 +9,7 @@ public class MySQLDataProvider : IDataProvider
 {
     private static string cs = @"server=user-database;userid=root;password=;database=test";
 
-    public User? CreateProfile(User user)
+    public User? CreateUser(User user)
     {
         using var con = new MySqlConnection(cs);
         con.Open();
@@ -37,7 +37,7 @@ public class MySQLDataProvider : IDataProvider
         return null;
     }
 
-    public User? GetProfileById(Guid id, bool withCV)
+    public User? GetUserById(Guid id, bool withCV)
     {
         using var con = new MySqlConnection(cs);
         con.Open();
@@ -69,7 +69,7 @@ public class MySQLDataProvider : IDataProvider
         return null;
     }
 
-    public User? GetProfileByLogin(string email, string password)
+    public User? GetUserByLogin(string email, string password)
     {
         using var con = new MySqlConnection(cs);
         con.Open();
@@ -102,7 +102,7 @@ public class MySQLDataProvider : IDataProvider
         return null;
     }
 
-    public User? UpdateProfile(User user)
+    public User? UpdateUser(User user)
     {
         using var con = new MySqlConnection(cs);
         con.Open();
@@ -129,7 +129,7 @@ public class MySQLDataProvider : IDataProvider
         return null;
     }
 
-    public bool DeleteProfileById(Guid id)
+    public bool DeleteUserById(Guid id)
     {
         using var con = new MySqlConnection(cs);
         con.Open();
