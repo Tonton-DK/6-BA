@@ -8,6 +8,6 @@ public interface IUserService
     public User? GetProfileById(Guid id, bool withCV);
     public User? UpdateProfile(User profile);
     public bool DeleteProfileById(Guid id);
-    public bool ValidateProfile(string email, string password);
-    public bool ChangePassword(Guid id, string oldPassword, string newPassword);
+    public User? ValidateProfile(LoginData loginData);
+    public bool ChangePassword(PasswordData passwordData);
 }

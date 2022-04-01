@@ -18,33 +18,39 @@ public class UserServiceController : ControllerBase, IUserService
         _dataProvider = dataProvider;
     }
 
-    public User? CreateProfile(User profile)
+    [HttpPost("CreateProfile")]
+    public User? CreateProfile([FromBody] User profile)
     {
-        throw new NotImplementedException();
+        return _dataProvider.CreateProfile(profile);
     }
 
+    [HttpGet("GetProfileById/{id}")]
     public User? GetProfileById(Guid id, bool withCV)
     {
-        throw new NotImplementedException();
+        return _dataProvider.GetProfileById(id, withCV);
     }
 
-    public User? UpdateProfile(User profile)
+    [HttpPut("UpdateProfile")]
+    public User? UpdateProfile([FromBody] User profile)
     {
-        throw new NotImplementedException();
+        return _dataProvider.UpdateProfile(profile);
     }
 
+    [HttpDelete("DeleteProfileById/{id}")]
     public bool DeleteProfileById(Guid id)
     {
-        throw new NotImplementedException();
+        return _dataProvider.DeleteProfileById(id);
     }
 
-    public bool ValidateProfile(string email, string password)
+    [HttpPost("ValidateProfile")]
+    public User? ValidateProfile([FromBody] LoginData loginData)
     {
-        throw new NotImplementedException();
+        return _dataProvider.GetProfileByLogin(loginData.Email, loginData.Password);
     }
 
-    public bool ChangePassword(Guid id, string oldPassword, string newPassword)
+    [HttpPost("ChangePassword")]
+    public bool ChangePassword([FromBody] PasswordData passwordData)
     {
-        throw new NotImplementedException();
+        return _dataProvider.ChangePassword(passwordData.UserId, passwordData.OldPassword, passwordData.NewPassword);
     }
 }

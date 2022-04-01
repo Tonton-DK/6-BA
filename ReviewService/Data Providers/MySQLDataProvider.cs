@@ -35,7 +35,7 @@ public class MySQLDataProvider : IDataProvider
         
         while (rdr.Read())
         {
-            var user = new User(rdr.GetGuid(0), rdr.GetString(1), rdr.GetString(2));
+            var user = new User(rdr.GetGuid(0), "","","","","",false);
             users.Add(user);
         }
 
