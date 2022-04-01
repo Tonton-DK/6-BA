@@ -11,7 +11,7 @@ CREATE TABLE User (
   IsServiceProvider BIT NOT NULL
 );
 
-INSERT INTO User(ID, Email, Password, Firstname, Lastname, PhoneNumber, IsServiceProvider) VALUES("156be3a6-5537-41f8-9608-705c7cd7cbc3", "test@mail.dk", "secret", "John", "Doe", "12345678", 0)
+INSERT INTO User(ID, Email, Password, Firstname, Lastname, PhoneNumber, IsServiceProvider) VALUES("156be3a6-5537-41f8-9608-705c7cd7cbc3", "test@mail.dk", "secret", "John", "Doe", "12345678", 0);
 
 ALTER user 'root' IDENTIFIED WITH mysql_native_password BY '';
 flush privileges;
