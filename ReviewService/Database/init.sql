@@ -8,7 +8,7 @@ CREATE TABLE Review (
   TargetId CHAR(36) NOT NULL,
   Comment VARCHAR(500) NOT NULL,
   Rating SMALLINT NOT NULL,
-  ReviewType SMALLINT NOT NULL
+  ReviewType ENUM('Client', 'Provider') NOT NULL
 );
 
 ALTER user 'root' IDENTIFIED WITH mysql_native_password BY '';

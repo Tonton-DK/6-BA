@@ -33,14 +33,29 @@ public class ReviewServiceController : ControllerBase, IReviewService
     [HttpGet("ListReviews/{id}")]
     public IEnumerable<Review> ListReviews(Guid userId, [FromBody]ReviewType type)
     {
-        return _dataProvider.List(userId).Where(review => review.Type == type).ToList();
+        var reviews = _dataProvider.List(userId);
+        switch (type)
+        {
+            case ReviewType.All:
+                return reviews;
+            default:
+                return reviews.Where(review => review.Type == type).ToList();
+        }
     }
 
     [HttpGet("GetRating/{id}")]
     public double GetRating(Guid userId, [FromBody]ReviewType type)
     {
-        var reviews = _dataProvider.List(userId).Where(review => review.Type == type).ToList();
-        return reviews.Aggregate<Review, double>(0, (current, review) => current + review.Rating) /reviews.Count;
+        var reviews = _dataProvider.List(userId);
+        switch (type)
+        {
+            case ReviewType.All:
+                break;
+            default:
+                reviews = reviews.Where(review => review.Type == type).ToList();
+                break;
+        }
+        return reviews.Aggregate<Review, double>(0, (sum, next) => sum + next.Rating) / reviews.Count;
     }
 
     [HttpPut("UpdateReview/{id}")]
@@ -53,6 +68,5 @@ public class ReviewServiceController : ControllerBase, IReviewService
     public bool DeleteReview(Guid id)
     {
         return _dataProvider.Delete(id);
-        
     }
 }

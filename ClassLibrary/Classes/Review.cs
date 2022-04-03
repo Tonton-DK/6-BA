@@ -26,5 +26,6 @@ public class Review
 public enum ReviewType
 {
     Client,
-    Provider
+    Provider,
+    All
 }

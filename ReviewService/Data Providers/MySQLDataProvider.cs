@@ -25,7 +25,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@targetId", review.TargetId);
         cmd.Parameters.AddWithValue("@comment", review.Comment);
         cmd.Parameters.AddWithValue("@rating", review.Rating);
-        cmd.Parameters.AddWithValue("@type", (int)review.Type);
+        cmd.Parameters.AddWithValue("@type", review.Type.ToString());
         cmd.Prepare();
 
         cmd.ExecuteNonQuery();
@@ -55,7 +55,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetGuid(3),
                 rdr.GetString(4),
                 rdr.GetInt32(5),
-                (ReviewType) rdr.GetInt32(6)
+                (ReviewType) Enum.Parse(typeof(ReviewType), rdr.GetString(6))
             );
 
             return review;
@@ -88,7 +88,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetGuid(3),
                 rdr.GetString(4),
                 rdr.GetInt32(5),
-                (ReviewType) rdr.GetInt32(6)
+                (ReviewType) Enum.Parse(typeof(ReviewType), rdr.GetString(6))
             );
 
             reviews.Add(review);
