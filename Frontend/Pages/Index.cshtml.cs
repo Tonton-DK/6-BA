@@ -12,7 +12,7 @@ public class IndexModel : PageModel
     private readonly IOfferService _offerService;
     private readonly IContractService _contractService;
 
-    public IEnumerable<User> Users { get; private set; }
+    public User User { get; private set; }
     public IEnumerable<Category> Categories { get; private set; }
     public IEnumerable<Job> Jobs { get; private set; }
     public IEnumerable<Offer>? Offers { get; private set; }
@@ -28,7 +28,7 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
-        //Users = _userService.Get();
+        User = _userService.ValidateUser(new LoginData("test@mail.dk", "secret"));
         Categories = _jobService.ListCategories();
         var data = new Filter(
             Guid.Parse("0ebbe367-300a-4c86-9070-d6e106d7e4b9"), 
@@ -48,7 +48,7 @@ public class IndexModel : PageModel
         _offerService.CreateOffer(new Offer(
                 Guid.Empty, 
                 Jobs.ToArray()[0].Id, 
-                Users.ToArray()[0].Id, 
+                User.Id, 
                 400, 
                 "2 Hours", 
                 DateTime.Now));
@@ -64,8 +64,8 @@ public class IndexModel : PageModel
             Guid.Empty, 
             Jobs.ToArray()[0].Id, 
             Offers.ToArray()[0].Id, 
-            Users.ToArray()[0].Id, 
-            Users.ToArray()[1].Id, 
+            User.Id, 
+            User.Id, 
             DateTime.Now,
             State.Open));
         

@@ -2,10 +2,16 @@ CREATE DATABASE test;
 USE test;
 
 CREATE TABLE User (
-  UserID CHAR(36) PRIMARY KEY,
+  ID CHAR(36) PRIMARY KEY,
+  Email NVARCHAR(500) NOT NULL,
+  Password NVARCHAR(500) NOT NULL,
   Firstname NVARCHAR(500) NOT NULL,
-  Lastname NVARCHAR(500) NOT NULL
+  Lastname NVARCHAR(500) NOT NULL,
+  PhoneNumber NVARCHAR(500) NOT NULL,
+  IsServiceProvider BIT NOT NULL
 );
+
+INSERT INTO User(ID, Email, Password, Firstname, Lastname, PhoneNumber, IsServiceProvider) VALUES("156be3a6-5537-41f8-9608-705c7cd7cbc3", "test@mail.dk", "secret", "John", "Doe", "12345678", 0);
 
 ALTER user 'root' IDENTIFIED WITH mysql_native_password BY '';
 flush privileges;

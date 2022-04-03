@@ -1,49 +1,64 @@
-﻿using ClassLibrary.Classes;
+﻿using System.Text;
+using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
+using Newtonsoft.Json;
 
 namespace Frontend.Data_Brokers;
 
 public class UserBroker : BaseBroker, IUserService
 {
     private static readonly HttpClient Client = new HttpClient();
-    private const string Uri = "http://user-service:80/UserService";
+    private const string baseUri = "http://user-service:80/UserService";
 
-    // In order to display the forecasts on our page, we need to get them from the API
-    public IEnumerable<User> Get()
+    public User? CreateUser(User user)
     {
-        var uri = "http://user-service:80/UserService";
-        var t = Get<User[]>(uri, Client);
-        if (t != null) return new List<User>(t.Result);
+        var uri = baseUri + "/CreateUser";
+        var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+        var t = Post<User?>(uri, Client, content);
+        if (t != null) return t.Result;
         return null;
     }
 
-    public User? CreateProfile(User profile)
+    public User? GetUserById(Guid id, bool withCV)
     {
-        throw new NotImplementedException();
+        var uri = baseUri + "/GetUserById/" + id;
+        var t = Get<User?>(uri, Client);
+        if (t != null) return t.Result;
+        return null;
     }
 
-    public User? GetProfileById(Guid id, bool withCV)
+    public User? UpdateUser(User user)
     {
-        throw new NotImplementedException();
+        var uri = baseUri + "/UpdateUser";
+        var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+        var t = Put<User?>(uri, Client, content);
+        if (t != null) return t.Result;
+        return null;
     }
 
-    public User? UpdateProfile(User profile)
+    public bool DeleteUserById(Guid id)
     {
-        throw new NotImplementedException();
+        var uri = baseUri + "/DeleteUserById/" + id;
+        var t = Delete<bool>(uri, Client);
+        if (t != null) return t.Result;
+        return false;
     }
 
-    public bool DeleteProfileById(Guid id)
+    public User? ValidateUser(LoginData loginData)
     {
-        throw new NotImplementedException();
+        var uri = baseUri + "/ValidateUser";
+        var content = new StringContent(JsonConvert.SerializeObject(loginData), Encoding.UTF8, "application/json");
+        var t = Post<User?>(uri, Client, content);
+        if (t != null) return t.Result;
+        return null;
     }
 
-    public bool ValidateProfile(string email, string password)
+    public bool ChangePassword(PasswordData passwordData)
     {
-        throw new NotImplementedException();
-    }
-
-    public bool ChangePassword(Guid id, string oldPassword, string newPassword)
-    {
-        throw new NotImplementedException();
+        var uri = baseUri + "/ChangePassword";
+        var content = new StringContent(JsonConvert.SerializeObject(passwordData), Encoding.UTF8, "application/json");
+        var t = Post<bool>(uri, Client, content);
+        if (t != null) return t.Result;
+        return false;
     }
 }

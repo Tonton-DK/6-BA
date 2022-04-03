@@ -18,52 +18,39 @@ public class UserServiceController : ControllerBase, IUserService
         _dataProvider = dataProvider;
     }
 
-    [HttpGet]
-    public IEnumerable<User> Get()
+    [HttpPost("CreateUser")]
+    public User? CreateUser([FromBody] User user)
     {
-        var users = _dataProvider.GetUsers();
-        return users.ToArray();
+        return _dataProvider.CreateUser(user);
     }
 
-    [HttpGet("GetByName/{name}")]
-    public IActionResult GetByName(string name)
+    [HttpGet("GetUserById/{id}")]
+    public User? GetUserById(Guid id, bool withCV)
     {
-        return Ok("Name: " + name);
+        return _dataProvider.GetUserById(id, withCV);
     }
 
-    [HttpGet("GetById/{id}")]
-    public IActionResult GetById(Guid id)
+    [HttpPut("UpdateUser")]
+    public User? UpdateUser([FromBody] User user)
     {
-        return Ok("Id: " + id);
+        return _dataProvider.UpdateUser(user);
     }
 
-    public User? CreateProfile(User profile)
+    [HttpDelete("DeleteUserById/{id}")]
+    public bool DeleteUserById(Guid id)
     {
-        throw new NotImplementedException();
+        return _dataProvider.DeleteUserById(id);
     }
 
-    public User? GetProfileById(Guid id, bool withCV)
+    [HttpPost("ValidateUser")]
+    public User? ValidateUser([FromBody] LoginData loginData)
     {
-        throw new NotImplementedException();
+        return _dataProvider.GetUserByLogin(loginData.Email, loginData.Password);
     }
 
-    public User? UpdateProfile(User profile)
+    [HttpPost("ChangePassword")]
+    public bool ChangePassword([FromBody] PasswordData passwordData)
     {
-        throw new NotImplementedException();
-    }
-
-    public bool DeleteProfileById(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool ValidateProfile(string email, string password)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool ChangePassword(Guid id, string oldPassword, string newPassword)
-    {
-        throw new NotImplementedException();
+        return _dataProvider.ChangePassword(passwordData.UserId, passwordData.OldPassword, passwordData.NewPassword);
     }
 }

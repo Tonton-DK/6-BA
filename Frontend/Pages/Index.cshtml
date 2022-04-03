@@ -15,16 +15,13 @@
     <br/>
     <ul>
         @{
-            if(Model.Users != null)
+            if(Model.User != null)
             {
-                foreach (var user in Model.Users)
-                {
-                    <li>
-                        <h4>@user.Id</h4>
-                        <p>First Name: @user.FirstName</p>
-                        <p>Last Name: @user.LastName</p>
-                    </li>
-                }
+                <li>
+                    <h4>@Model.User.Id</h4>
+                    <p>First Name: @Model.User.FirstName</p>
+                    <p>Last Name: @Model.User.LastName</p>
+                </li>
             }
         }
     </ul>
