@@ -1,8 +1,13 @@
 ﻿using ClassLibrary.Classes;
 
-namespace UserService.Interfaces;
+namespace ReviewService.Interfaces;
 
 public interface IDataProvider
 {
-    public List<User> GetUsers();
+    public Review? Create(Review review);
+    public Review? Get(Guid id);
+    public List<Review> List(Guid userId);
+    public Review? Update(Review review);
+    public bool Delete(Guid id);
+
 }

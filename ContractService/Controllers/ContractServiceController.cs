@@ -39,14 +39,26 @@ public class ContractServiceController : ControllerBase, IContractService
     [HttpPut("ConcludeContract/{id}")]
     public Contract? ConcludeContract(Guid id)
     {
-        // ToDo: Fix
-        throw new NotImplementedException();
+        var contract = _dataProvider.Get(id);
+        if (contract != null)
+        {
+            contract.ContractState = State.Concluded;
+            contract.ClosedDate = DateTime.Now;
+            return _dataProvider.Update(contract);
+        }
+        return null;
     }
 
     [HttpDelete("CancelContract/{id}")]
     public Contract? CancelContract(Guid id)
     {
-        // ToDo: Fix
-        throw new NotImplementedException();
+        var contract = _dataProvider.Get(id);
+        if (contract != null)
+        {
+            contract.ContractState = State.Cancelled;
+            contract.ClosedDate = DateTime.Now;
+            return _dataProvider.Update(contract);
+        }
+        return null;
     }
 }

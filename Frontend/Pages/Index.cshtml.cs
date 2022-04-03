@@ -67,7 +67,7 @@ public class IndexModel : PageModel
             User.Id, 
             User.Id, 
             DateTime.Now,
-            Contract.State.Open));
+            State.Open));
         
         return _contractService.ListContracts(Jobs.ToArray()[0].Id);
     }

@@ -1,5 +1,5 @@
-using UserService.Data_Providers;
-using UserService.Interfaces;
+using ReviewService.Data_Providers;
+using ReviewService.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

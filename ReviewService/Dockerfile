@@ -1,6 +1,6 @@
 ﻿
 # cd /
-# docker build -f UserService/Dockerfile -t service .
+# docker build -f ReviewService/Dockerfile -t service .
 # docker run -p 8080:80 service
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
@@ -9,17 +9,17 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["UserService/UserService.csproj", "UserService/"]
+COPY ["ReviewService/ReviewService.csproj", "ReviewService/"]
 COPY ["ClassLibrary/ClassLibrary.csproj", "ClassLibrary/"]
-RUN dotnet restore "UserService/UserService.csproj"
+RUN dotnet restore "ReviewService/ReviewService.csproj"
 COPY . .
-WORKDIR "/src/UserService"
-RUN dotnet build "UserService.csproj" -c Release -o /app/build
+WORKDIR "/src/ReviewService"
+RUN dotnet build "ReviewService.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "UserService.csproj" -c Release -o /app/publish
+RUN dotnet publish "ReviewService.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "UserService.dll"]
+ENTRYPOINT ["dotnet", "ReviewService.dll"]
