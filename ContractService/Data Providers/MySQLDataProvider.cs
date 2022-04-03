@@ -56,7 +56,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr. GetGuid(3),
                 rdr.GetGuid(4),
                 rdr.GetDateTime(5),
-                (Contract.State)rdr.GetInt32(7)
+                (State)rdr.GetInt32(7)
             );
             
             if(!rdr.IsDBNull(6))
@@ -75,8 +75,7 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        // TODO: List for both client and provider
-        var sql = "SELECT * FROM Contract WHERE Contract.ClientId = @userId";
+        var sql = "SELECT * FROM Contract WHERE Contract.ClientId = @userId OR Contract.ProviderId = @userId";
         using var cmd = new MySqlCommand(sql, con);
         
         cmd.Parameters.AddWithValue("@userId", userId);
@@ -95,7 +94,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr. GetGuid(3),
                 rdr.GetGuid(4),
                 rdr.GetDateTime(5),
-                (Contract.State)rdr.GetInt32(7)
+                (State)rdr.GetInt32(7)
             );
             
             if(!rdr.IsDBNull(6))

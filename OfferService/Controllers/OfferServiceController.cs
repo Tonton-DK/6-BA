@@ -40,6 +40,7 @@ public class OfferServiceController : ControllerBase, IOfferService
     [HttpGet("ListOffersForUser/{userId}")]
     public IEnumerable<Offer> ListOffersForUser(Guid userId)
     {
+        // TODO: Add to IDataProvider as well?
         throw new NotImplementedException();
     }
 
@@ -62,14 +63,17 @@ public class OfferServiceController : ControllerBase, IOfferService
     }
 
     [HttpDelete("CreateCounterOffer/{id}")]
-    public Offer? CreateCounterOffer(Guid id, Offer counterOffer)
+    public Offer? CreateCounterOffer(Guid id, [FromBody]Offer counterOffer)
     {
-        throw new NotImplementedException();
+        // TODO: Is this needed? We could simply use CreateOffer and simply add "PreviousOfferId" before making the API call.
+        counterOffer.PreviousOfferId = id;
+        return _dataProvider.Create(counterOffer);
     }
     
     [HttpDelete("DeclineOffer/{id}")]
     public bool DeclineOffer(Guid id)
     {
+        // TODO: Should we just delete declined offers?
         throw new NotImplementedException();
     }
 }
