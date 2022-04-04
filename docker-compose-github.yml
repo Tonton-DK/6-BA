@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  
   frontend:
     image: ghcr.io/antje12/ba/frontend:latest
     ports:
@@ -9,6 +10,7 @@ services:
       - frontend
     depends_on:
       - user-service
+  
   user-service:
     image: ghcr.io/antje12/ba/user-service:latest
     networks:
@@ -16,11 +18,13 @@ services:
       - user-service
     depends_on:
       - user-database
+  
   user-database:
     image: ghcr.io/antje12/ba/user-database:latest
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - user-service
+  
   job-service:
     image: ghcr.io/antje12/ba/job-service:latest
     networks:
@@ -28,13 +32,59 @@ services:
       - job-service
     depends_on:
       - job-database
+  
   job-database:
       image: ghcr.io/antje12/ba/job-database:latest
       command: --default-authentication-plugin=mysql_native_password
       networks:
         - job-service
 
+  offer-service:
+    image: ghcr.io/antje12/ba/offer-service:latest
+    networks:
+      - frontend
+      - offer-service
+    depends_on:
+      - offer-database
+  
+  offer-database:
+    image: ghcr.io/antje12/ba/offer-database:latest
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - offer-service
+
+  contract-service:
+    image: ghcr.io/antje12/ba/contract-service:latest
+    networks:
+      - frontend
+      - contract-service
+    depends_on:
+      - contract-database
+  
+  contract-database:
+    image: ghcr.io/antje12/ba/contract-database:latest
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - contract-service
+
+  review-service:
+    image: ghcr.io/antje12/ba/review-service:latest
+    networks:
+      - frontend
+      - review-service
+    depends_on:
+      - review-database
+  
+  review-database:
+    image: ghcr.io/antje12/ba/review-database:latest
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - review-service
+
 networks:
   frontend:
   user-service:
   job-service:
+  offer-service:
+  contract-service:
+  review-service:

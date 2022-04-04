@@ -17,20 +17,43 @@ jobs:
       - name: Login to container registry
         run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
 
+      - name: Build and push frontend image to registry
+        run: docker buildx build --push --file Frontend/Dockerfile --tag ghcr.io/antje12/ba/frontend .
+
+      # User images
       - name: Build and push user-database image to registry
         run: docker buildx build --push --tag ghcr.io/antje12/ba/user-database ./UserService/Database/
 
       - name: Build and push user-service image to registry
         run: docker buildx build --push --file UserService/Dockerfile --tag ghcr.io/antje12/ba/user-service .
 
+      # Job images
       - name: Build and push job-database image to registry
         run: docker buildx build --push --tag ghcr.io/antje12/ba/job-database ./JobService/Database/
       
       - name: Build and push job-service image to registry
         run: docker buildx build --push --file JobService/Dockerfile --tag ghcr.io/antje12/ba/job-service .
 
-      - name: Build and push frontend image to registry
-        run: docker buildx build --push --file Frontend/Dockerfile --tag ghcr.io/antje12/ba/frontend .
+      # Offer images
+      - name: Build and push offer-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/offer-database ./offerService/Database/
+
+      - name: Build and push offer-service image to registry
+        run: docker buildx build --push --file offerService/Dockerfile --tag ghcr.io/antje12/ba/offer-service .
+
+      # Contract images
+      - name: Build and push contract-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/contract-database ./contractService/Database/
+
+      - name: Build and push contract-service image to registry
+        run: docker buildx build --push --file contractService/Dockerfile --tag ghcr.io/antje12/ba/contract-service .
+
+      # Review images
+      - name: Build and push review-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/review-database ./reviewService/Database/
+
+      - name: Build and push review-service image to registry
+        run: docker buildx build --push --file reviewService/Dockerfile --tag ghcr.io/antje12/ba/review-service .
   
   #Production-Deploy:
   #  name: production deploy job

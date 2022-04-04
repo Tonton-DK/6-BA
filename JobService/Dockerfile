@@ -1,6 +1,5 @@
-﻿
-# cd /
-# docker build -f MicroService/Dockerfile -t service .
+﻿# cd /
+# docker build -f JobService/Dockerfile -t service .
 # docker run -p 8080:80 service
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base

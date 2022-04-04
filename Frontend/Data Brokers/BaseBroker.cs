@@ -2,6 +2,8 @@
 
 public class BaseBroker
 {
+    private static readonly HttpClient Client = new HttpClient();
+    
     private static HttpClient GetClient()
     {
         HttpClientHandler clientHandler = new HttpClientHandler();
@@ -24,28 +26,28 @@ public class BaseBroker
         return default(T);
     }
 
-    protected static async Task<T>? Get<T>(string uri, HttpClient httpClient)
+    protected static async Task<T>? Get<T>(string uri)
     {
         var client = GetClient();
         using var httpResponse = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
         return await GetResponse<T>(httpResponse);
     }
 
-    protected static async Task<T>? Post<T>(string uri, HttpClient httpClient, StringContent content)
+    protected static async Task<T>? Post<T>(string uri, StringContent content)
     {
         var client = GetClient();
         using var httpResponse = await client.PostAsync(uri, content);
         return await GetResponse<T>(httpResponse);
     }
     
-    protected static async Task<T>? Put<T>(string uri, HttpClient httpClient, StringContent content)
+    protected static async Task<T>? Put<T>(string uri, StringContent content)
     {
         var client = GetClient();
         using var httpResponse = await client.PutAsync(uri, content);
         return await GetResponse<T>(httpResponse);
     }
     
-    protected static async Task<T>? Delete<T>(string uri, HttpClient httpClient)
+    protected static async Task<T>? Delete<T>(string uri)
     {
         var client = GetClient();
         using var httpResponse = await client.DeleteAsync(uri);

@@ -2,7 +2,7 @@
 
 namespace ClassLibrary.Interfaces;
 
-public interface IUserService
+public interface IUserService : IBaseService
 {
     public User? CreateUser(User user);
     public User? GetUserById(Guid id, bool withCV);

@@ -2,7 +2,7 @@
 
 namespace ClassLibrary.Interfaces;
 
-public interface IReviewService
+public interface IReviewService : IBaseService
 {
     public Review? CreateReview(Review review);
     public Review? GetReviewById(Guid id);

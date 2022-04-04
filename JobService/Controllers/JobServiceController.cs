@@ -18,6 +18,12 @@ public class JobServiceController : ControllerBase, IJobService
         _dataProvider = dataProvider;
     }
 
+    [HttpGet("Get")]
+    public bool Get()
+    {
+        return true;
+    }
+
     [HttpGet("ListCategories")]
     public IEnumerable<Category> ListCategories()
     {

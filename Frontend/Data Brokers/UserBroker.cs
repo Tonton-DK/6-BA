@@ -7,14 +7,20 @@ namespace Frontend.Data_Brokers;
 
 public class UserBroker : BaseBroker, IUserService
 {
-    private static readonly HttpClient Client = new HttpClient();
     private const string baseUri = "http://user-service:80/UserService";
+    
+    public bool Get()
+    {
+        var t = Get<bool>(baseUri+"/Get");
+        if (t != null) return t.Result;
+        return false;
+    }
 
     public User? CreateUser(User user)
     {
         var uri = baseUri + "/CreateUser";
         var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
-        var t = Post<User?>(uri, Client, content);
+        var t = Post<User?>(uri, content);
         if (t != null) return t.Result;
         return null;
     }
@@ -22,7 +28,7 @@ public class UserBroker : BaseBroker, IUserService
     public User? GetUserById(Guid id, bool withCV)
     {
         var uri = baseUri + "/GetUserById/" + id;
-        var t = Get<User?>(uri, Client);
+        var t = Get<User?>(uri);
         if (t != null) return t.Result;
         return null;
     }
@@ -31,7 +37,7 @@ public class UserBroker : BaseBroker, IUserService
     {
         var uri = baseUri + "/UpdateUser";
         var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
-        var t = Put<User?>(uri, Client, content);
+        var t = Put<User?>(uri, content);
         if (t != null) return t.Result;
         return null;
     }
@@ -39,7 +45,7 @@ public class UserBroker : BaseBroker, IUserService
     public bool DeleteUserById(Guid id)
     {
         var uri = baseUri + "/DeleteUserById/" + id;
-        var t = Delete<bool>(uri, Client);
+        var t = Delete<bool>(uri);
         if (t != null) return t.Result;
         return false;
     }
@@ -48,7 +54,7 @@ public class UserBroker : BaseBroker, IUserService
     {
         var uri = baseUri + "/ValidateUser";
         var content = new StringContent(JsonConvert.SerializeObject(loginData), Encoding.UTF8, "application/json");
-        var t = Post<User?>(uri, Client, content);
+        var t = Post<User?>(uri, content);
         if (t != null) return t.Result;
         return null;
     }
@@ -57,7 +63,7 @@ public class UserBroker : BaseBroker, IUserService
     {
         var uri = baseUri + "/ChangePassword";
         var content = new StringContent(JsonConvert.SerializeObject(passwordData), Encoding.UTF8, "application/json");
-        var t = Post<bool>(uri, Client, content);
+        var t = Post<bool>(uri, content);
         if (t != null) return t.Result;
         return false;
     }

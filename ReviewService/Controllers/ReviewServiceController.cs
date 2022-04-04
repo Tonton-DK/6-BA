@@ -18,6 +18,12 @@ public class ReviewServiceController : ControllerBase, IReviewService
         _dataProvider = dataProvider;
     }
 
+    [HttpGet("Get")]
+    public bool Get()
+    {
+        return true;
+    }
+
     [HttpPost("CreateReview")]
     public Review? CreateReview([FromBody]Review review)
     {

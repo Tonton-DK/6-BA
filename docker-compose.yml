@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  
   frontend:
     build:
       context: ./
@@ -11,6 +12,7 @@ services:
       - frontend
     depends_on:
       - user-service
+  
   user-service:
     build:
       context: ./
@@ -20,12 +22,14 @@ services:
       - user-service
     depends_on:
       - user-database
+  
   user-database:
     build:
       context: ./UserService/Database
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - user-service
+  
   job-service:
     build:
       context: ./
@@ -35,12 +39,14 @@ services:
       - job-service
     depends_on:
       - job-database
+  
   job-database:
     build:
       context: ./JobService/Database
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - job-service
+  
   offer-service:
     build:
       context: ./
@@ -50,12 +56,14 @@ services:
       - offer-service
     depends_on:
       - offer-database
+  
   offer-database:
     build:
       context: ./OfferService/Database
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - offer-service
+  
   contract-service:
     build:
       context: ./
@@ -65,12 +73,14 @@ services:
       - contract-service
     depends_on:
       - contract-database
+  
   contract-database:
     build:
       context: ./ContractService/Database
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - contract-service
+  
   review-service:
     build:
       context: ./
@@ -80,6 +90,7 @@ services:
       - review-service
     depends_on:
       - review-database
+  
   review-database:
     build:
       context: ./ReviewService/Database

@@ -8,13 +8,19 @@ namespace Frontend.Data_Brokers;
 public class ReviewBroker : BaseBroker, IReviewService
 {
     private static readonly string baseUri = "http://review-service:80/ReviewService";
-    private static readonly HttpClient Client = new HttpClient();
+    
+    public bool Get()
+    {
+        var t = Get<bool>(baseUri+"/Get");
+        if (t != null) return t.Result;
+        return false;
+    }
 
     public Review? CreateReview(Review review)
     {
         var uri = baseUri + "/CreateReview";
         var content = new StringContent(JsonConvert.SerializeObject(review), Encoding.UTF8, "application/json");
-        var t = Post<Review?>(uri, Client, content);
+        var t = Post<Review?>(uri, content);
         if (t != null) return t.Result;
         return null;
     }
@@ -22,7 +28,7 @@ public class ReviewBroker : BaseBroker, IReviewService
     public Review? GetReviewById(Guid id)
     {
         var uri = baseUri + "/GetReviewById/" + id;
-        var t = Get<Review?>(uri, Client);
+        var t = Get<Review?>(uri);
         if (t != null) return t.Result;
         return null;
     }
@@ -31,7 +37,7 @@ public class ReviewBroker : BaseBroker, IReviewService
     {
         var uri = baseUri + "/ListReviews/"+userId;
         var content = new StringContent(JsonConvert.SerializeObject(type), Encoding.UTF8, "application/json");
-        var t = Post<Review[]>(uri, Client, content);
+        var t = Post<Review[]>(uri, content);
         if (t != null) return new List<Review>(t.Result);
         return null;
     }
@@ -40,7 +46,7 @@ public class ReviewBroker : BaseBroker, IReviewService
     {
         var uri = baseUri + "/GetRating/"+userId;
         var content = new StringContent(JsonConvert.SerializeObject(type), Encoding.UTF8, "application/json");
-        var t = Post<double>(uri, Client, content);
+        var t = Post<double>(uri, content);
         if (t != null) return t.Result;
         return 0;
     }
@@ -49,7 +55,7 @@ public class ReviewBroker : BaseBroker, IReviewService
     {
         var uri = baseUri + "/UpdateReview";
         var content = new StringContent(JsonConvert.SerializeObject(review), Encoding.UTF8, "application/json");
-        var t = Put<Review?>(uri, Client, content);
+        var t = Put<Review?>(uri, content);
         if (t != null) return t.Result;
         return null;
     }
@@ -57,7 +63,7 @@ public class ReviewBroker : BaseBroker, IReviewService
     public bool DeleteReview(Guid id)
     {
         var uri = baseUri + "/DeleteReviewById/" + id;
-        var t = Delete<bool>(uri, Client);
+        var t = Delete<bool>(uri);
         if (t != null) return t.Result;
         return false;
     }

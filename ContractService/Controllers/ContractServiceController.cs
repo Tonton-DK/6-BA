@@ -18,6 +18,12 @@ public class ContractServiceController : ControllerBase, IContractService
         _dataProvider = dataProvider;
     }
 
+    [HttpGet("Get")]
+    public bool Get()
+    {
+        return true;
+    }
+
     [HttpPost("CreateContract")]
     public Contract? CreateContract([FromBody]Contract contract)
     {

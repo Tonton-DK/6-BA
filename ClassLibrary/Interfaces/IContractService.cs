@@ -2,7 +2,7 @@
 
 namespace ClassLibrary.Interfaces;
 
-public interface IContractService
+public interface IContractService : IBaseService
 {
     public Contract? CreateContract(Contract contract);
     public Contract? GetContractById(Guid id);

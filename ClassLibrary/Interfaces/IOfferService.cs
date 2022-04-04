@@ -2,7 +2,7 @@ using ClassLibrary.Classes;
 
 namespace ClassLibrary.Interfaces;
 
-public interface IOfferService
+public interface IOfferService : IBaseService
 {
     public Offer? CreateOffer(Offer offer);
     public Offer? GetOfferById(Guid id);

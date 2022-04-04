@@ -1,5 +1,4 @@
-﻿
-# cd /
+﻿# cd /
 # docker build -f OfferService/Dockerfile -t service .
 # docker run -p 8080:80 service
 

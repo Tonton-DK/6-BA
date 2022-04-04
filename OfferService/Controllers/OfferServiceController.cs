@@ -18,6 +18,12 @@ public class OfferServiceController : ControllerBase, IOfferService
         _dataProvider = dataProvider;
     }
 
+    [HttpGet("Get")]
+    public bool Get()
+    {
+        return true;
+    }
+
     [HttpPost("CreateOffer")]
     public Offer? CreateOffer([FromBody]Offer offer)
     {
@@ -59,6 +65,7 @@ public class OfferServiceController : ControllerBase, IOfferService
     [HttpDelete("AcceptOffer/{id}")]
     public bool AcceptOffer(Guid id)
     {
+        // TODO
         throw new NotImplementedException();
     }
 

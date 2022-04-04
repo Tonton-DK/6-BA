@@ -18,6 +18,12 @@ public class UserServiceController : ControllerBase, IUserService
         _dataProvider = dataProvider;
     }
 
+    [HttpGet("Get")]
+    public bool Get()
+    {
+        return true;
+    }
+
     [HttpPost("CreateUser")]
     public User? CreateUser([FromBody] User user)
     {

@@ -2,7 +2,7 @@
 
 namespace ClassLibrary.Interfaces;
 
-public interface IJobService
+public interface IJobService : IBaseService
 {
     public IEnumerable<Category> ListCategories();
     public Job? CreateJob(Job job);

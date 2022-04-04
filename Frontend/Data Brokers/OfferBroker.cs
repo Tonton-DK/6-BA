@@ -7,36 +7,42 @@ namespace Frontend.Data_Brokers;
 
 public class OfferBroker : BaseBroker, IOfferService
 {
-    private static readonly HttpClient Client = new HttpClient();
-    private const string Uri = "http://offer-service:80/OfferService";
+    private const string baseUri = "http://offer-service:80/OfferService";
+    
+    public bool Get()
+    {
+        var t = Get<bool>(baseUri+"/Get");
+        if (t != null) return t.Result;
+        return false;
+    }
 
     // In order to display the forecasts on our page, we need to get them from the API
 
     public Offer? CreateOffer(Offer offer)
     {
         var content = new StringContent(JsonConvert.SerializeObject(offer), Encoding.UTF8, "application/json");
-        var t = Post<Offer>(Uri+"/CreateOffer", Client, content);
+        var t = Post<Offer>(baseUri+"/CreateOffer", content);
         if (t != null) return t.Result;
         return null;
     }
 
     public Offer? GetOfferById(Guid id)
     {
-        var t = Get<Offer>(Uri+"/GetOfferById/"+id, Client);
+        var t = Get<Offer>(baseUri+"/GetOfferById/"+id);
         if (t != null) return t.Result;
         return null;
     }
 
     public IEnumerable<Offer> ListOffersForJob(Guid jobId)
     {
-        var t = Get<Offer[]>(Uri+"/ListOffersForJob/"+jobId, Client);
+        var t = Get<Offer[]>(baseUri+"/ListOffersForJob/"+jobId);
         if (t != null) return new List<Offer>(t.Result);
         return null;
     }
 
     public IEnumerable<Offer> ListOffersForUser(Guid userId)
     {
-        var t = Get<Offer[]>(Uri+"/ListOffersForUser/"+userId, Client);
+        var t = Get<Offer[]>(baseUri+"/ListOffersForUser/"+userId);
         if (t != null) return new List<Offer>(t.Result);
         return null;
     }
@@ -44,14 +50,14 @@ public class OfferBroker : BaseBroker, IOfferService
     public Offer? UpdateOffer(Offer offer)
     {
         var content = new StringContent(JsonConvert.SerializeObject(offer), Encoding.UTF8, "application/json");
-        var t = Put<Offer>(Uri+"/UpdateOffer", Client, content);
+        var t = Put<Offer>(baseUri+"/UpdateOffer", content);
         if (t != null) return t.Result;
         return null;
     }
 
     public bool DeleteOffer(Guid id)
     {
-        var t = Delete<bool>(Uri+"/DeleteOffer/"+id, Client);
+        var t = Delete<bool>(baseUri+"/DeleteOffer/"+id);
         if (t != null) return t.Result;
         return false;
     }
@@ -59,7 +65,7 @@ public class OfferBroker : BaseBroker, IOfferService
     public bool AcceptOffer(Guid id)
     {
         var content = new StringContent("", Encoding.UTF8, "application/json");
-        var t = Put<bool>(Uri+"/AcceptOffer/"+id, Client, content);
+        var t = Put<bool>(baseUri+"/AcceptOffer/"+id, content);
         if (t != null) return t.Result;
         return false;
     }
@@ -67,7 +73,7 @@ public class OfferBroker : BaseBroker, IOfferService
     public Offer? CreateCounterOffer(Guid id, Offer counterOffer)
     {
         var content = new StringContent(JsonConvert.SerializeObject(counterOffer), Encoding.UTF8, "application/json");
-        var t = Put<Offer?>(Uri+"/AcceptOffer/"+id, Client, content);
+        var t = Put<Offer?>(baseUri+"/AcceptOffer/"+id, content);
         if (t != null) return t.Result;
         return null;
     }
@@ -75,7 +81,7 @@ public class OfferBroker : BaseBroker, IOfferService
     public bool DeclineOffer(Guid id)
     {
         var content = new StringContent("", Encoding.UTF8, "application/json");
-        var t = Put<bool>(Uri+"/DeclineOffer/"+id, Client, content);
+        var t = Put<bool>(baseUri+"/DeclineOffer/"+id, content);
         if (t != null) return t.Result;
         return false;
     }
