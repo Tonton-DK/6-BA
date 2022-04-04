@@ -14,12 +14,12 @@ public class IndexModel : PageModel
     private readonly IContractService _contractService;
     private readonly IReviewService _reviewService;
 
+    public Dictionary<Type, bool> ServiceStatus { get; private set; }
     public User User { get; private set; }
     public IEnumerable<Category> Categories { get; private set; }
     public IEnumerable<Job> Jobs { get; private set; }
-    public IEnumerable<Offer>? Offers { get; private set; }
-    public IEnumerable<Contract>? Contracts { get; private set; }
-    public Dictionary<IBaseService, bool> ServiceStatus { get; private set; }
+    public IEnumerable<Offer> Offers { get; private set; }
+    public IEnumerable<Contract> Contracts { get; private set; }
 
     public IndexModel(ILogger<IndexModel> logger, 
         IUserService userService, 
@@ -34,12 +34,12 @@ public class IndexModel : PageModel
         _offerService = offerService;
         _contractService = contractService;
         _reviewService = reviewService;
+        ServiceStatus = new Dictionary<Type, bool>();
     }
 
     public void OnGet()
     {
         TestServices();
-
 
         /*
         User = _userService.ValidateUser(new LoginData("test@mail.dk", "secret"));
@@ -55,16 +55,17 @@ public class IndexModel : PageModel
         Contracts = TestContracts();
         */
     }
-
+    
     private void TestServices()
     {
-        ServiceStatus.Add(_userService, _userService.Get());
-        ServiceStatus.Add(_jobService, _jobService.Get());
-        ServiceStatus.Add(_offerService, _offerService.Get());
-        ServiceStatus.Add(_contractService, _contractService.Get());
-        ServiceStatus.Add(_reviewService, _reviewService.Get());
+        ServiceStatus.Add(_userService.GetType(), _userService.Get());
+        ServiceStatus.Add(_jobService.GetType(), _jobService.Get());
+        ServiceStatus.Add(_offerService.GetType(), _offerService.Get());
+        ServiceStatus.Add(_contractService.GetType(), _contractService.Get());
+        ServiceStatus.Add(_reviewService.GetType(), _reviewService.Get());
     }
-
+    
+    /*
     // Create test offer and load it afterwards
     IEnumerable<Offer>? TestOffers()
     {
@@ -95,4 +96,5 @@ public class IndexModel : PageModel
         
         return _contractService.ListContracts(Jobs.ToArray()[0].Id);
     }
+    */
 }

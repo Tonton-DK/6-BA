@@ -7,7 +7,7 @@ namespace Frontend.Data_Brokers;
 
 public class ContractBroker : BaseBroker, IContractService
 {
-    private const string baseUri = "http://offer-service:80/ContractService";
+    private const string baseUri = "http://contract-service:80/ContractService";
     
     public bool Get()
     {

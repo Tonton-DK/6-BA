@@ -20,7 +20,7 @@
                 foreach (var status in Model.ServiceStatus)
                 {
                     <li>
-                        <h4>@status.Key.GetType() </h4>
+                        <h4>@status.Key.Name </h4>
                         <p>Status: @(status.Value ? "Found" : "Missing")</p>
                     </li>
                 }
@@ -29,6 +29,7 @@
     </ul>
 </div>
 
+@*
 <div class="align-left">
     <br/>
     <h3>Users from service:</h3>
@@ -139,3 +140,4 @@
         }
     </ul>
 </div>
+*@
