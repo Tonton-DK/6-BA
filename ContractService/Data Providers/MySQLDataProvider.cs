@@ -26,7 +26,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@providerId", contract.ProviderId);
         cmd.Parameters.AddWithValue("@creationDate", contract.CreationDate);
         cmd.Parameters.AddWithValue("@closedDate", contract.ClosedDate ?? (object) DBNull.Value);
-        cmd.Parameters.AddWithValue("@state", (int)contract.ContractState);
+        cmd.Parameters.AddWithValue("@state", contract.ContractState.ToString());
         cmd.Prepare();
 
         cmd.ExecuteNonQuery();
@@ -56,7 +56,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr. GetGuid(3),
                 rdr.GetGuid(4),
                 rdr.GetDateTime(5),
-                (State)rdr.GetInt32(7)
+                (State) Enum.Parse(typeof(State), rdr.GetString(7))
             );
             
             if(!rdr.IsDBNull(6))
@@ -94,7 +94,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr. GetGuid(3),
                 rdr.GetGuid(4),
                 rdr.GetDateTime(5),
-                (State)rdr.GetInt32(7)
+                (State) Enum.Parse(typeof(State), rdr.GetString(7))
             );
             
             if(!rdr.IsDBNull(6))
@@ -123,7 +123,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@providerId", contract.ProviderId);
         cmd.Parameters.AddWithValue("@creationDate", contract.CreationDate);
         cmd.Parameters.AddWithValue("@closedDate", contract.ClosedDate ?? (object) DBNull.Value);
-        cmd.Parameters.AddWithValue("@state", (int)contract.ContractState);
+        cmd.Parameters.AddWithValue("@state", contract.ContractState.ToString());
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();

@@ -3,7 +3,7 @@ using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
 using Newtonsoft.Json;
 
-namespace Frontend.Data_Brokers;
+namespace ClassLibrary.Data_Brokers;
 
 public class OfferBroker : BaseBroker, IOfferService
 {
@@ -15,8 +15,6 @@ public class OfferBroker : BaseBroker, IOfferService
         if (t != null) return t.Result;
         return false;
     }
-
-    // In order to display the forecasts on our page, we need to get them from the API
 
     public Offer? CreateOffer(Offer offer)
     {
@@ -62,12 +60,12 @@ public class OfferBroker : BaseBroker, IOfferService
         return false;
     }
 
-    public bool AcceptOffer(Guid id)
+    public Contract? AcceptOffer(Guid id)
     {
         var content = new StringContent("", Encoding.UTF8, "application/json");
-        var t = Put<bool>(baseUri+"/AcceptOffer/"+id, content);
+        var t = Put<Contract?>(baseUri+"/AcceptOffer/"+id, content);
         if (t != null) return t.Result;
-        return false;
+        return null;
     }
 
     public Offer? CreateCounterOffer(Guid id, Offer counterOffer)

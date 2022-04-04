@@ -9,7 +9,7 @@ CREATE TABLE Contract (
   ProviderId CHAR(36) NOT NULL,
   CreationDate DATETIME NOT NULL,
   ClosedDate DATETIME,
-  State TINYINT NOT NULL
+  State ENUM('Open', 'Concluded', 'Cancelled')
 );
 
 ALTER user 'root' IDENTIFIED WITH mysql_native_password BY '';

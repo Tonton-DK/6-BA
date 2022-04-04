@@ -2,7 +2,7 @@ namespace ClassLibrary.Classes;
 
 public class Offer
 {
-    public Offer(Guid id, Guid jobId, Guid providerId, int price, string duration, DateTime date)
+    public Offer(Guid id, Guid jobId, Guid providerId, int price, string duration, DateTime date, State state)
     {
         Id = id;
         JobId = jobId;
@@ -10,6 +10,7 @@ public class Offer
         Price = price;
         Duration = duration;
         Date = date;
+        State = state;
     }
 
     public Guid Id{get;set;}
@@ -19,4 +20,5 @@ public class Offer
     public int Price{get;set;}
     public string Duration{get;set;}
     public DateTime Date{get;set;}
+    public State State{get;set;}
 }

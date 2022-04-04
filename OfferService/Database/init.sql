@@ -8,7 +8,8 @@ CREATE TABLE Offer (
   PreviousOfferId CHAR(36),
   Price int NOT NULL,
   Duration VARCHAR(500) NOT NULL,
-  DATE DATETIME NOT NULL
+  DATE DATETIME NOT NULL,
+  State ENUM('Open', 'Concluded', 'Cancelled')
 );
 
 ALTER user 'root' IDENTIFIED WITH mysql_native_password BY '';

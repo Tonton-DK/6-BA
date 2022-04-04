@@ -1,5 +1,5 @@
+using ClassLibrary.Data_Brokers;
 using ClassLibrary.Interfaces;
-using Frontend.Data_Brokers;
 
 var builder = WebApplication.CreateBuilder(args);
 

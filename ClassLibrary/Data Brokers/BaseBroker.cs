@@ -1,4 +1,4 @@
-﻿namespace Frontend.Data_Brokers;
+﻿namespace ClassLibrary.Data_Brokers;
 
 public class BaseBroker
 {

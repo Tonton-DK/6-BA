@@ -3,7 +3,7 @@ using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
 using Newtonsoft.Json;
 
-namespace Frontend.Data_Brokers;
+namespace ClassLibrary.Data_Brokers;
 
 public class ContractBroker : BaseBroker, IContractService
 {
