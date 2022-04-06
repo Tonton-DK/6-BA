@@ -55,6 +55,45 @@
     </ul>
 </div>
 
+<div class="align-left">
+    <br/>
+    <h3>Created Job:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.Job != null)
+            {
+                <li>
+                    <h4>@Model.Job.Id</h4>
+                    <p>Name: @Model.Job.Title</p>
+                    <p>Description: @Model.Job.Description</p>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+<div class="align-left">
+    <br/>
+    <h3>Jobs listed:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.Jobs != null)
+            {
+                foreach (var job in Model.Jobs)
+                {
+                    <li>
+                        <h4>@job.Id</h4>
+                        <p>Name: @job.Title</p>
+                        <p>Description: @job.Description</p>
+                    </li>
+                }
+            }
+        }
+    </ul>
+</div>
+
 @*
 <div class="align-left">
     <br/>
@@ -70,27 +109,6 @@
                         <h4>@category.Id</h4>
                         <p>Name: @category.Name</p>
                         <p>Description: @category.Description</p>
-                    </li>
-                }
-            }
-        }
-    </ul>
-</div>
-
-<div class="align-left">
-    <br/>
-    <h3>Jobs from service:</h3>
-    <br/>
-    <ul>
-        @{
-            if(Model.Jobs != null)
-            {
-                foreach (var job in Model.Jobs)
-                {
-                    <li>
-                        <h4>@job.Id</h4>
-                        <p>Name: @job.Title</p>
-                        <p>Description: @job.Description</p>
                     </li>
                 }
             }

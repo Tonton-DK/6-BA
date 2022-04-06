@@ -18,9 +18,11 @@ public class IndexModel : PageModel
     
     public User Client { get; private set; }
     public User Provider { get; private set; }
-    
     public IEnumerable<Category> Categories { get; private set; }
+    public Job Job { get; private set; }
     public IEnumerable<Job> Jobs { get; private set; }
+    public Offer Offer { get; private set; }
+    
     public IEnumerable<Offer> Offers { get; private set; }
     public IEnumerable<Contract> Contracts { get; private set; }
 
@@ -78,6 +80,20 @@ public class IndexModel : PageModel
         Provider = new User(Guid.Empty, "provider@mail.dk", "secret", "Provider", "Dude", "12345678", true);
         Provider = _userService.CreateUser(Provider);
         Provider = _userService.ValidateUser(new LoginData(Provider.Email, Provider.Password));
+
+        Categories = _jobService.ListCategories();
+        
+        var address = new Address("Campusvej", "55", "5230");
+        Job = new Job(Guid.Empty, "Dog walker", "Walk my dog, please. He is a good boy.", DateTime.Now, Categories.First(), address, Client.Id);
+        Job = _jobService.CreateJob(Job);
+
+        var filter = new Filter(null, null, null, "", "");
+        Jobs = _jobService.ListJobs(filter);
+        Job = _jobService.GetJobById(Job.Id);
+        
+        //Offer = new Offer();
+        //Offer = _offerService.CreateJob(Offer);
+
     }
 
     /*
