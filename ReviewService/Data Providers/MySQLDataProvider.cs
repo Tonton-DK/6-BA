@@ -7,7 +7,7 @@ namespace ReviewService.Data_Providers;
 // Guide: https://zetcode.com/csharp/mysql/
 public class MySQLDataProvider : IDataProvider
 {
-    private static string cs = @"server=review-database;userid=root;password=;database=test";
+    private static string cs = @"server=review-database;userid=root;password=;database=db";
 
     public Review? Create(Review review)
     {

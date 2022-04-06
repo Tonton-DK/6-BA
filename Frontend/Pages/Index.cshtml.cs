@@ -15,7 +15,10 @@ public class IndexModel : PageModel
     private readonly IReviewService _reviewService;
 
     public Dictionary<Type, bool> ServiceStatus { get; private set; }
-    public User User { get; private set; }
+    
+    public User Client { get; private set; }
+    public User Provider { get; private set; }
+    
     public IEnumerable<Category> Categories { get; private set; }
     public IEnumerable<Job> Jobs { get; private set; }
     public IEnumerable<Offer> Offers { get; private set; }
@@ -39,7 +42,8 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
-        TestServices();
+        GetServiceStatus();
+        TestFullServiceFlow();
 
         /*
         User = _userService.ValidateUser(new LoginData("test@mail.dk", "secret"));
@@ -56,7 +60,7 @@ public class IndexModel : PageModel
         */
     }
     
-    private void TestServices()
+    private void GetServiceStatus()
     {
         ServiceStatus.Add(_userService.GetType(), _userService.Get());
         ServiceStatus.Add(_jobService.GetType(), _jobService.Get());
@@ -64,7 +68,18 @@ public class IndexModel : PageModel
         ServiceStatus.Add(_contractService.GetType(), _contractService.Get());
         ServiceStatus.Add(_reviewService.GetType(), _reviewService.Get());
     }
-    
+
+    private void TestFullServiceFlow()
+    {
+        Client = new User(Guid.Empty, "client@mail.dk", "secret", "Client", "Dude", "12345678", false);
+        Client = _userService.CreateUser(Client);
+        Client = _userService.ValidateUser(new LoginData(Client.Email, Client.Password));
+        
+        Provider = new User(Guid.Empty, "provider@mail.dk", "secret", "Provider", "Dude", "12345678", true);
+        Provider = _userService.CreateUser(Provider);
+        Provider = _userService.ValidateUser(new LoginData(Provider.Email, Provider.Password));
+    }
+
     /*
     // Create test offer and load it afterwards
     IEnumerable<Offer>? TestOffers()

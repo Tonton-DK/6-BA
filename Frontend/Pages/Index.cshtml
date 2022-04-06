@@ -29,28 +29,36 @@
     </ul>
 </div>
 
-@*
 <div class="align-left">
     <br/>
-    <h3>Users from service:</h3>
+    <h3>Users:</h3>
     <br/>
     <ul>
         @{
-            if(Model.User != null)
+            if(Model.Client != null)
             {
                 <li>
-                    <h4>@Model.User.Id</h4>
-                    <p>First Name: @Model.User.FirstName</p>
-                    <p>Last Name: @Model.User.LastName</p>
+                    <h4>Client: @Model.Client.Id</h4>
+                    <p>First Name: @Model.Client.FirstName</p>
+                    <p>Last Name: @Model.Client.LastName</p>
+                </li>
+            }
+            if(Model.Provider != null)
+            {
+                <li>
+                    <h4>Client: @Model.Provider.Id</h4>
+                    <p>First Name: @Model.Provider.FirstName</p>
+                    <p>Last Name: @Model.Provider.LastName</p>
                 </li>
             }
         }
     </ul>
 </div>
 
+@*
 <div class="align-left">
     <br/>
-    <h3>Categories from service:</h3>
+    <h3>Categories:</h3>
     <br/>
     <ul>
         @{
