@@ -36,7 +36,7 @@ public class ReviewServiceController : ControllerBase, IReviewService
         return _dataProvider.Get(id);
     }
 
-    [HttpPost("ListReviews/{id}")]
+    [HttpPost("ListReviews/{userId}")]
     public IEnumerable<Review> ListReviews(Guid userId, [FromBody]ReviewType type)
     {
         var reviews = _dataProvider.List(userId);
@@ -49,7 +49,7 @@ public class ReviewServiceController : ControllerBase, IReviewService
         }
     }
 
-    [HttpPost("GetRating/{id}")]
+    [HttpPost("GetRating/{userId}")]
     public decimal GetRating(Guid userId, [FromBody]ReviewType type)
     {
         var reviews = _dataProvider.List(userId);
@@ -72,8 +72,8 @@ public class ReviewServiceController : ControllerBase, IReviewService
         return 0;
     }
 
-    [HttpPut("UpdateReview/{id}")]
-    public Review? UpdateReview(Review review)
+    [HttpPut("UpdateReview")]
+    public Review? UpdateReview([FromBody]Review review)
     {
         return _dataProvider.Update(review);
     }
