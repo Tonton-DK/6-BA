@@ -22,9 +22,12 @@ public class IndexModel : PageModel
     public Job Job { get; private set; }
     public IEnumerable<Job> Jobs { get; private set; }
     public Offer Offer { get; private set; }
-    
     public IEnumerable<Offer> Offers { get; private set; }
+    public Contract Contract { get; private set; }
     public IEnumerable<Contract> Contracts { get; private set; }
+    public Review Review { get; private set; }
+    public IEnumerable<Review> Reviews { get; private set; }
+    public decimal Rating { get; private set; }
 
     public IndexModel(ILogger<IndexModel> logger, 
         IUserService userService, 
@@ -46,20 +49,6 @@ public class IndexModel : PageModel
     {
         GetServiceStatus();
         TestFullServiceFlow();
-
-        /*
-        User = _userService.ValidateUser(new LoginData("test@mail.dk", "secret"));
-        Categories = _jobService.ListCategories();
-        var data = new Filter(
-            Guid.Parse("0ebbe367-300a-4c86-9070-d6e106d7e4b9"), 
-            DateTime.Now.AddDays(-7), 
-            DateTime.Now.AddDays(7), 
-            "5000",
-            "");
-        Jobs = _jobService.ListJobs(data);
-        Offers = TestOffers();
-        Contracts = TestContracts();
-        */
     }
     
     private void GetServiceStatus()
@@ -76,56 +65,33 @@ public class IndexModel : PageModel
         Client = new User(Guid.Empty, "client@mail.dk", "secret", "Client", "Dude", "12345678", false);
         Client = _userService.CreateUser(Client);
         Client = _userService.ValidateUser(new LoginData(Client.Email, Client.Password));
-        
         Provider = new User(Guid.Empty, "provider@mail.dk", "secret", "Provider", "Dude", "12345678", true);
         Provider = _userService.CreateUser(Provider);
         Provider = _userService.ValidateUser(new LoginData(Provider.Email, Provider.Password));
 
         Categories = _jobService.ListCategories();
-        
         var address = new Address("Campusvej", "55", "5230");
         Job = new Job(Guid.Empty, "Dog walker", "Walk my dog, please. He is a good boy.", DateTime.Now, Categories.First(), address, Client.Id);
         Job = _jobService.CreateJob(Job);
-
         var filter = new Filter(null, null, null, "", "");
         Jobs = _jobService.ListJobs(filter);
         Job = _jobService.GetJobById(Job.Id);
         
-        //Offer = new Offer();
-        //Offer = _offerService.CreateJob(Offer);
+        Offer = new Offer(Guid.Empty, Job.Id, Provider.Id, 500, "2 Hours", DateTime.Now, State.Open);
+        Offer = _offerService.CreateOffer(Offer);
+        Offer = _offerService.GetOfferById(Offer.Id);
+        Offers = _offerService.ListOffersForJob(Job.Id);
+        Offers = _offerService.ListOffersForUser(Provider.Id);
+        Contract = _offerService.AcceptOffer(Offer.Id);
 
+        Contract = _contractService.GetContractById(Contract.Id);
+        Contracts = _contractService.ListContracts(Client.Id);
+        _contractService.ConcludeContract(Contract.Id);
+
+        Review = new Review(Guid.Empty, Contract.Id, Client.Id, Provider.Id, "Really good job.", 5, ReviewType.Provider);
+        Review = _reviewService.CreateReview(Review);
+        Review = _reviewService.GetReviewById(Review.Id);
+        Reviews = _reviewService.ListReviews(Provider.Id, ReviewType.All);
+        Rating = _reviewService.GetRating(Provider.Id, ReviewType.All);
     }
-
-    /*
-    // Create test offer and load it afterwards
-    IEnumerable<Offer>? TestOffers()
-    {
-
-        _offerService.CreateOffer(new Offer(
-                Guid.Empty, 
-                Jobs.ToArray()[0].Id, 
-                User.Id, 
-                400, 
-                "2 Hours", 
-                DateTime.Now));
-        
-        return _offerService.ListOffersForJob(Jobs.ToArray()[0].Id);
-    }
-    
-    // Create test contracts and load it afterwards
-    IEnumerable<Contract>? TestContracts()
-    {
-
-        _contractService.CreateContract(new Contract(
-            Guid.Empty, 
-            Jobs.ToArray()[0].Id, 
-            Offers.ToArray()[0].Id, 
-            User.Id, 
-            User.Id, 
-            DateTime.Now,
-            State.Open));
-        
-        return _contractService.ListContracts(Jobs.ToArray()[0].Id);
-    }
-    */
 }

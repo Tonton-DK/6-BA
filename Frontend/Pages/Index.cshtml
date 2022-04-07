@@ -94,23 +94,19 @@
     </ul>
 </div>
 
-@*
 <div class="align-left">
     <br/>
-    <h3>Categories:</h3>
+    <h3>Created Offer:</h3>
     <br/>
     <ul>
         @{
-            if(Model.Categories != null)
+            if(Model.Offer != null)
             {
-                foreach (var category in Model.Categories)
-                {
-                    <li>
-                        <h4>@category.Id</h4>
-                        <p>Name: @category.Name</p>
-                        <p>Description: @category.Description</p>
-                    </li>
-                }
+                <li>
+                    <h4>@Model.Offer.Id</h4>
+                    <p>Name: @Model.Offer.Price</p>
+                    <p>Description: @Model.Offer.Duration</p>
+                </li>
             }
         }
     </ul>
@@ -118,22 +114,18 @@
 
 <div class="align-left">
     <br/>
-    <h3>Offers from service:</h3>
+    <h3>Offers listed:</h3>
     <br/>
     <ul>
         @{
             if(Model.Offers != null)
             {
-                foreach (var offer in Model.Offers)
+                foreach (var job in Model.Offers)
                 {
                     <li>
-                        <h4>@offer.Id</h4>
-                        <p>Job ID: @offer.JobId</p>
-                        <p>Provider ID: @offer.ProviderId</p>
-                        <p>Previous Offer ID: @(offer.PreviousOfferId?.ToString() ?? "No previous offer")</p>
-                        <p>Price: @offer.Price</p>
-                        <p>Duration: @offer.Duration</p>
-                        <p>Date: @offer.Date</p>
+                        <h4>@job.Id</h4>
+                        <p>Name: @Model.Offer.Price</p>
+                        <p>Description: @Model.Offer.Duration</p>
                     </li>
                 }
             }
@@ -143,27 +135,94 @@
 
 <div class="align-left">
     <br/>
-    <h3>Contracts from service:</h3>
+    <h3>Created Contract:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.Contract != null)
+            {
+                <li>
+                    <h4>@Model.Contract.Id</h4>
+                    <p>Name: @Model.Contract.ContractState</p>
+                    <p>Description: @Model.Contract.CreationDate</p>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+<div class="align-left">
+    <br/>
+    <h3>Contracts listed:</h3>
     <br/>
     <ul>
         @{
             if(Model.Contracts != null)
             {
-                foreach (var contract in Model.Contracts)
+                foreach (var job in Model.Contracts)
                 {
                     <li>
-                        <h4>@contract.Id</h4>
-                        <p>Job ID: @contract.JobId</p>
-                        <p>Offer ID: @contract.OfferId</p>
-                        <p>Client ID: @contract.ClientId</p>
-                        <p>Provider ID: @contract.ProviderId</p>
-                        <p>Creation date: @contract.CreationDate</p>
-                        <p>Previous Offer ID: @(contract.ClosedDate?.ToString() ?? "No previous offer")</p>
-                        <p>State: @contract.ContractState</p>
+                        <h4>@job.Id</h4>
+                        <p>Name: @Model.Contract.ContractState</p>
+                        <p>Description: @Model.Contract.CreationDate</p>
                     </li>
                 }
             }
         }
     </ul>
 </div>
-*@
+
+<div class="align-left">
+    <br/>
+    <h3>Created Review:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.Review != null)
+            {
+                <li>
+                    <h4>@Model.Review.Id</h4>
+                    <p>Name: @Model.Review.Rating</p>
+                    <p>Description: @Model.Review.Comment</p>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+<div class="align-left">
+    <br/>
+    <h3>Reviews listed:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.Reviews != null)
+            {
+                foreach (var job in Model.Reviews)
+                {
+                    <li>
+                        <h4>@job.Id</h4>
+                        <p>Name: @Model.Review.Rating</p>
+                        <p>Description: @Model.Review.Comment</p>
+                    </li>
+                }
+            }
+        }
+    </ul>
+</div>
+
+<div class="align-left">
+    <br/>
+    <h3>Provider Rating:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.Rating != null)
+            {
+                <li>
+                    <h4>@Model.Rating</h4>
+                </li>
+            }
+        }
+    </ul>
+</div>

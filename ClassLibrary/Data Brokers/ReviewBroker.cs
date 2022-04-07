@@ -42,11 +42,11 @@ public class ReviewBroker : BaseBroker, IReviewService
         return null;
     }
 
-    public double GetRating(Guid userId, ReviewType type)
+    public decimal GetRating(Guid userId, ReviewType type)
     {
         var uri = baseUri + "/GetRating/"+userId;
         var content = new StringContent(JsonConvert.SerializeObject(type), Encoding.UTF8, "application/json");
-        var t = Post<double>(uri, content);
+        var t = Post<decimal>(uri, content);
         if (t != null) return t.Result;
         return 0;
     }

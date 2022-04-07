@@ -192,6 +192,7 @@ public class MySQLDataProvider : IDataProvider
         var sql = "UPDATE Offer SET Offer.State = @state WHERE Offer.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
         
+        cmd.Parameters.AddWithValue("@id", id);
         cmd.Parameters.AddWithValue("@state", State.Concluded.ToString());
         cmd.Prepare();
 

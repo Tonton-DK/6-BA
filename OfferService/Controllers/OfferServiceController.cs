@@ -76,7 +76,7 @@ public class OfferServiceController : ControllerBase, IOfferService
         return _dataProvider.Delete(id);
     }
 
-    [HttpDelete("AcceptOffer/{id}")]
+    [HttpPut("AcceptOffer/{id}")]
     public Contract? AcceptOffer(Guid id)
     {
         // TODO
@@ -97,7 +97,7 @@ public class OfferServiceController : ControllerBase, IOfferService
         return _contractService.CreateContract(contract);
     }
 
-    [HttpDelete("CreateCounterOffer/{id}")]
+    [HttpPut("CreateCounterOffer/{id}")]
     public Offer? CreateCounterOffer(Guid id, [FromBody]Offer counterOffer)
     {
         // TODO: Is this needed? We could simply use CreateOffer and simply add "PreviousOfferId" before making the API call.
@@ -106,7 +106,7 @@ public class OfferServiceController : ControllerBase, IOfferService
         return _dataProvider.Create(counterOffer);
     }
     
-    [HttpDelete("DeclineOffer/{id}")]
+    [HttpPut("DeclineOffer/{id}")]
     public bool DeclineOffer(Guid id)
     {
         // TODO: Should we just delete declined offers?
