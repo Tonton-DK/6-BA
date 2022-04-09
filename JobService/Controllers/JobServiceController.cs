@@ -48,7 +48,7 @@ public class JobServiceController : ControllerBase, IJobService
         return _dataProvider.ListJobs(filter);
     }
 
-    [HttpGet("ListJobsByUser/{id}")]
+    [HttpGet("ListJobsByUser/{userId}")]
     public IEnumerable<Job> ListJobsByUser(Guid userId)
     {
         return _dataProvider.ListJobsByUser(userId);

@@ -71,7 +71,7 @@ public class OfferBroker : BaseBroker, IOfferService
     public Offer? CreateCounterOffer(Guid id, Offer counterOffer)
     {
         var content = new StringContent(JsonConvert.SerializeObject(counterOffer), Encoding.UTF8, "application/json");
-        var t = Put<Offer?>(baseUri+"/AcceptOffer/"+id, content);
+        var t = Put<Offer?>(baseUri+"/CreateCounterOffer/"+id, content);
         if (t != null) return t.Result;
         return null;
     }

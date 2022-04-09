@@ -96,6 +96,27 @@
 
 <div class="align-left">
     <br/>
+    <h3>Client Jobs listed:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.ClientJobs != null)
+            {
+                foreach (var job in Model.ClientJobs)
+                {
+                    <li>
+                        <h4>@job.Id</h4>
+                        <p>Name: @job.Title</p>
+                        <p>Description: @job.Description</p>
+                    </li>
+                }
+            }
+        }
+    </ul>
+</div>
+
+<div class="align-left">
+    <br/>
     <h3>Created Offer:</h3>
     <br/>
     <ul>
@@ -114,18 +135,36 @@
 
 <div class="align-left">
     <br/>
+    <h3>Created Counter Offer:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.CounterOffer != null)
+            {
+                <li>
+                    <h4>@Model.CounterOffer.Id</h4>
+                    <p>Name: @Model.CounterOffer.Price</p>
+                    <p>Description: @Model.CounterOffer.Duration</p>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+<div class="align-left">
+    <br/>
     <h3>Offers listed:</h3>
     <br/>
     <ul>
         @{
             if(Model.Offers != null)
             {
-                foreach (var job in Model.Offers)
+                foreach (var offer in Model.Offers)
                 {
                     <li>
-                        <h4>@job.Id</h4>
-                        <p>Name: @Model.Offer.Price</p>
-                        <p>Description: @Model.Offer.Duration</p>
+                        <h4>@offer.Id</h4>
+                        <p>Name: @offer.Price</p>
+                        <p>Description: @offer.Duration</p>
                     </li>
                 }
             }
@@ -159,12 +198,12 @@
         @{
             if(Model.Contracts != null)
             {
-                foreach (var job in Model.Contracts)
+                foreach (var contract in Model.Contracts)
                 {
                     <li>
-                        <h4>@job.Id</h4>
-                        <p>Name: @Model.Contract.ContractState</p>
-                        <p>Description: @Model.Contract.CreationDate</p>
+                        <h4>@contract.Id</h4>
+                        <p>Name: @contract.ContractState</p>
+                        <p>Description: @contract.CreationDate</p>
                     </li>
                 }
             }
@@ -198,14 +237,30 @@
         @{
             if(Model.Reviews != null)
             {
-                foreach (var job in Model.Reviews)
+                foreach (var review in Model.Reviews)
                 {
                     <li>
-                        <h4>@job.Id</h4>
-                        <p>Name: @Model.Review.Rating</p>
-                        <p>Description: @Model.Review.Comment</p>
+                        <h4>@review.Id</h4>
+                        <p>Name: @review.Rating</p>
+                        <p>Description: @review.Comment</p>
                     </li>
                 }
+            }
+        }
+    </ul>
+</div>
+
+<div class="align-left">
+    <br/>
+    <h3>Client Rating:</h3>
+    <br/>
+    <ul>
+        @{
+            if(Model.ClientRating != null)
+            {
+                <li>
+                    <h4>@Model.ClientRating</h4>
+                </li>
             }
         }
     </ul>
@@ -217,10 +272,10 @@
     <br/>
     <ul>
         @{
-            if(Model.Rating != null)
+            if(Model.ProviderRating != null)
             {
                 <li>
-                    <h4>@Model.Rating</h4>
+                    <h4>@Model.ProviderRating</h4>
                 </li>
             }
         }
