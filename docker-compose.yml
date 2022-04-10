@@ -12,6 +12,10 @@ services:
       - frontend
     depends_on:
       - user-service
+      - job-service
+      - offer-service
+      - contract-service
+      - review-service
   
   user-service:
     build:
