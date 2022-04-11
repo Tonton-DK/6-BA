@@ -53,6 +53,10 @@ nav .navbar-brand {
   background-color: var(--bs-gray-300);
 }
 
+.btn-logout{
+  margin: 0 auto;
+}
+
 @media (min-width: 768px) {
   .navbar-collapse{
     display: block;

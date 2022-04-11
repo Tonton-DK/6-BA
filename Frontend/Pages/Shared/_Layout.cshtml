@@ -36,7 +36,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </label>
                     <input type="checkbox" id="menu-control" class="menu-control d-none">
-                    <aside class="sidebar d-flex flex-column box-shadow bg-white text-center">
+                    <aside class="sidebar d-flex flex-column justify-content-between text-center box-shadow bg-white">
                         <label class="navbar-close position-absolute" aria-controls="navbarSupportedContent" for="menu-control" aria-label="Toggle navigation">
                             <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-x-lg" viewBox="0 0 16 16" width="30" height="30" fill="#6c757d">
                                 <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"></path>
@@ -50,15 +50,17 @@
                             <span class="active-profile-text">Logged in as:</span>
                             <span class="profile-name">Placeholder</span>
                         </div>
-                        <div class="sidebar-menu nav">
-                            <a class="nav-item" href="">View Profile</a>
-                            <a class="nav-item" href="">View Inbox</a>
-                            <a class="nav-item" href="">My Contracts</a>
-                            <a class="nav-item" href="">My Tasks</a>
-                            <a class="nav-item" href="">Create Task</a>
-                            <a class="nav-item" href="">Find Work</a>
+                        <div class="flex-grow-1">
+                            <div class="sidebar-menu nav">
+                                <a class="nav-item" href="">View Profile</a>
+                                <a class="nav-item" href="">View Inbox</a>
+                                <a class="nav-item" href="">My Contracts</a>
+                                <a class="nav-item" href="">My Tasks</a>
+                                <a class="nav-item" href="">Create Task</a>
+                                <a class="nav-item" href="">Find Work</a>
+                            </div>
                         </div>
-                        <div class="fixed-bottom pb-3"><a class="btn btn-danger" href="">Log out</a></div>
+                        <a class="btn btn-danger btn-logout" href="">Log out</a>
                     </aside>
                 </div>
             </div>
