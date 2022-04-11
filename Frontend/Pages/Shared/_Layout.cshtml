@@ -3,29 +3,65 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Frontend</title>
+    <title>@ViewData["Title"] - I Know A Guy</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Frontend.styles.css" asp-append-version="true" />
+    <style>
+    @@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+    </style> 
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Frontend</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">I Know A Guy!</a>
+                <div class="navbar-collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Post">Create Task</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Find">Find Work</a>
                         </li>
                     </ul>
+                </div>
+                @*If logged in show burger, else show buttons*@
+                <div class="navbar-nav flex-row flex-wrap">
+                    <a href="/Login" class="navbar-item btn btn-success me-2">Login</a>
+                    <a href="/Create" class="navbar-item btn btn-outline-secondary">Sign up</a>
+                </div>
+                <div class="navbar-nav flex-row flex-wrap">
+                    <label aria-label="Toggle navigation" aria-controls="navbarSupportedContent" for="menu-control" class="navbar-toggler d-block">
+                        <span class="navbar-toggler-icon"></span>
+                    </label>
+                    <input type="checkbox" id="menu-control" class="menu-control d-none">
+                    <aside class="sidebar d-flex flex-column justify-content-between text-center box-shadow bg-white">
+                        <label class="navbar-close position-absolute" aria-controls="navbarSupportedContent" for="menu-control" aria-label="Toggle navigation">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-x-lg" viewBox="0 0 16 16" width="30" height="30" fill="#6c757d">
+                                <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"></path>
+                                <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"></path>
+                            </svg>
+                        </label>
+                        <div class="d-flex flex-column pb-3 active-profile">
+                            <a href="" title="Go to your profile">
+                                <img class="profile-picture img" src="/images/person.jpg" width="100" height="100" alt="Your profile picture">
+                            </a>
+                            <span class="active-profile-text">Logged in as:</span>
+                            <span class="profile-name">Placeholder</span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="sidebar-menu nav">
+                                <a class="nav-item" href="">View Profile</a>
+                                <a class="nav-item" href="">View Inbox</a>
+                                <a class="nav-item" href="">My Contracts</a>
+                                <a class="nav-item" href="">My Tasks</a>
+                                <a class="nav-item" href="">Create Task</a>
+                                <a class="nav-item" href="">Find Work</a>
+                            </div>
+                        </div>
+                        <a class="btn btn-danger btn-logout" href="">Log out</a>
+                    </aside>
                 </div>
             </div>
         </nav>
@@ -38,7 +74,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - Frontend - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2022 - I Know A Guy - <a asp-area="" asp-page="/Index">Home</a> - <a asp-area="" asp-page="/About">About</a> - <a asp-area="" asp-page="/Privacy">Privacy</a>  - <a asp-area="" asp-page="/Terms">Terms and Conditions</a>
         </div>
     </footer>
 
