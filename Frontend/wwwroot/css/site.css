@@ -2,6 +2,20 @@ html {
   font-size: 14px;
 }
 
+nav .navbar-brand {
+  width: 100px;
+  white-space: normal;
+  font-family: Lobster, cursive;
+  font-size: 1.8rem;
+  text-align: center;
+  transform: rotate(-10deg);
+}
+
+.btn{
+  border-radius: 2rem;
+  width: 150px;
+}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
