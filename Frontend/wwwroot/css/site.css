@@ -43,7 +43,6 @@ nav .navbar-brand {
 .sidebar-menu a {
   display: block;
   width: 100%;
-  text-align: center;
   color: var(--bs-body-color);
   text-decoration: none;
   padding: 12px;
