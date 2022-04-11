@@ -25,9 +25,19 @@ nav .navbar-brand {
   position: fixed;
   top: 0;
   right: 0;
-  padding: 0 15px;
+  padding: 15px;
   transform: translatex(100%);
   transition: transform 0.4s ease-in-out;
+}
+
+.profile-picture{
+  margin: 0 auto;
+  border-radius: 100px;
+  border: 2px solid var(--bs-gray-300);
+}
+
+.active-profile-text{
+  font-size: 12px;
 }
 
 .sidebar-menu a {
