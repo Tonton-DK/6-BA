@@ -28,9 +28,8 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@type", review.Type.ToString());
         cmd.Prepare();
 
-        cmd.ExecuteNonQuery();
-
-        return review;
+        var result = cmd.ExecuteNonQuery();
+        return result > 0 ? review : null;
     }
 
     public Review? Get(Guid id)
@@ -116,7 +115,6 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
         return result > 1 ? review : null;
     }
 
@@ -132,7 +130,6 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
         
         var result = cmd.ExecuteNonQuery();
-
-        return result > 0;
+        return result > 0 ? true : false;
     }
 }

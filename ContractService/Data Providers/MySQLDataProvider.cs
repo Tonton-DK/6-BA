@@ -29,9 +29,8 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@state", contract.ContractState.ToString());
         cmd.Prepare();
 
-        cmd.ExecuteNonQuery();
-
-        return contract;
+        var result = cmd.ExecuteNonQuery();
+        return result > 0 ? contract : null;
     }
 
     public Contract? Get(Guid id)
@@ -127,7 +126,6 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
         return result > 0 ? contract : null;
     }
 
@@ -143,7 +141,6 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
         
         var result = cmd.ExecuteNonQuery();
-
-        return result > 0;
+        return result > 0 ? true : false;
     }
 }

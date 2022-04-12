@@ -30,7 +30,6 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
         return result > 0 ? offer : null;
     }
 
@@ -164,7 +163,6 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
         return result > 0 ? offer : null;
     }
 
@@ -180,8 +178,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
         
         var result = cmd.ExecuteNonQuery();
-
-        return result > 0;
+        return result > 0 ? true : false;
     }
 
     public Offer? AcceptOffer(Guid id)
@@ -197,7 +194,6 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
         return result > 0 ? Get(id) : null;
     }
 
@@ -213,7 +209,6 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
         return result > 0 ? true : false;
     }
 }

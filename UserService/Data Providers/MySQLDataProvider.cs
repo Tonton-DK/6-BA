@@ -31,11 +31,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
-        if (result > 0)
-            return user;
-
-        return null;
+        return result > 0 ? user : null;
     }
 
     public User? GetUserById(Guid id)
@@ -156,11 +152,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
-        if (result > 0)
-            return user;
-
-        return null;
+        return result > 0 ? user : null;
     }
 
     public bool DeleteUserById(Guid id)
@@ -175,11 +167,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
-        if (result > 0)
-            return true;
-
-        return false;
+        return result > 0 ? true : false;
     }
 
     public bool ChangePassword(Guid userId, string newPasswordSalt, string newPasswordHash)
@@ -198,10 +186,6 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
-        if (result > 0)
-            return true;
-
-        return false;
+        return result > 0 ? true : false;
     }
 }

@@ -33,11 +33,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
-        if (result > 0)
-            return job;
-
-        return null;
+        return result > 0 ? job : null;
     }
     
     public Job? GetJob(Guid id)
@@ -218,11 +214,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
-        if (result > 0)
-            return job;
-
-        return null;
+        return result > 0 ? job : null;
     }
     
     public bool DeleteJob(Guid id)
@@ -237,11 +229,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
-        if (result > 0)
-            return true;
-
-        return false;
+        return result > 0 ? true : false;
     }
     # endregion
 
@@ -263,11 +251,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
-        if (result > 0)
-            return category;
-
-        return null;
+        return result > 0 ? category : null;
     }
     
     public Category GetCategory(Guid id)
@@ -341,11 +325,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
-        if (result > 0)
-            return category;
-
-        return null;
+        return result > 0 ? category : null;
     }
     
     public bool DeleteCategory(Guid id)
@@ -360,11 +340,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-
-        if (result > 0)
-            return true;
-
-        return false;
+        return result > 0 ? true : false;
     }
     # endregion
 }
