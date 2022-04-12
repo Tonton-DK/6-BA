@@ -16,7 +16,7 @@ public class UserBroker : BaseBroker, IUserService
         return false;
     }
 
-    public User? CreateUser(User user)
+    public User? CreateUser(UserCreator user)
     {
         var uri = baseUri + "/CreateUser";
         var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
@@ -25,7 +25,7 @@ public class UserBroker : BaseBroker, IUserService
         return null;
     }
 
-    public User? GetUserById(Guid id, bool withCV)
+    public User? GetUserById(Guid id)
     {
         var uri = baseUri + "/GetUserById/" + id;
         var t = Get<User?>(uri);
@@ -50,19 +50,19 @@ public class UserBroker : BaseBroker, IUserService
         return false;
     }
 
-    public User? ValidateUser(LoginData loginData)
+    public User? ValidateUser(LoginRequest loginRequest)
     {
         var uri = baseUri + "/ValidateUser";
-        var content = new StringContent(JsonConvert.SerializeObject(loginData), Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonConvert.SerializeObject(loginRequest), Encoding.UTF8, "application/json");
         var t = Post<User?>(uri, content);
         if (t != null) return t.Result;
         return null;
     }
 
-    public bool ChangePassword(PasswordData passwordData)
+    public bool ChangePassword(PasswordRequest passwordRequest)
     {
         var uri = baseUri + "/ChangePassword";
-        var content = new StringContent(JsonConvert.SerializeObject(passwordData), Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonConvert.SerializeObject(passwordRequest), Encoding.UTF8, "application/json");
         var t = Post<bool>(uri, content);
         if (t != null) return t.Result;
         return false;

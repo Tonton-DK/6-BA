@@ -4,10 +4,11 @@ namespace UserService.Interfaces;
 
 public interface IDataProvider
 {
-    public User? CreateUser(User user);
-    public User? GetUserById(Guid id, bool withCV);
-    public User? GetUserByLogin(string email, string password);
+    public User? CreateUser(User user, string salt, string hash);
+    public User? GetUserById(Guid id);
+    public UserValidator? GetUserValidator(string email);
+    public UserValidator? GetUserValidator(Guid id);
     public User? UpdateUser(User user);
     public bool DeleteUserById(Guid id);
-    public bool ChangePassword(Guid userId, string oldPassword, string newPassword);
+    public bool ChangePassword(Guid userId, string newPasswordSalt, string newPasswordHash);
 }

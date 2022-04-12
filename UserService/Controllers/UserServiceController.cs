@@ -1,6 +1,7 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using UserService.Classes;
 using UserService.Interfaces;
 
 namespace UserService.Controllers;
@@ -25,15 +26,17 @@ public class UserServiceController : ControllerBase, IUserService
     }
 
     [HttpPost("CreateUser")]
-    public User? CreateUser([FromBody] User user)
+    public User? CreateUser([FromBody] UserCreator user)
     {
-        return _dataProvider.CreateUser(user);
+        var salt = Salt.Create();
+        var hash = Hash.Create(user.Password, salt);
+        return _dataProvider.CreateUser(user, salt, hash);
     }
 
     [HttpGet("GetUserById/{id}")]
-    public User? GetUserById(Guid id, bool withCV)
+    public User? GetUserById(Guid id)
     {
-        return _dataProvider.GetUserById(id, withCV);
+        return _dataProvider.GetUserById(id);
     }
 
     [HttpPut("UpdateUser")]
@@ -49,14 +52,38 @@ public class UserServiceController : ControllerBase, IUserService
     }
 
     [HttpPost("ValidateUser")]
-    public User? ValidateUser([FromBody] LoginData loginData)
+    public User? ValidateUser([FromBody] LoginRequest loginRequest)
     {
-        return _dataProvider.GetUserByLogin(loginData.Email, loginData.Password);
+        var user = _dataProvider.GetUserValidator(loginRequest.Email);
+        if (user != null)
+        {
+            var result = Hash.Validate(loginRequest.Password, user.PasswordSalt, user.PasswordHash);
+            if (result)
+            {
+                return user;
+            }
+        }
+
+        return null;
     }
 
     [HttpPost("ChangePassword")]
-    public bool ChangePassword([FromBody] PasswordData passwordData)
+    public bool ChangePassword([FromBody] PasswordRequest passwordRequest)
     {
-        return _dataProvider.ChangePassword(passwordData.UserId, passwordData.OldPassword, passwordData.NewPassword);
+        var user = _dataProvider.GetUserValidator(passwordRequest.UserId);
+        if (user != null)
+        {
+            var result = Hash.Validate(passwordRequest.OldPassword, user.PasswordSalt, user.PasswordHash);
+            if (result)
+            {
+                var salt = Salt.Create();
+                var hash = Hash.Create(passwordRequest.NewPassword, salt);
+                return _dataProvider.ChangePassword(passwordRequest.UserId, salt, hash);
+            }
+
+            return false;
+        }
+
+        return false;
     }
 }

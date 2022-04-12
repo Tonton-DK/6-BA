@@ -14,16 +14,10 @@ public class Job
     }
 
     public Guid Id { get; set; }
-
     public string Title { get; set; }
-    
     public string Description { get; set; }
-    
     public DateTime Deadline { get; set; }
-    
     public Category Category { get; set; }
-    
     public Address Location { get; set; }
-    
     public Guid ClientId { get; set; }
 }

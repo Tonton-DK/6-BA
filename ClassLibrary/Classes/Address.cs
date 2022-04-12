@@ -10,8 +10,6 @@ public class Address
     }
 
     public string Road { get; set; }
-    
     public string Number { get; set; }
-    
     public string Zip { get; set; }
 }

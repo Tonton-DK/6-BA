@@ -65,14 +65,14 @@ public class IndexModel : PageModel
 
     private void TestFullServiceFlow()
     {
-        Client = new User(Guid.Empty, "client@mail.dk", "secret", "Client", "Dude", "12345678", false);
-        Client = _userService.CreateUser(Client);
-        Client = _userService.GetUserById(Client.Id, false);
-        Client = _userService.ValidateUser(new LoginData(Client.Email, Client.Password));
-        Provider = new User(Guid.Empty, "provider@mail.dk", "secret", "Provider", "Dude", "12345678", true);
-        Provider = _userService.CreateUser(Provider);
-        Provider = _userService.GetUserById(Provider.Id, false);
-        Provider = _userService.ValidateUser(new LoginData(Provider.Email, Provider.Password));
+        var client = new UserCreator(Guid.Empty, "client@mail.dk", "Client", "Dude", "12345678", false, "secret");
+        Client = _userService.CreateUser(client);
+        Client = _userService.GetUserById(Client.Id);
+        Client = _userService.ValidateUser(new LoginRequest(client.Email, client.Password));
+        var provider = new UserCreator(Guid.Empty, "provider@mail.dk", "Provider", "Dude", "12345678", true, "secret");
+        Provider = _userService.CreateUser(provider);
+        Provider = _userService.GetUserById(Provider.Id);
+        Provider = _userService.ValidateUser(new LoginRequest(provider.Email, provider.Password));
 
         Categories = _jobService.ListCategories();
         var address = new Address("Campusvej", "55", "5230");

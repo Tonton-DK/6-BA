@@ -12,12 +12,8 @@ public class Filter
     }
 
     public Guid? CategoryId { get; set; }
-    
     public DateTime? StartDate { get; set; }
-    
     public DateTime? EndDate { get; set; }
-    
     public string Zip { get; set; }
-    
     public string SearchQuery { get; set; }
 }

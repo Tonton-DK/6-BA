@@ -9,20 +9,21 @@ public class MySQLDataProvider : IDataProvider
 {
     private static string cs = @"server=user-database;userid=root;password=;database=db";
 
-    public User? CreateUser(User user)
+    public User? CreateUser(User user, string salt, string hash)
     {
         using var con = new MySqlConnection(cs);
         con.Open();
 
-        var sql = @"INSERT INTO User(ID, Email, Password, Firstname, Lastname, PhoneNumber, IsServiceProvider) 
-                    VALUES(@id, @email, @password, @firstname, @lastname, @phoneNumber, @isServiceProvider)";
+        var sql =
+            @"INSERT INTO User(ID, Email, PasswordSalt, PasswordHash, Firstname, Lastname, PhoneNumber, IsServiceProvider) 
+                    VALUES(@id, @email, @passwordSalt, @passwordHash, @firstname, @lastname, @phoneNumber, @isServiceProvider)";
         using var cmd = new MySqlCommand(sql, con);
 
         user.Id = Guid.NewGuid();
-        
         cmd.Parameters.AddWithValue("@id", user.Id);
         cmd.Parameters.AddWithValue("@email", user.Email);
-        cmd.Parameters.AddWithValue("@password", user.Password);
+        cmd.Parameters.AddWithValue("@passwordSalt", salt);
+        cmd.Parameters.AddWithValue("@passwordHash", hash);
         cmd.Parameters.AddWithValue("@firstname", user.FirstName);
         cmd.Parameters.AddWithValue("@lastname", user.LastName);
         cmd.Parameters.AddWithValue("@phoneNumber", user.PhoneNumber);
@@ -37,31 +38,30 @@ public class MySQLDataProvider : IDataProvider
         return null;
     }
 
-    public User? GetUserById(Guid id, bool withCV)
+    public User? GetUserById(Guid id)
     {
         using var con = new MySqlConnection(cs);
         con.Open();
 
-        var stm = @"SELECT User.ID, User.Email, User.Password, User.Firstname, User.Lastname, User.PhoneNumber, User.IsServiceProvider
+        var stm = @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.IsServiceProvider
                     FROM User
                     WHERE User.ID = @id";
         using var cmd = new MySqlCommand(stm, con);
 
         cmd.Parameters.AddWithValue("@id", id);
         cmd.Prepare();
-        
+
         using MySqlDataReader rdr = cmd.ExecuteReader();
-        
+
         if (rdr.Read())
         {
             var user = new User(
                 rdr.GetGuid(0),
-                rdr.GetString(1), 
-                rdr.GetString(2), 
+                rdr.GetString(1),
+                rdr.GetString(2),
                 rdr.GetString(3),
                 rdr.GetString(4),
-                rdr.GetString(5), 
-                rdr.GetBoolean(6));
+                rdr.GetBoolean(5));
 
             return user;
         }
@@ -69,32 +69,67 @@ public class MySQLDataProvider : IDataProvider
         return null;
     }
 
-    public User? GetUserByLogin(string email, string password)
+    public UserValidator? GetUserValidator(string email)
     {
         using var con = new MySqlConnection(cs);
         con.Open();
 
-        var stm = @"SELECT User.ID, User.Email, User.Password, User.Firstname, User.Lastname, User.PhoneNumber, User.IsServiceProvider
+        var stm =
+            @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.IsServiceProvider, User.PasswordSalt, User.PasswordHash
                     FROM User
-                    WHERE User.Email = @email AND User.Password = @password";
+                    WHERE User.Email = @email";
         using var cmd = new MySqlCommand(stm, con);
 
         cmd.Parameters.AddWithValue("@email", email);
-        cmd.Parameters.AddWithValue("@password", password);
         cmd.Prepare();
-        
+
         using MySqlDataReader rdr = cmd.ExecuteReader();
-        
+
         if (rdr.Read())
         {
-            var user = new User(
+            var user = new UserValidator(
                 rdr.GetGuid(0),
-                rdr.GetString(1), 
-                rdr.GetString(2), 
+                rdr.GetString(1),
+                rdr.GetString(2),
                 rdr.GetString(3),
                 rdr.GetString(4),
-                rdr.GetString(5), 
-                rdr.GetBoolean(6));
+                rdr.GetBoolean(5),
+                rdr.GetString(6),
+                rdr.GetString(7));
+
+            return user;
+        }
+
+        return null;
+    }
+
+    public UserValidator? GetUserValidator(Guid id)
+    {
+        using var con = new MySqlConnection(cs);
+        con.Open();
+
+        var stm =
+            @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.IsServiceProvider, User.PasswordSalt, User.PasswordHash
+                    FROM User
+                    WHERE User.ID = @id";
+        using var cmd = new MySqlCommand(stm, con);
+
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Prepare();
+
+        using MySqlDataReader rdr = cmd.ExecuteReader();
+
+        if (rdr.Read())
+        {
+            var user = new UserValidator(
+                rdr.GetGuid(0),
+                rdr.GetString(1),
+                rdr.GetString(2),
+                rdr.GetString(3),
+                rdr.GetString(4),
+                rdr.GetBoolean(5),
+                rdr.GetString(6),
+                rdr.GetString(7));
 
             return user;
         }
@@ -114,7 +149,6 @@ public class MySQLDataProvider : IDataProvider
 
         cmd.Parameters.AddWithValue("@id", user.Id);
         cmd.Parameters.AddWithValue("@email", user.Email);
-        cmd.Parameters.AddWithValue("@password", user.Password);
         cmd.Parameters.AddWithValue("@firstname", user.FirstName);
         cmd.Parameters.AddWithValue("@lastname", user.LastName);
         cmd.Parameters.AddWithValue("@phoneNumber", user.PhoneNumber);
@@ -136,7 +170,7 @@ public class MySQLDataProvider : IDataProvider
 
         var sql = @"DELETE FROM User WHERE User.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
-        
+
         cmd.Parameters.AddWithValue("@id", id);
         cmd.Prepare();
 
@@ -148,19 +182,19 @@ public class MySQLDataProvider : IDataProvider
         return false;
     }
 
-    public bool ChangePassword(Guid userId, string oldPassword, string newPassword)
+    public bool ChangePassword(Guid userId, string newPasswordSalt, string newPasswordHash)
     {
         using var con = new MySqlConnection(cs);
         con.Open();
 
         var sql = @"UPDATE User 
-                    SET Password = @newPassword
-                    WHERE User.ID = @id AND User.Password = @oldPassword";
+                    SET PasswordSalt = @newPasswordSalt, PasswordHash = @newPasswordHash
+                    WHERE User.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
 
         cmd.Parameters.AddWithValue("@id", userId);
-        cmd.Parameters.AddWithValue("@oldPassword", oldPassword);
-        cmd.Parameters.AddWithValue("@newPassword", newPassword);
+        cmd.Parameters.AddWithValue("@newPasswordSalt", newPasswordSalt);
+        cmd.Parameters.AddWithValue("@newPasswordHash", newPasswordHash);
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
