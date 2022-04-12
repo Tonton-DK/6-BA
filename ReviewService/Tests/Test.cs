@@ -1,4 +1,8 @@
-﻿using NUnit.Framework;
+﻿using ClassLibrary.Classes;
+using Moq;
+using NUnit.Framework;
+using ReviewService.Controllers;
+using ReviewService.Interfaces;
 
 namespace ReviewService.Tests;
 
@@ -9,18 +13,18 @@ public class Test
     {
     }
     
-    /*
-    public Review? CreateReview(Review review);
-    public Review? GetReviewById(Guid id);
-    public IEnumerable<Review> ListReviews(Guid userId, ReviewType type);
-    public decimal GetRating(Guid userId, ReviewType type);
-    public Review? UpdateReview(Review review);
-    public bool DeleteReview(Guid id);
-    */
-
     [Test]
-    public void Test1()
+    public void CreateReviewTest()
     {
-        Assert.Pass();
+        var input = new Review(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "comment", 5, ReviewType.Provider);
+
+        var logger = new Mock<ILogger<ReviewServiceController>>();
+        var dataProvider = new Mock<IDataProvider>();
+        dataProvider.Setup(x => x.Create(input)).Returns(input);
+        
+        var service = new ReviewServiceController(logger.Object, dataProvider.Object);
+        var output = service.CreateReview(input);
+        
+        Assert.AreSame(input, output);
     }
 }

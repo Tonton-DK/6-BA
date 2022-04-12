@@ -1,4 +1,8 @@
-﻿using NUnit.Framework;
+﻿using ClassLibrary.Classes;
+using JobService.Controllers;
+using JobService.Interfaces;
+using Moq;
+using NUnit.Framework;
 
 namespace JobService.Tests;
 
@@ -9,20 +13,18 @@ public class Test
     {
     }
     
-    /*
-    public IEnumerable<Category> ListCategories();
-    public Job? CreateJob(Job job);
-    public Job? GetJobById(Guid id);
-    public IEnumerable<Job> ListJobs(Filter filter);
-    public IEnumerable<Job> ListJobsByUser(Guid userId);
-    public IEnumerable<Job> ListJobsByIDs(IEnumerable<Guid> jobIds);
-    public Job? UpdateJob(Job job);
-    public bool DeleteJobById(Guid id);
-    */
-    
     [Test]
-    public void Test1()
+    public void CreateJobTest()
     {
-        Assert.Pass();
+        var input = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.NewGuid(), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid());
+        
+        var logger = new Mock<ILogger<JobServiceController>>();
+        var dataProvider = new Mock<IDataProvider>();
+        dataProvider.Setup(x => x.CreateJob(input)).Returns(input);
+        
+        var service = new JobServiceController(logger.Object, dataProvider.Object);
+        var output = service.CreateJob(input);
+        
+        Assert.AreSame(input, output);
     }
 }
