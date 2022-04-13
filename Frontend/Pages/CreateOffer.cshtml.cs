@@ -23,9 +23,7 @@ public class CreateOfferModel : PageModel
         ServiceStatus = new Dictionary<Type, bool>();
     }
     
-    [BindProperty]
     public Guid JobId { get; set; }
-    [BindProperty]
     public Guid ProviderId { get; set;}
     [BindProperty]
     public int Price { get; set; }
