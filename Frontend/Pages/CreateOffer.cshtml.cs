@@ -1,9 +1,6 @@
-using System.Security.Cryptography;
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
-using Frontend.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages;
@@ -51,6 +48,7 @@ public class CreateOfferModel : PageModel
     public void OnPost()
     {
         Offer = new Offer(Guid.Empty, Guid.Empty, Guid.Empty, Price, Duration, Date, State.Open);
+        _offerService.CreateOffer(Offer);
         RedirectToPage("/Job?id="+Offer.JobId);
     }
 }
