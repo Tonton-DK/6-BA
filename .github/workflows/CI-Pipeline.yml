@@ -34,10 +34,10 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore --logger "GitHubActions;report-warnings=false"
+        run: dotnet build --configuration Release --no-restore
       
       - name: Test
-        run: dotnet test --nologo --no-restore --logger "GitHubActions;report-warnings=false" --verbosity quiet
+        run: dotnet test --nologo --no-restore --verbosity quiet
 
       - name: Login to container registry
         run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
