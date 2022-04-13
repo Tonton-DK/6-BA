@@ -1,5 +1,7 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages;
@@ -35,5 +37,11 @@ public class CreateOfferModel : PageModel
     public void OnGet()
     {
         //TODO: Set Instance variables OnGet
+    }
+
+    [HttpPost]
+    public void OnPost()
+    {
+        
     }
 }

@@ -1,5 +1,5 @@
 @page
-@model Frontend.Pages.Create_Offer
+@model Frontend.Pages.CreateOffer
 
 @{
     ViewData["Title"] = "Create Offer";
@@ -8,6 +8,20 @@
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
 </div>
+
 <div class="text-center">
-    
+    <form action="/CreateOffer" method="post" asp-antiforgery="true">
+        <div class="formLine">
+            <label for="price">Price</label>
+            <input type="number" id="price" name="price">
+        </div>
+        <div class="formLine">
+            <label for="duration">Duration</label>
+            <input type="text" id="duration" name="duration">
+        </div>
+        <div class="formLine">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date">
+        </div>
+    </form>
 </div>
