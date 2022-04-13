@@ -1,17 +1,60 @@
 ﻿using ClassLibrary.Classes;
 using Moq;
+using MySql.Data.MySqlClient;
 using NUnit.Framework;
+using ThrowawayDb.MySql;
 using UserService.Classes;
 using UserService.Controllers;
 using UserService.Interfaces;
 
 namespace UserService.Tests;
 
+[TestFixture]
 public class Test
 {
+    private ThrowawayDatabase database;
+    
+    [OneTimeSetUp]
+    public void OneTimeSetUp()
+    {
+        database = ThrowawayDatabase.Create(
+            "root",
+            "root",
+            "localhost"
+        );
+
+        using var con = new MySqlConnection(database.ConnectionString);
+        con.Open();
+        var sql = @"CREATE TABLE User (
+                      ID CHAR(36) PRIMARY KEY,
+                      Email NVARCHAR(500) NOT NULL,
+                      PasswordSalt NVARCHAR(500) NOT NULL,
+                      PasswordHash NVARCHAR(500) NOT NULL,
+                      Firstname NVARCHAR(500) NOT NULL,
+                      Lastname NVARCHAR(500) NOT NULL,
+                      PhoneNumber NVARCHAR(500) NOT NULL,
+                      IsServiceProvider BIT NOT NULL
+                    );";
+        using var cmd = new MySqlCommand(sql, con);
+        cmd.ExecuteNonQuery();
+    }
+    
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        database.Dispose();
+    }
+    
     [SetUp]
     public void Setup()
     {
+        database.CreateSnapshot();
+    }
+
+    [TearDown]
+    public void Cleanup()
+    {
+        database.RestoreSnapshot();
     }
 
     [Test]

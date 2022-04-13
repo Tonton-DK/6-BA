@@ -1,60 +1,71 @@
 ﻿using ClassLibrary.Classes;
 using ContractService.Controllers;
-using ContractService.Interfaces;
+using ContractService.Data_Providers;
 using Moq;
 using MySql.Data.MySqlClient;
-using MySql.Server;
 using NUnit.Framework;
 using ThrowawayDb.MySql;
 
 namespace ContractService.Tests;
 
+[TestFixture]
 public class Test
 {
+    private ThrowawayDatabase database;
+    
+    [OneTimeSetUp]
+    public void OneTimeSetUp()
+    {
+        database = ThrowawayDatabase.Create(
+            "root",
+            "root",
+            "localhost"
+        );
+
+        using var con = new MySqlConnection(database.ConnectionString);
+        con.Open();
+        var sql = @"CREATE TABLE Contract (
+                      ID CHAR(36) PRIMARY KEY,
+                      JobId CHAR(36) NOT NULL,
+                      OfferId CHAR(36) NOT NULL,
+                      ClientId CHAR(36) NOT NULL,
+                      ProviderId CHAR(36) NOT NULL,
+                      CreationDate DATETIME NOT NULL,
+                      ClosedDate DATETIME,
+                      State ENUM('Open', 'Concluded', 'Cancelled')
+                    );";
+        using var cmd = new MySqlCommand(sql, con);
+        cmd.ExecuteNonQuery();
+    }
+    
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        database.Dispose();
+    }
+    
     [SetUp]
     public void Setup()
     {
-    }
-    
-    private static class Settings
-    {
-        public const string Username = "root";
-        public const string Password = "root";
-        public const string Host = "localhost";
+        database.CreateSnapshot();
     }
 
-    [Test]
-    public void DBTest()
+    [TearDown]
+    public void Cleanup()
     {
-        using var database = ThrowawayDatabase.Create(
-            Settings.Username, 
-            Settings.Password, 
-            Settings.Host
-        );
-
-        var cs = database.ConnectionString;
-        using var con = new MySqlConnection(cs);
-        con.Open();
-        
-        var sql = "SELECT 1";
-        using var cmd = new MySqlCommand(sql, con);
-        
-        var result = Convert.ToInt32(cmd.ExecuteScalar());
-        
-        //database.ShutDown();
-        Assert.AreEqual(1, result);
+        database.RestoreSnapshot();
     }
-    
+
     [Test]
     public void CreateContractTest()
     {
         var input = new Contract(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, State.Open);
         
         var logger = new Mock<ILogger<ContractServiceController>>();
-        var dataProvider = new Mock<IDataProvider>();
-        dataProvider.Setup(x => x.Create(input)).Returns(input);
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
         
-        var service = new ContractServiceController(logger.Object, dataProvider.Object);
+        var service = new ContractServiceController(logger.Object, dataProvider);
         var output = service.CreateContract(input);
         
         Assert.AreSame(input, output);
@@ -67,11 +78,12 @@ public class Test
         var input = new Contract(ex.Id, ex.JobId, ex.OfferId, ex.ClientId, ex.ProviderId, ex.CreationDate, ex.ContractState);
 
         var logger = new Mock<ILogger<ContractServiceController>>();
-        var dataProvider = new Mock<IDataProvider>();
-        dataProvider.Setup(x => x.Get(input.Id)).Returns(input);
-        dataProvider.Setup(x => x.Update(It.IsAny<Contract>())).Returns<Contract>(x => x);
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
         
-        var service = new ContractServiceController(logger.Object, dataProvider.Object);
+        var service = new ContractServiceController(logger.Object, dataProvider);
+        input = service.CreateContract(input);
+        ex.Id = input.Id;
         var output = service.ConcludeContract(input.Id);
         
         Assert.AreEqual(ex.Id, output.Id);
@@ -79,7 +91,7 @@ public class Test
         Assert.AreEqual(ex.OfferId, output.OfferId);
         Assert.AreEqual(ex.ClientId, output.ClientId);
         Assert.AreEqual(ex.ProviderId, output.ProviderId);
-        Assert.AreEqual(ex.CreationDate, output.CreationDate);
+        Assert.AreEqual(ex.CreationDate.ToString("yyyy-mm-dd HH:MM"), output.CreationDate.ToString("yyyy-mm-dd HH:MM"));
         Assert.AreEqual(State.Concluded, output.ContractState);
         Assert.AreNotEqual(ex.ClosedDate, output.ClosedDate);
     }
@@ -91,11 +103,12 @@ public class Test
         var input = new Contract(ex.Id, ex.JobId, ex.OfferId, ex.ClientId, ex.ProviderId, ex.CreationDate, ex.ContractState);
 
         var logger = new Mock<ILogger<ContractServiceController>>();
-        var dataProvider = new Mock<IDataProvider>();
-        dataProvider.Setup(x => x.Get(input.Id)).Returns(input);
-        dataProvider.Setup(x => x.Update(It.IsAny<Contract>())).Returns<Contract>(x => x);
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
         
-        var service = new ContractServiceController(logger.Object, dataProvider.Object);
+        var service = new ContractServiceController(logger.Object, dataProvider);
+        input = service.CreateContract(input);
+        ex.Id = input.Id;
         var output = service.CancelContract(input.Id);
         
         Assert.AreEqual(ex.Id, output.Id);
@@ -103,7 +116,7 @@ public class Test
         Assert.AreEqual(ex.OfferId, output.OfferId);
         Assert.AreEqual(ex.ClientId, output.ClientId);
         Assert.AreEqual(ex.ProviderId, output.ProviderId);
-        Assert.AreEqual(ex.CreationDate, output.CreationDate);
+        Assert.AreEqual(ex.CreationDate.ToString("yyyy-mm-dd HH:MM"), output.CreationDate.ToString("yyyy-mm-dd HH:MM"));
         Assert.AreEqual(State.Cancelled, output.ContractState);
         Assert.AreNotEqual(ex.ClosedDate, output.ClosedDate);
     }

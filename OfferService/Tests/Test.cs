@@ -1,17 +1,60 @@
 ﻿using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
 using Moq;
+using MySql.Data.MySqlClient;
 using NUnit.Framework;
 using OfferService.Controllers;
 using OfferService.Interfaces;
+using ThrowawayDb.MySql;
 
 namespace OfferService.Tests;
 
+[TestFixture]
 public class Test
 {
+    private ThrowawayDatabase database;
+    
+    [OneTimeSetUp]
+    public void OneTimeSetUp()
+    {
+        database = ThrowawayDatabase.Create(
+            "root",
+            "root",
+            "localhost"
+        );
+
+        using var con = new MySqlConnection(database.ConnectionString);
+        con.Open();
+        var sql = @"CREATE TABLE Offer (
+                      ID CHAR(36) PRIMARY KEY,
+                      JobId CHAR(36) NOT NULL,
+                      ProviderId CHAR(36) NOT NULL,
+                      PreviousOfferId CHAR(36),
+                      Price int NOT NULL,
+                      Duration VARCHAR(500) NOT NULL,
+                      DATE DATETIME NOT NULL,
+                      State ENUM('Open', 'Concluded', 'Cancelled')
+                    );";
+        using var cmd = new MySqlCommand(sql, con);
+        cmd.ExecuteNonQuery();
+    }
+    
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        database.Dispose();
+    }
+    
     [SetUp]
     public void Setup()
     {
+        database.CreateSnapshot();
+    }
+
+    [TearDown]
+    public void Cleanup()
+    {
+        database.RestoreSnapshot();
     }
     
     [Test]
