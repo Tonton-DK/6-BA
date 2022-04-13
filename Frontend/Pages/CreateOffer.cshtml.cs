@@ -1,5 +1,7 @@
+using System.Security.Cryptography;
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
+using Frontend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -38,10 +40,17 @@ public class CreateOfferModel : PageModel
     {
         //TODO: Set Instance variables OnGet
     }
-
-    [HttpPost]
+    
+    [BindProperty]
+    public int Price { get; set; }
+    [BindProperty]
+    public string Duration { get; set;}
+    [BindProperty]
+    public DateTime Date { get; set;}
+    
     public void OnPost()
     {
-        
+        Offer = new Offer(Guid.Empty, Guid.Empty, Guid.Empty, Price, Duration, Date, State.Open);
+        RedirectToPage("/Job?id="+Offer.JobId);
     }
 }
