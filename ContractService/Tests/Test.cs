@@ -31,13 +31,7 @@ public class Test
         var result = Convert.ToInt32(cmd.ExecuteScalar());
         
         database.ShutDown();
-        Assert.AreEqual(1, result); 
-        
-        /*
-        var sql = "UPDATE Contract SET Contract.JobId = @jobId, Contract.OfferId = @offerId, Contract.ClientId = @clientId, Contract.ProviderId = @providerId, Contract.CreationDate = @creationDate, Contract.ClosedDate = @closedDate, Contract.State = @state WHERE Contract.ID = @id";
-        using var cmd = new MySqlCommand(sql, con);
-        cmd.ExecuteNonQuery();
-        */
+        Assert.AreEqual(1, result);
     }
     
     [Test]
