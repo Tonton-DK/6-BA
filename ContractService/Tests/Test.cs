@@ -16,7 +16,6 @@ public class Test
     [Test]
     public void CreateContractTest()
     {
-        Assert.Fail();
         var input = new Contract(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, State.Open);
         
         var logger = new Mock<ILogger<ContractServiceController>>();
