@@ -14,7 +14,7 @@
     <form method="post">
         <div class="form-group pt-3">
             <label asp-for="Job.Title">Task Title</label>
-            <input asp-for="Job.Title" class="form-control form-control-lg" placeholder="Task title">
+            <input asp-for="Job.Title" class="form-control form-control-lg" placeholder="Title">
         </div>
         <div class="form-group pt-3">
             <label asp-for="Job.Deadline">Deadline</label>
@@ -27,9 +27,11 @@
             <option>Select A Category</option>
             </select>
         </div>
-        <div class="form-group pt-3">
-            <label asp-for="Job.Location">Location</label>
-            <input asp-for="Job.Location" class="form-control form-control-lg">
+        <div class="form-group input-multiple pt-3">
+            <label asp-for="Job.Location">Job Location</label>
+            <input asp-for="Job.Location.Road" class="form-control form-control-lg" placeholder="Road name">
+            <input asp-for="Job.Location.Number" class="form-control form-control-lg" placeholder="House number">
+            <input asp-for="Job.Location.Zip" class="form-control form-control-lg" placeholder="Postal code">
         </div>
         <div class="form-group pt-3">
             <label asp-for="Job.Description">Description</label>
