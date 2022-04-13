@@ -1,19 +1,39 @@
 @page
-@model Frontend.Pages.CreateJob
+@model CreateJobModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Create Task";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
 </div>
-</body>
-</html>
+
+<div class="text-center">
+    <form method="post">
+        <div class="form-group pt-3">
+            <label asp-for="Job.Title">Task Title</label>
+            <input asp-for="Job.Title" class="form-control form-control-lg" placeholder="Task title">
+        </div>
+        <div class="form-group pt-3">
+            <label asp-for="Job.Deadline">Deadline</label>
+            <input asp-for="Job.Deadline" class="form-control form-control-lg">
+        </div>
+        <div class="form-group pt-3">
+            <label asp-for="Job.Category">Category</label>
+            <select asp-for="Job.Category" 
+                        asp-items="@(new SelectList(Model.EmployeesList, nameof(Employee.Id), nameof(Employee.FullName)))">
+                    <option>Please select one</option>
+                </select>
+        </div>
+        <div class="form-group pt-3">
+            <label asp-for="Job.Location">Location</label>
+            <input asp-for="Job.Location" class="form-control form-control-lg">
+        </div>
+        <div class="form-group pt-3">
+            <label asp-for="Job.Description">Description</label>
+            <textarea asp-for="Job.Description" class="form-control form-control-lg" placeholder="Describe the task..." rows="5"></textarea>
+        </div>
+        <button type="submit" class="btn btn-lg btn-success mt-5">Create Task</button>
+    </form>
+</div>
