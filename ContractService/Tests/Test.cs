@@ -5,6 +5,7 @@ using Moq;
 using MySql.Data.MySqlClient;
 using MySql.Server;
 using NUnit.Framework;
+using ThrowawayDb.MySql;
 
 namespace ContractService.Tests;
 
@@ -14,14 +15,24 @@ public class Test
     public void Setup()
     {
     }
+    
+    private static class Settings
+    {
+        public const string Username = "root";
+        public const string Password = "root";
+        public const string Host = "localhost";
+    }
 
     [Test]
     public void DBTest()
     {
-        MySqlServer database = MySqlServer.Instance;
-        database.StartServer();
+        using var database = ThrowawayDatabase.Create(
+            Settings.Username, 
+            Settings.Password, 
+            Settings.Host
+        );
 
-        var cs = database.GetConnectionString();
+        var cs = database.ConnectionString;
         using var con = new MySqlConnection(cs);
         con.Open();
         
@@ -30,7 +41,7 @@ public class Test
         
         var result = Convert.ToInt32(cmd.ExecuteScalar());
         
-        database.ShutDown();
+        //database.ShutDown();
         Assert.AreEqual(1, result);
     }
     
