@@ -97,7 +97,8 @@ nav .navbar-brand {
   font-size: 18px;
 }
 
-.form-control {
+.form-control,
+.form-select{
   border-radius: 24px;
   max-width: 360px;
   margin: 0 auto;

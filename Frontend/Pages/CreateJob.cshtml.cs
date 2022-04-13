@@ -13,7 +13,8 @@ public class CreateJobModel : PageModel
     public Dictionary<Type, bool> ServiceStatus { get; private set; }
     
     public Job Job { get; private set; }
-    
+    public IEnumerable<Category> Categories { get; private set; }
+
     public CreateJobModel(ILogger<CreateJobModel> logger,
         IJobService jobService)
     {
@@ -23,7 +24,7 @@ public class CreateJobModel : PageModel
     }
     public void OnGet()
     {
-        
+        Categories = _jobService.ListCategories();
     }
     
 }

@@ -1,4 +1,5 @@
 @page
+@using ClassLibrary.Classes
 @model CreateJobModel
 
 @{
@@ -21,10 +22,10 @@
         </div>
         <div class="form-group pt-3">
             <label asp-for="Job.Category">Category</label>
-            <select asp-for="Job.Category" 
-                        asp-items="@(new SelectList(Model.EmployeesList, nameof(Employee.Id), nameof(Employee.FullName)))">
-                    <option>Please select one</option>
-                </select>
+            <select asp-for="Job.Category"
+                    asp-items="@(new SelectList(Model.Categories, nameof(Category.Id), nameof(Category.Name)))" class="form-select form-select-lg">
+            <option>Select A Category</option>
+            </select>
         </div>
         <div class="form-group pt-3">
             <label asp-for="Job.Location">Location</label>
