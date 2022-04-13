@@ -3,6 +3,7 @@ using Moq;
 using MySql.Data.MySqlClient;
 using NUnit.Framework;
 using ReviewService.Controllers;
+using ReviewService.Data_Providers;
 using ReviewService.Interfaces;
 using ThrowawayDb.MySql;
 
@@ -61,10 +62,10 @@ public class Test
         var input = new Review(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "comment", 5, ReviewType.Provider);
 
         var logger = new Mock<ILogger<ReviewServiceController>>();
-        var dataProvider = new Mock<IDataProvider>();
-        dataProvider.Setup(x => x.Create(input)).Returns(input);
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
         
-        var service = new ReviewServiceController(logger.Object, dataProvider.Object);
+        var service = new ReviewServiceController(logger.Object, dataProvider);
         var output = service.CreateReview(input);
         
         Assert.AreSame(input, output);

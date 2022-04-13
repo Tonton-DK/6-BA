@@ -5,6 +5,7 @@ using NUnit.Framework;
 using ThrowawayDb.MySql;
 using UserService.Classes;
 using UserService.Controllers;
+using UserService.Data_Providers;
 using UserService.Interfaces;
 
 namespace UserService.Tests;
@@ -63,10 +64,10 @@ public class Test
         var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");
 
         var logger = new Mock<ILogger<UserServiceController>>();
-        var dataProvider = new Mock<IDataProvider>();
-        dataProvider.Setup(x => x.CreateUser(input, It.IsAny<string>(), It.IsAny<string>())).Returns(input);
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
 
-        var service = new UserServiceController(logger.Object, dataProvider.Object);
+        var service = new UserServiceController(logger.Object, dataProvider);
         var output = service.CreateUser(input);
 
         Assert.AreSame(input, output);
@@ -77,16 +78,13 @@ public class Test
     {
         var user = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");
         var input = new LoginRequest(user.Email, user.Password);
-
-        var salt = Salt.Create();
-        var hash = Hash.Create(input.Password, salt);
-        var validator = new UserValidator(user.Id, user.Email, user.FirstName, user.LastName, user.PhoneNumber, user.IsServiceProvider, salt, hash);
-
+        
         var logger = new Mock<ILogger<UserServiceController>>();
-        var dataProvider = new Mock<IDataProvider>();
-        dataProvider.Setup(x => x.GetUserValidator(input.Email)).Returns(validator);
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
 
-        var service = new UserServiceController(logger.Object, dataProvider.Object);
+        var service = new UserServiceController(logger.Object, dataProvider);
+        service.CreateUser(user);
         var output = service.ValidateUser(input);
 
         Assert.AreEqual(user.Id, output.Id);
@@ -102,17 +100,14 @@ public class Test
     {
         var user = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");
         var input = new PasswordRequest(user.Id, user.Password, "more secret");
-
-        var salt = Salt.Create();
-        var hash = Hash.Create(input.OldPassword, salt);
-        var validator = new UserValidator(user.Id, user.Email, user.FirstName, user.LastName, user.PhoneNumber, user.IsServiceProvider, salt, hash);
-
+        
         var logger = new Mock<ILogger<UserServiceController>>();
-        var dataProvider = new Mock<IDataProvider>();
-        dataProvider.Setup(x => x.GetUserValidator(input.UserId)).Returns(validator);
-        dataProvider.Setup(x => x.ChangePassword(user.Id, It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
 
-        var service = new UserServiceController(logger.Object, dataProvider.Object);
+        var service = new UserServiceController(logger.Object, dataProvider);
+        service.CreateUser(user);
+        input.UserId = user.Id;
         var output = service.ChangePassword(input);
 
         Assert.AreEqual(true, output);

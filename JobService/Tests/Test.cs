@@ -1,5 +1,6 @@
 ﻿using ClassLibrary.Classes;
 using JobService.Controllers;
+using JobService.Data_Providers;
 using JobService.Interfaces;
 using Moq;
 using MySql.Data.MySqlClient;
@@ -29,6 +30,7 @@ public class Test
                       Name NVARCHAR(500) NOT NULL,
                       Description NVARCHAR(500) NOT NULL
                     );
+                    INSERT INTO Category(ID, Name, Description) VALUES('156be3a6-5537-41f8-9608-705c7cd7cbc3', 'Garden Work', 'Fix my garden, please.');
                     CREATE TABLE Job (
                       ID CHAR(36) PRIMARY KEY,
                       Title NVARCHAR(500) NOT NULL,
@@ -62,17 +64,17 @@ public class Test
     {
         database.RestoreSnapshot();
     }
-    
+
     [Test]
     public void CreateJobTest()
     {
-        var input = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.NewGuid(), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid());
+        var input = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.Parse("156be3a6-5537-41f8-9608-705c7cd7cbc3"), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid());
         
         var logger = new Mock<ILogger<JobServiceController>>();
-        var dataProvider = new Mock<IDataProvider>();
-        dataProvider.Setup(x => x.CreateJob(input)).Returns(input);
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
         
-        var service = new JobServiceController(logger.Object, dataProvider.Object);
+        var service = new JobServiceController(logger.Object, dataProvider);
         var output = service.CreateJob(input);
         
         Assert.AreSame(input, output);

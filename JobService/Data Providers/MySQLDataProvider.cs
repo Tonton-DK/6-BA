@@ -7,7 +7,8 @@ namespace JobService.Data_Providers;
 // Guide: https://zetcode.com/csharp/mysql/
 public class MySQLDataProvider : IDataProvider
 {
-    private static string cs = @"server=job-database;userid=root;password=;database=db";
+    private string cs = @"server=job-database;userid=root;password=;database=db";
+    public void setConnectionString(string connectionString) => cs = connectionString;
 
     # region Job
     public Job? CreateJob(Job job)
