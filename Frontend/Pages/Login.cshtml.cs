@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages;
 
-public class Login : PageModel
+public class LoginModel : PageModel
 {
     public void OnGet()
     {
