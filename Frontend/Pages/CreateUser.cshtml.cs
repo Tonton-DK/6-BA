@@ -1,5 +1,6 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages;
@@ -13,7 +14,7 @@ public class CreateUserModel : PageModel
     public Dictionary<Type, bool> ServiceStatus { get; private set; }
     
     public User User { get; private set; }
-    
+
     public CreateUserModel(ILogger<CreateUserModel> logger,
         IUserService userService)
     {
