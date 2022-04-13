@@ -1,0 +1,28 @@
+@page
+@model CreateOfferModel
+
+@{
+    ViewData["Title"] = "Create Offer";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+</div>
+
+<div class="text-center">
+    <form action="/CreateOffer" method="post">
+        <div class="form-group pt-3">
+            <label for="price">Price</label>
+            <input type="number" id="price" class="form-control form-control-lg" name="price" placeholder="Price">
+        </div>
+        <div class="form-group pt-3">
+            <label for="duration">Duration</label>
+            <input type="text" id="duration" class="form-control form-control-lg" name="duration" placeholder="Duration">
+        </div>
+        <div class="form-group pt-3">
+            <label for="date">Date</label>
+            <input type="date" id="date" class="form-control form-control-lg" name="date">
+        </div>
+        <button type="submit" class="btn btn-lg btn-success mt-5">Create Offer</button>
+        </form>
+</div>
