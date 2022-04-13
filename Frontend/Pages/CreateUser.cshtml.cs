@@ -15,6 +15,9 @@ public class CreateUserModel : PageModel
     
     public User User { get; private set; }
 
+    [BindProperty]
+    public string Password { get; private set; }
+
     public CreateUserModel(ILogger<CreateUserModel> logger,
         IUserService userService)
     {
