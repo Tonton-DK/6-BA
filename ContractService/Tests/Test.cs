@@ -70,6 +70,53 @@ public class Test
         
         Assert.AreSame(input, output);
     }
+
+    [Test]
+    public void GetContractByIdTest()
+    {
+        var input = new Contract(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, State.Open);
+        
+        var logger = new Mock<ILogger<ContractServiceController>>();
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
+        
+        var service = new ContractServiceController(logger.Object, dataProvider);
+        input = service.CreateContract(input);
+        var output = service.GetContractById(input.Id);
+        
+        Assert.AreEqual(input.Id, output.Id);
+        Assert.AreEqual(input.JobId, output.JobId);
+        Assert.AreEqual(input.OfferId, output.OfferId);
+        Assert.AreEqual(input.ClientId, output.ClientId);
+        Assert.AreEqual(input.ProviderId, output.ProviderId);
+        Assert.AreEqual(input.CreationDate.ToString("yyyy-mm-dd HH:MM"), output.CreationDate.ToString("yyyy-mm-dd HH:MM"));
+        Assert.AreEqual(input.ClosedDate?.ToString("yyyy-mm-dd HH:MM"), output.ClosedDate?.ToString("yyyy-mm-dd HH:MM"));
+        Assert.AreEqual(input.ContractState, output.ContractState);
+    }
+
+    [Test]
+    public void ListContractsTest()
+    {
+        var userId = Guid.NewGuid();
+        var input1 = new Contract(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), userId, Guid.NewGuid(), DateTime.Now, State.Open);
+        var input2 = new Contract(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), userId, Guid.NewGuid(), DateTime.Now, State.Open);
+        var input3 = new Contract(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, State.Open);
+        
+        var logger = new Mock<ILogger<ContractServiceController>>();
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
+        
+        var service = new ContractServiceController(logger.Object, dataProvider);
+        input1 = service.CreateContract(input1);
+        input2 = service.CreateContract(input2);
+        input3 = service.CreateContract(input3);
+        var output = service.ListContracts(userId);
+        
+        Assert.AreEqual(2, output.Count());
+        Assert.AreEqual(true, output.Any(x => x.Id == input1.Id));
+        Assert.AreEqual(true, output.Any(x => x.Id == input2.Id));
+        Assert.AreEqual(false, output.Any(x => x.Id == input3.Id));
+    }
     
     [Test]
     public void ConcludeContractTest()
