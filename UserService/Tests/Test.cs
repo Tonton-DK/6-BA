@@ -57,7 +57,7 @@ public class Test
     {
         database.RestoreSnapshot();
     }
-
+    
     [Test]
     public void CreateUserTest()
     {
@@ -72,7 +72,67 @@ public class Test
 
         Assert.AreSame(input, output);
     }
+    
+    [Test]
+    public void GetUserByIdTest()
+    {
+        var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");
 
+        var logger = new Mock<ILogger<UserServiceController>>();
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
+
+        var service = new UserServiceController(logger.Object, dataProvider);
+        input.Id = service.CreateUser(input).Id;
+        var output = service.GetUserById(input.Id);
+        
+        Assert.AreEqual(input.Id, output.Id);
+        Assert.AreEqual(input.Email, output.Email);
+        Assert.AreEqual(input.FirstName, output.FirstName);
+        Assert.AreEqual(input.LastName, output.LastName);
+        Assert.AreEqual(input.PhoneNumber, output.PhoneNumber);
+        Assert.AreEqual(input.IsServiceProvider, output.IsServiceProvider);
+    }
+    
+    [Test]
+    public void UpdateUserTest()
+    {
+        var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");
+
+        var logger = new Mock<ILogger<UserServiceController>>();
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
+
+        var service = new UserServiceController(logger.Object, dataProvider);
+        input.Id = service.CreateUser(input).Id;
+        input.Email = "new email";
+        input.FirstName = "new first name";
+        input.LastName = "new last name";
+        var output = service.UpdateUser(input);
+        
+        Assert.AreEqual(input, output);
+    }
+    
+    [Test]
+    public void DeleteUserByIdTest()
+    {
+        var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");
+
+        var logger = new Mock<ILogger<UserServiceController>>();
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
+
+        var service = new UserServiceController(logger.Object, dataProvider);
+        input.Id = service.CreateUser(input).Id;
+        var output1 = service.GetUserById(input.Id);
+        var output2 = service.DeleteUserById(input.Id);
+        var output3 = service.GetUserById(input.Id);
+        
+        Assert.AreEqual(input.Id, output1.Id);
+        Assert.AreEqual(true, output2);
+        Assert.AreEqual(null, output3);
+    }
+    
     [Test]
     public void ValidateUserTest()
     {

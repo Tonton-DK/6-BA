@@ -151,12 +151,10 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        var sql = "UPDATE Offer SET Offer.JobId = @jobId, Offer.ProviderId = @providerId, Offer.PreviousOfferId = @previousOfferId, Offer.Price = @price, Offer.Duration = @duration, Offer.Date = @date, Offer.State = @state WHERE Offer.ID = @id";
+        var sql = "UPDATE Offer SET Offer.Price = @price, Offer.Duration = @duration, Offer.Date = @date, Offer.State = @state WHERE Offer.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
         
-        cmd.Parameters.AddWithValue("@jobId", offer.JobId);
-        cmd.Parameters.AddWithValue("@providerId", offer.ProviderId);
-        cmd.Parameters.AddWithValue("@previousOfferId", offer.PreviousOfferId ?? (object) DBNull.Value);
+        cmd.Parameters.AddWithValue("@id", offer.Id);
         cmd.Parameters.AddWithValue("@price", offer.Price);
         cmd.Parameters.AddWithValue("@duration", offer.Duration);
         cmd.Parameters.AddWithValue("@date", offer.Date);
@@ -172,7 +170,7 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        var sql = "DELETE * FROM Offer WHERE Offer.ID = @id";
+        var sql = "DELETE FROM Offer WHERE Offer.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
         
         cmd.Parameters.AddWithValue("@id", id);
@@ -206,6 +204,7 @@ public class MySQLDataProvider : IDataProvider
         var sql = "UPDATE Offer SET Offer.State = @state WHERE Offer.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
         
+        cmd.Parameters.AddWithValue("@id", id);
         cmd.Parameters.AddWithValue("@state", State.Cancelled.ToString());
         cmd.Prepare();
 

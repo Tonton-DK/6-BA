@@ -171,7 +171,7 @@ public class MySQLDataProvider : IDataProvider
         var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
                         Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription 
                     FROM Job join Category on Job.CategoryID = Category.ID
-                    WHERE Job.ID in (" + string.Join(",", jobIds) + ")";
+                    WHERE Job.ID in ('" + string.Join("','", jobIds) + "')";
 
         using var cmd = new MySqlCommand(stm, con);
         
@@ -208,7 +208,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@id", job.Id);
         cmd.Parameters.AddWithValue("@title", job.Title);
         cmd.Parameters.AddWithValue("@description", job.Description);
-        cmd.Parameters.AddWithValue("@deadline", job.Deadline.Ticks);
+        cmd.Parameters.AddWithValue("@deadline", job.Deadline.ToString("yyyy-MM-dd HH:mm:ss"));
         cmd.Parameters.AddWithValue("@road", job.Location.Road);
         cmd.Parameters.AddWithValue("@number", job.Location.Number);
         cmd.Parameters.AddWithValue("@zip", job.Location.Zip);

@@ -136,7 +136,7 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
 
-        var sql = "DELETE * FROM Contract WHERE Contract.ID = @id";
+        var sql = "DELETE FROM Contract WHERE Contract.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
 
         cmd.Parameters.AddWithValue("@id", id);

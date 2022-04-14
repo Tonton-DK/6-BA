@@ -102,21 +102,17 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        var sql = "UPDATE Review SET Review.ContractId = @contractId, Review.CreatorId = @creatorId, Review.TargetId = @targetId, Review.Comment = @comment, Review.Rating = @rating, Review.Type = @type WHERE Review.ID = @id";
+        var sql = "UPDATE Review SET Review.Comment = @comment, Review.Rating = @rating WHERE Review.ID = @id";
 
         using var cmd = new MySqlCommand(sql, con);
 
         cmd.Parameters.AddWithValue("@id", review.Id);
-        cmd.Parameters.AddWithValue("@contractId", review.ContractId);
-        cmd.Parameters.AddWithValue("@creatorId", review.CreatorId);
-        cmd.Parameters.AddWithValue("@targetId", review.TargetId);
         cmd.Parameters.AddWithValue("@comment", review.Comment);
         cmd.Parameters.AddWithValue("@rating", review.Rating);
-        cmd.Parameters.AddWithValue("@type", (int)review.Type);
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
-        return result > 1 ? review : null;
+        return result > 0 ? review : null;
     }
 
     public bool Delete(Guid id)
@@ -124,7 +120,7 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        var sql = "DELETE * FROM Review WHERE Review.ID = @id";
+        var sql = "DELETE FROM Review WHERE Review.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
         
         cmd.Parameters.AddWithValue("@id", id);
