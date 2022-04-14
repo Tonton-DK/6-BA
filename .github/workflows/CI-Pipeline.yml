@@ -14,7 +14,7 @@ env:
   DB_PASSWORD: root
   
 jobs:
-  build-and-deploy-job:
+  unit-test-job:
     runs-on: ubuntu-latest
     steps:
       - name: Set up MySQL
@@ -35,9 +35,15 @@ jobs:
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      
+
       - name: Test
         run: dotnet test --nologo --no-restore --verbosity quiet
+  
+  build-and-deploy-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
 
       - name: Login to container registry
         run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
