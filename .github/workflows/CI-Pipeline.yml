@@ -39,9 +39,21 @@ jobs:
       - name: Test
         run: dotnet test --nologo --no-restore --verbosity quiet
   
-  build-and-deploy-job:
+  integration-test-job:
     runs-on: ubuntu-latest
     needs: [unit-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+      
+      - name: Build docker images
+        run: docker-compose build
+
+      # http://localhost:8080/ServiceCheck
+  
+  build-and-deploy-job:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
     steps:
       - name: Checkout code base
         uses: actions/checkout@v2
