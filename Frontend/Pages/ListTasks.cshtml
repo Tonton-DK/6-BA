@@ -10,14 +10,25 @@
 </div>
 
 <div class="text-center">
-    @{
-        foreach (var job in Model.Jobs)
-        {
-            <li>
-                <h4>@job.Id</h4>
-                <p>Name: @job.Title</p>
-                <p>Description: @job.Description</p>
-            </li>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        @{
+            foreach (var job in Model.Jobs)
+            {
+                <div class="col">
+                    <div class="h-100"><img src="/images/person.jpg" alt="Task owner" class="card-img-top job-card-img">
+                        <div class="card job-card">
+                            <div class="card-body">
+                                <h5 class="card-title">@job.Title</h5>
+                                <p class="card-text">@job.Description</p>
+                            </div>
+                            <a href="#" class="btn btn-center btn-success mb-3">See Task</a>
+                            <div class="card-footer">
+                                <small class="text-muted">@job.Deadline</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         }
-    }
+    </div>
 </div>
