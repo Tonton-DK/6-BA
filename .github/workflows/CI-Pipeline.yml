@@ -48,6 +48,9 @@ jobs:
       
       - name: Build docker images
         run: docker-compose build
+        
+      - name: Build docker images
+        run: docker-compose up
 
       # http://localhost:8080/ServiceCheck
   
