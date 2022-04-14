@@ -9,15 +9,29 @@
     <h1 class="display-4">@ViewData["Title"]</h1>
 </div>
 
-<div class="text-center">
-    <select asp-for="Filter.CategoryId"
-                        asp-items="Model.Categories" class="form-select form-select-lg">
+<div class="text-center card bg-light pt-2 mb-5">
+    <div class="row">
+        <h5 class="card-title">Filters</h5>
+    </div>
+    <div class="row card-body">
+        <div class="col">
+            <select asp-for="Filter.CategoryId" asp-items="Model.Categories" class="form-select form-select-lg">
                 <option value="default">Select A Category</option>
-                </select>
-    <input asp-for="Filter.Zip" class="form-control form-control-lg" placeholder="Postal code">
-    <input asp-for="Filter.StartDate" class="form-control form-control-lg" placeholder="Postal code">
-    <input asp-for="Filter.EndDate" class="form-control form-control-lg" placeholder="Postal code">
-    <input asp-for="Filter.SearchQuery" class="form-control form-control-lg" placeholder="Postal code">
+            </select>
+        </div>
+        <div class="col">
+            <input asp-for="Filter.Zip" class="form-control form-control-lg" placeholder="Postal code">
+        </div>
+        <div class="col">
+            <input asp-for="Filter.StartDate" class="form-control form-control-lg" placeholder="Postal code">
+        </div>
+        <div class="col">
+            <input asp-for="Filter.EndDate" class="form-control form-control-lg" placeholder="Postal code">
+        </div>
+        <div class="col">
+            <input asp-for="Filter.SearchQuery" class="form-control form-control-lg" placeholder="Postal code">
+        </div>
+    </div>
 </div>
 
 <div class="text-center">

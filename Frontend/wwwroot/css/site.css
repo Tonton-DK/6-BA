@@ -116,7 +116,7 @@ nav .navbar-brand {
 
 .job-card-img{
   border-radius: 1000px;
-  width: 200px;
+  width: 150px;
   margin-bottom: -60px;
   z-index: 1;
   position: relative;
@@ -124,5 +124,5 @@ nav .navbar-brand {
 
 .job-card{
   padding-top: 60px;
-  height: calc(100% - 140px);
+  height: calc(100% - 90px);
 }
