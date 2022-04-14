@@ -1,6 +1,7 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Frontend.Pages;
 
@@ -13,7 +14,10 @@ public class ListJobsModel : PageModel
     public Dictionary<Type, bool> ServiceStatus { get; private set; }
 
     public IEnumerable<Job> Jobs { get; private set; }
-    
+    public Filter Filter { get; set; }
+    public SelectList Categories { get; set; }
+
+
     public ListJobsModel(ILogger<ListJobsModel> logger,
         IJobService jobService)
     {
@@ -24,7 +28,8 @@ public class ListJobsModel : PageModel
     
     public void OnGet()
     {
-        var filter = new Filter(null, null, null, "", "");
-        Jobs = _jobService.ListJobs(filter);
+        Filter = new Filter(null, null, null, "", "");
+        Jobs = _jobService.ListJobs(Filter);
+        Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
     }
 }
