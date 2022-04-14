@@ -10,19 +10,19 @@
 </div>
 
 <div class="text-center">
-    <form action="/CreateOffer" method="post">
+    <form method="post">
         <div class="form-group pt-3">
-            <label for="price">Price</label>
-            <input type="number" id="price" class="form-control form-control-lg" name="price" placeholder="Price">
+            <label asp-for="Price">Price</label>
+            <input asp-for="Price" class="form-control form-control-lg" placeholder="Price">
         </div>
         <div class="form-group pt-3">
-            <label for="duration">Duration</label>
-            <input type="text" id="duration" class="form-control form-control-lg" name="duration" placeholder="Duration">
+            <label asp-for="Duration">Duration</label>
+            <input asp-for="Duration" class="form-control form-control-lg" placeholder="Duration">
         </div>
         <div class="form-group pt-3">
-            <label for="date">Date</label>
-            <input type="date" id="date" class="form-control form-control-lg" name="date">
+            <label asp-for="Date">Date</label>
+            <input asp-for="Date" class="form-control form-control-lg" min="@DateTime.Now.ToString("yyyy-MM-dd")">
         </div>
         <button type="submit" class="btn btn-lg btn-success mt-5">Create Offer</button>
-        </form>
+    </form>
 </div>

@@ -1,0 +1,41 @@
+@page
+@model CreateJobModel
+
+@{
+    ViewData["Title"] = "Create Task";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+</div>
+
+<div class="text-center">
+    <form method="post">
+        <div class="form-group pt-3">
+            <label asp-for="Job.Title">Task Title</label>
+            <input asp-for="Job.Title" class="form-control form-control-lg" placeholder="Title">
+        </div>
+        <div class="form-group pt-3">
+            <label asp-for="Job.Deadline">Deadline</label>
+            <input asp-for="Job.Deadline" class="form-control form-control-lg">
+        </div>
+        <div class="form-group pt-3">
+            <label asp-for="Job.Category.Id">Category</label>
+            <select asp-for="Job.Category.Id"
+                    asp-items="Model.Categories" class="form-select form-select-lg">
+            <option value="default">Select A Category</option>
+            </select>
+        </div>
+        <div class="form-group input-multiple pt-3">
+            <label asp-for="Job.Location">Job Location</label>
+            <input asp-for="Job.Location.Road" class="form-control form-control-lg" placeholder="Road name">
+            <input asp-for="Job.Location.Number" class="form-control form-control-lg" placeholder="House number">
+            <input asp-for="Job.Location.Zip" class="form-control form-control-lg" placeholder="Postal code">
+        </div>
+        <div class="form-group pt-3">
+            <label asp-for="Job.Description">Description</label>
+            <textarea asp-for="Job.Description" class="form-control form-control-lg" placeholder="Describe the task..." rows="5"></textarea>
+        </div>
+        <button type="submit" class="btn btn-lg btn-success mt-5">Create Task</button>
+    </form>
+</div>
