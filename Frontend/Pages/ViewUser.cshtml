@@ -1,19 +1,10 @@
 @page
-@model Frontend.Pages.ViewUser
+@model ViewUserModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = Model;
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
 </div>
-</body>
-</html>
