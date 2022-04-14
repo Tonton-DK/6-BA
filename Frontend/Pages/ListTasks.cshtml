@@ -1,19 +1,23 @@
 @page
-@model Frontend.Pages.ListTasksModel
+@model ListJobsModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Available Tasks";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
 </div>
-</body>
-</html>
+
+<div class="text-center">
+    @{
+        foreach (var job in Model.Jobs)
+        {
+            <li>
+                <h4>@job.Id</h4>
+                <p>Name: @job.Title</p>
+                <p>Description: @job.Description</p>
+            </li>
+        }
+    }
+</div>
