@@ -116,3 +116,8 @@ nav .navbar-brand {
   padding-top: 60px;
   height: calc(100% - 90px);
 }
+
+.offer-card-img {
+  max-width: 100%;
+  height: auto;
+}
