@@ -1,10 +1,50 @@
 @page
-@model ViewTaskModel
+@model ViewJobModel
 
 @{
-    ViewData["Title"] = Model;
+    ViewData["Title"] = Model.Job.Title;
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
+    <p>@Model.Job.Description</p>
+    <small class="text-muted">Deadline: @Model.Job.Deadline</small>
+    <small class="text-muted">Task location: @Model.Job.Location.Zip</small>
+    <small class="text-muted">Category: @Model.Job.Category.Name - @Model.Job.Category.Description</small>
+</div>
+
+<div class="text-center">
+    <h1 class="display-4">Created by</h1>
+</div>
+
+<div class="text-center row row-cols-1 row-cols-md-4 g-4">
+    <div class="col mx-auto">
+        <div class="h-100"><img src="/images/person.jpg" alt="Task owner" class="profile-picture job-card-img" width="150" height="150">
+            <div class="card job-card">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Client.FirstName</h5>
+                    <p class="card-text"></p>
+                </div>
+                <a href="#" class="btn btn-success mb-3 mx-auto">See Client</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- IF JOB OWNER -->
+<div class="text-center">
+    <h1 class="display-4">Offers</h1>
+</div>
+<div class="text-center row row-cols-1 row-cols-md-3 g-4">
+    <div class="col mx-auto">
+        <div class="h-100"><img src="/images/person.jpg" alt="Task owner" class="profile-picture job-card-img" width="150" height="150">
+            <div class="card job-card">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Client.FirstName</h5>
+                    <p class="card-text"></p>
+                </div>
+                <a href="#" class="btn btn-success mb-3 mx-auto">See Client</a>
+            </div>
+        </div>
+    </div>
 </div>
