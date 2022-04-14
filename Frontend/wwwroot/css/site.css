@@ -89,10 +89,6 @@ nav .navbar-brand {
   background-color: var(--bs-gray-300);
 }
 
-.btn-center{
-  margin: auto;
-}
-
 .form-group label {
   font-size: 18px;
 }
