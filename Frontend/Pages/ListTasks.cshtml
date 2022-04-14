@@ -13,23 +13,23 @@
     <div class="row">
         <h5 class="card-title">Filters</h5>
     </div>
-    <div class="row card-body">
+    <div class="row card-body pt-2">
         <div class="col">
             <select asp-for="Filter.CategoryId" asp-items="Model.Categories" class="form-select form-select-lg">
                 <option value="default">Select A Category</option>
             </select>
         </div>
         <div class="col">
-            <input asp-for="Filter.Zip" class="form-control form-control-lg" placeholder="Postal code">
+            <input asp-for="Filter.StartDate" class="form-control">
         </div>
         <div class="col">
-            <input asp-for="Filter.StartDate" class="form-control form-control-lg" placeholder="Postal code">
+            <input asp-for="Filter.EndDate" class="form-control">
         </div>
         <div class="col">
-            <input asp-for="Filter.EndDate" class="form-control form-control-lg" placeholder="Postal code">
+            <input asp-for="Filter.Zip" class="form-control" placeholder="Postal code">
         </div>
         <div class="col">
-            <input asp-for="Filter.SearchQuery" class="form-control form-control-lg" placeholder="Postal code">
+            <input asp-for="Filter.SearchQuery" class="form-control" placeholder="Search">
         </div>
     </div>
 </div>
@@ -40,7 +40,7 @@
             foreach (var job in Model.Jobs)
             {
                 <div class="col">
-                    <div class="h-100"><img src="/images/person.jpg" alt="Task owner" class="card-img-top job-card-img">
+                    <div class="h-100"><img src="/images/person.jpg" alt="Task owner" class="profile-picture job-card-img" width="150" height="150">
                         <div class="card job-card">
                             <div class="card-body">
                                 <h5 class="card-title">@job.Title</h5>
@@ -48,7 +48,7 @@
                             </div>
                             <a href="#" class="btn btn-success mb-3 mx-auto">See Task</a>
                             <div class="card-footer">
-                                <small class="text-muted">@job.Deadline</small>
+                                <small class="text-muted">Deadline: @job.Deadline</small>
                             </div>
                         </div>
                     </div>

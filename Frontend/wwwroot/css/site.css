@@ -72,10 +72,6 @@ nav .navbar-brand {
   border: 1px solid var(--bs-gray-600);
 }
 
-.active-profile-text{
-  font-size: 12px;
-}
-
 .sidebar-menu a {
   display: block;
   width: 100%;
@@ -111,8 +107,6 @@ nav .navbar-brand {
 }
 
 .job-card-img{
-  border-radius: 1000px;
-  width: 150px;
   margin-bottom: -60px;
   z-index: 1;
   position: relative;
