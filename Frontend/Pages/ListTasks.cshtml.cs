@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages;
 
-public class ListTasks : PageModel
+public class ListTasksModel : PageModel
 {
     public void OnGet()
     {
