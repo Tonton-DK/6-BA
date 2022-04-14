@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Frontend.Pages;
 
@@ -13,7 +14,7 @@ public class CreateJobModel : PageModel
     public Dictionary<Type, bool> ServiceStatus { get; private set; }
     
     public Job Job { get; private set; }
-    public IEnumerable<Category> Categories { get; private set; }
+    public SelectList Categories { get; set; }
 
     public CreateJobModel(ILogger<CreateJobModel> logger,
         IJobService jobService)
@@ -24,7 +25,7 @@ public class CreateJobModel : PageModel
     }
     public void OnGet()
     {
-        Categories = _jobService.ListCategories();
+        Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
     }
     
 }
