@@ -11,7 +11,6 @@ services:
     networks:
       - frontend
     depends_on:
-      - user-service
       - job-service
       - offer-service
       - contract-service
