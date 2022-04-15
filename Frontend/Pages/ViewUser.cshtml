@@ -3,13 +3,15 @@
 @model ViewUserModel
 
 @{
-    ViewData["Title"] = Model;
+    ViewData["Title"] = Model.Client.FirstName + Model.Client.LastName;
 }
 
 <div class="text-center">
-    <h1 class="display-4">@ViewData["Title"]</h1>
     <div class="col">
-        
+        <div class="mx-auto">
+            <img class="profile-picture img" src="/images/person.jpg" alt="Profile picture" width="150" height="150">
+            <h1 class="fs-4">@ViewData["Title"]</h1>
+        </div>
     </div>
     <ul id="myTab" role="tablist" class="nav nav-tabs rows-cols-3 user-tabs fs-5">
         <li role="presentation" class="nav-item mx-auto">
