@@ -67,7 +67,7 @@ jobs:
         if: always()
         run: docker-compose down
   
-  build-and-deploy-job:
+  build-and-deploy-frontend-image:
     runs-on: ubuntu-latest
     needs: [integration-test-job]
     steps:
@@ -77,39 +77,83 @@ jobs:
       - name: Login to container registry
         run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
       
-      # Frontend image
       - name: Build and push frontend image to registry
         run: docker buildx build --push --file Frontend/Dockerfile --tag ghcr.io/antje12/ba/frontend .
 
-      # User service images
+  build-and-deploy-user-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+
       - name: Build and push user-database image to registry
         run: docker buildx build --push --tag ghcr.io/antje12/ba/user-database ./UserService/Database/
 
       - name: Build and push user-service image to registry
         run: docker buildx build --push --file UserService/Dockerfile --tag ghcr.io/antje12/ba/user-service .
+  
+  build-and-deploy-job-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
 
-      # Job service images
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+      
       - name: Build and push job-database image to registry
         run: docker buildx build --push --tag ghcr.io/antje12/ba/job-database ./JobService/Database/
-      
+
       - name: Build and push job-service image to registry
         run: docker buildx build --push --file JobService/Dockerfile --tag ghcr.io/antje12/ba/job-service .
 
-      # Offer service images
+  build-and-deploy-offer-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+
       - name: Build and push offer-database image to registry
         run: docker buildx build --push --tag ghcr.io/antje12/ba/offer-database ./OfferService/Database/
 
       - name: Build and push offer-service image to registry
         run: docker buildx build --push --file OfferService/Dockerfile --tag ghcr.io/antje12/ba/offer-service .
 
-      # Contract service images
+  build-and-deploy-contract-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+      
       - name: Build and push contract-database image to registry
         run: docker buildx build --push --tag ghcr.io/antje12/ba/contract-database ./ContractService/Database/
 
       - name: Build and push contract-service image to registry
         run: docker buildx build --push --file ContractService/Dockerfile --tag ghcr.io/antje12/ba/contract-service .
 
-      # Review service images
+  build-and-deploy-review-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+      
       - name: Build and push review-database image to registry
         run: docker buildx build --push --tag ghcr.io/antje12/ba/review-database ./ReviewService/Database/
 
