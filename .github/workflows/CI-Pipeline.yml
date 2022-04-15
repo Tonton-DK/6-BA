@@ -160,10 +160,10 @@ jobs:
       - name: Build and push review-service image to registry
         run: docker buildx build --push --file ReviewService/Dockerfile --tag ghcr.io/antje12/ba/review-service .
   
-  #Production-Deploy:
+  #production-deploy-job:
   #  name: production deploy job
   #  runs-on: self-hosted
-  #  needs: [Test-Environment-Health-Test]
+  #  needs: [build-and-deploy-frontend-image, build-and-deploy-user-image,build-and-deploy-job-image, build-and-deploy-offer-image, build-and-deploy-contract-image, build-and-deploy-review-image]
   #  if: github.ref == 'refs/heads/main'
   #  steps:
   #    - name: Checkout
