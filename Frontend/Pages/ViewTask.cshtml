@@ -1,0 +1,67 @@
+@page
+@using ClassLibrary.Classes
+@model ViewJobModel
+
+@{
+    ViewData["Title"] = Model.Job.Title;
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <p>@Model.Job.Description</p>
+    <small class="text-muted">Deadline: @Model.Job.Deadline</small>
+    <small class="text-muted">Task location: @Model.Job.Location.Zip</small>
+    <small class="text-muted">Category: @Model.Job.Category.Name - @Model.Job.Category.Description</small>
+</div>
+
+<div class="text-center">
+    <h1 class="display-5">Created by</h1>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        <div class="col mx-auto">
+            <div class="h-100"><img src="/images/person.jpg" alt="Task owner" class="profile-picture job-card-img" width="150" height="150">
+                <div class="card job-card">
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.Client.FirstName</h5>
+                        <p class="card-text"></p>
+                    </div>
+                    <a href="#" class="btn btn-success mb-3 mx-auto">See Client</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- IF JOB OWNER -->
+<div class="text-center">
+    <h1 class="display-5">Offers</h1>
+    <div class="text-lg-start">
+        @foreach (var offer in Model.Offers)
+        {
+            <div class="row-cols-1 row-cols-lg-2">
+                <div class="card mx-auto my-3 p-2">
+                    <div class="row g-0">
+                        <div class="col-lg-3 d-flex align-items-center">
+                            <a href="#" alt="Go to offer provider">
+                                <img src="/images/person.jpg" alt="Task owner" class="img-fluid profile-picture mx-auto" width="150" height="150">
+                            </a>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="card-body">
+                                <h5 class="card-title">@offer.State - @offer.Price DKK</h5>
+                                <div><small class="text-muted">Price: @offer.Price DKK</small></div>
+                                <div><small class="text-muted">Duration: @offer.Duration</small></div>
+                                <div><small class="text-muted">Date: @offer.Date</small></div>
+                                <div><small class="text-muted">Offer provider: @offer.ProviderId</small></div>
+                            </div>
+                        </div>
+                        <div class="row mx-auto">
+                            <a href="#" class="col btn btn-success me-2">Accept</a>
+                            <a href="#" class="col btn btn-outline-secondary me-2">Counteroffer</a>
+                            <a href="#" class="col btn btn-danger">Decline</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
