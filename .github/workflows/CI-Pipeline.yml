@@ -61,7 +61,7 @@ jobs:
 
       # smoke testing: https://github.com/peter-evans/smoke-testing
       - name: Perform system healthcheck
-        run: docker run --rm --network container:ba_frontend_1 appropriate/curl http://localhost:80/api/HealthCheck
+        run: bash ./scripts/health-test.sh
 
       - name: Stop docker containers
         if: always()
