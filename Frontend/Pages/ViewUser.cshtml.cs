@@ -19,16 +19,20 @@ public class ViewUserModel : PageModel
     public IEnumerable<Job> Jobs { get; private set; }
     public IEnumerable<Contract> OpenContracts { get; private set; }
     public IEnumerable<Contract> ClosedContracts { get; private set; }
+    public IEnumerable<Review> ReviewsAsClient { get; private set; }
+    public IEnumerable<Review> ReviewsAsProvider { get; private set; }
     
     public ViewUserModel(ILogger<ViewUserModel> logger,
         IJobService jobService,
         IUserService userService,
-        IContractService contractService)
+        IContractService contractService,
+        IReviewService reviewService)
     {
         _logger = logger;
         _jobService = jobService;
         _userService = userService;
         _contractService = contractService;
+        _reviewService = reviewService;
         ServiceStatus = new Dictionary<Type, bool>();
     }
     public void OnGet()

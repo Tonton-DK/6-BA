@@ -7,14 +7,14 @@
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="jobs-tab" data-bs-toggle="tab" data-bs-target="#jobs" type="button" role="tab" aria-controls="jobs" aria-selected="true">Jobs</button>
+    <ul id="myTab" role="tablist" class="nav nav-tabs rows-cols-3 user-tabs fs-5">
+        <li role="presentation" class="nav-item mx-auto">
+            <button id="jobs-tab" data-bs-toggle="tab" data-bs-target="#jobs" type="button" role="tab" aria-controls="jobs" aria-selected="false" class="nav-link">Jobs</button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="false">About</button>
+        <li role="presentation" class="nav-item mx-auto">
+            <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="true">About</button>
         </li>
-        <li class="nav-item" role="presentation">
+        <li role="presentation" class="nav-item mx-auto">
             <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews</button>
         </li>
     </ul>
@@ -29,7 +29,7 @@
             
         </div>
         <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-            
+            <div></div>
         </div>
     </div>
 </div>
