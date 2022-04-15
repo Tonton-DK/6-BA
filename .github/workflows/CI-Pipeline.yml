@@ -59,8 +59,9 @@ jobs:
       - name: Check running containers
         run: docker ps -a
 
-      # test
-      # http://localhost:8080/ServiceCheck
+      # smoke testing: https://github.com/peter-evans/smoke-testing
+      - name: Perform system healthcheck
+        run: docker run --rm --network container:ba-frontend-1 appropriate/curl http://localhost:80/api/HealthCheck
 
       - name: Stop docker containers
         if: always()
