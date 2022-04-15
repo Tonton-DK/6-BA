@@ -17,22 +17,7 @@ services:
       - contract-service
       - review-service
   
-  user-service:
-    build:
-      context: ./
-      dockerfile: UserService/Dockerfile
-    networks:
-      - frontend
-      - user-service
-    depends_on:
-      - user-database
   
-  user-database:
-    build:
-      context: ./UserService/Database
-    command: --default-authentication-plugin=mysql_native_password
-    networks:
-      - user-service
   
   job-service:
     build:
