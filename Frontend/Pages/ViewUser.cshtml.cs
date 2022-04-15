@@ -15,7 +15,7 @@ public class ViewUserModel : PageModel
 
     public Dictionary<Type, bool> ServiceStatus { get; private set; }
 
-    public User Client { get; private set; }
+    public User? Client { get; private set; }
     public IEnumerable<Job> Jobs { get; private set; }
     public IEnumerable<Contract> OpenContracts { get; private set; }
     public IEnumerable<Contract> ClosedContracts { get; private set; }
@@ -37,6 +37,13 @@ public class ViewUserModel : PageModel
     }
     public void OnGet()
     {
-        
+        OpenContracts = new List<Contract>();
+        Jobs = new List<Job>();
+        ReviewsAsClient = new List<Review>();
+        ReviewsAsProvider = new List<Review>();
+        var contracts = new List<Contract>();
+        contracts.Add(new Contract(Guid.Empty, Guid.Empty, Guid.Empty, Guid.Empty, Guid.Empty, DateTime.Now,State.Cancelled));
+        contracts.Add(new Contract(Guid.Empty, Guid.Empty, Guid.Empty, Guid.Empty, Guid.Empty, DateTime.Now,State.Open));
+        ClosedContracts = contracts;
     }
 }
