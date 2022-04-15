@@ -60,8 +60,8 @@ jobs:
         run: docker ps -a
 
       # smoke testing: https://github.com/peter-evans/smoke-testing
-      - name: Perform system healthcheck
-        run: bash ./scripts/health-test.sh
+      - name: Perform system healthcheck (smoke test)
+        run: bash ./Pipeline/Scripts/health-test.sh
 
       - name: Stop docker containers
         if: always()
