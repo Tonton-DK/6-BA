@@ -95,7 +95,6 @@ nav .navbar-brand {
   max-width: 360px;
   margin: 0 auto;
 }
-
 .input-multiple input:first-of-type {
   border-radius: 25px 25px 0 0;
 }
@@ -111,7 +110,6 @@ nav .navbar-brand {
   z-index: 1;
   position: relative;
 }
-
 .job-card{
   padding-top: 60px;
   height: calc(100% - 90px);
@@ -120,4 +118,14 @@ nav .navbar-brand {
 .offer-card-img {
   max-width: 100%;
   height: auto;
+}
+
+.user-tabs .nav-item {
+  width: 200px;
+  max-width: 33%;
+}
+.user-tabs button.nav-link {
+  width: 100%;
+  border-top-left-radius: 1.25rem;
+  border-top-right-radius: 1.25rem;
 }

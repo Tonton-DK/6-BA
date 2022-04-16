@@ -1,0 +1,138 @@
+@page
+@using ClassLibrary.Classes
+@model ViewUserModel
+
+@{
+    ViewData["Title"] = Model.Client.FirstName + Model.Client.LastName;
+}
+
+<div class="text-center">
+    <div class="col">
+        <div class="mx-auto">
+            <img class="profile-picture img" src="/images/person.jpg" alt="Profile picture" width="150" height="150">
+            <h1 class="fs-4">@ViewData["Title"]</h1>
+        </div>
+    </div>
+    <ul id="myTab" role="tablist" class="nav nav-tabs rows-cols-3 user-tabs fs-5">
+        <li role="presentation" class="nav-item mx-auto">
+            <button id="jobs-tab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#jobs" type="button" role="tab" aria-controls="jobs" aria-selected="true">Jobs</button>
+        </li>
+        <li role="presentation" class="nav-item mx-auto">
+            <button id="reviews-tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews</button>
+        </li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade container active show" id="jobs" role="tabpanel" aria-labelledby="jobs-tab">
+            <!-- IF ME -->
+            
+            <!-- ELSE -->
+            <div class="row mt-2">
+                <div class="col-lg-4 mt-lg-0 mt-3">
+                    <div class="card">
+                        <div class="card-header">TO-DO</div>
+                        <div class="card-body">
+                            @foreach (var job in Model.Jobs)
+                            {
+                                <div class="card border-warning text-center mt-2">
+                                    <div class="card-header">
+                                        @job.Title
+                                    </div>
+                                    <div class="card-body text-warning">
+                                        <p class="card-text">@job.Description</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">Deadline: @job.Deadline</small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mt-lg-0 mt-3">
+                    <div class="card">
+                        <div class="card-header">IN PROGRESS</div>
+                        <div class="card-body">
+                            @foreach (var contract in Model.OpenContracts)
+                            {
+                                <div class="card border-primary text-center mt-2">
+                                    <div class="card-header">
+                                        NAME GOES HERE - @contract.Id
+                                    </div>
+                                    <div class="card-body text-primary">
+                                        <p class="card-text">DESCRIPTION GOES HERE - @contract.Id</p>
+                                        <div><small class="text-muted">Price: PRICE GOES HERE - @contract.Id</small></div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">Deadline: DEADLINE GOES HERE - @contract.Id</small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mt-lg-0 mt-3">
+                    <div class="card">
+                        <div class="card-header">COMPLETED</div>
+                        <div class="card-body">
+                            @foreach (var contract in Model.ClosedContracts)
+                            {
+                                <div class="card @Html.Raw(contract.ContractState == State.Cancelled ? "border-danger" : "border-success") text-center mt-2">
+                                    <div class="card-header">
+                                        NAME GOES HERE - @contract.Id
+                                    </div>
+                                    <div class="card-body @Html.Raw(contract.ContractState == State.Cancelled ? "text-danger" : "text-success")">
+                                        <p class="card-text">DESCRIPTION GOES HERE - @contract.Id</p>
+                                        <div><small class="text-muted">Price: PRICE GOES HERE - @contract.Id</small></div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">Closing date: @contract.ClosedDate</small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade container" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+            <div class="row mt-2">
+                <div class="col-lg-6 mt-lg-0 mt-3">
+                    <div class="card">
+                        <div class="card-header">MY WORK</div>
+                        <div class="card-body">
+                            @foreach (var review in Model.ReviewsAsProvider)
+                                {
+                                    <div class="card text-center mt-3">
+                                        <div class="card-header">
+                                            Rating: @review.Rating
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">@review.Comment</p>
+                                        </div>
+                                    </div>
+                                }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mt-lg-0 mt-3">
+                    <div class="card">
+                        <div class="card-header">WORKING FOR OTHERS</div>
+                        <div class="card-body">
+                            @foreach (var review in Model.ReviewsAsClient)
+                                {
+                                    <div class="card text-center mt-3">
+                                        <div class="card-header">
+                                            Rating: @review.Rating
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">@review.Comment</p>
+                                        </div>
+                                    </div>
+                                }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
