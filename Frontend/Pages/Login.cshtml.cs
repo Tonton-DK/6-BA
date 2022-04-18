@@ -9,7 +9,7 @@ public class LoginModel : PageModel
     public User User { get; private set; }
 
     [BindProperty]
-    public string Password { get; private set; }
+    public LoginRequest LoginRequest { get; set; }
     public void OnGet()
     {
         

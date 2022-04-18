@@ -12,12 +12,12 @@
 <div class="text-center">
     <form method="post">
         <div class="form-group pt-3">
-            <label asp-for="User.Email">Email</label>
-            <input asp-for="User.Email" class="form-control form-control-lg" placeholder="Email">
+            <label asp-for="LoginRequest.Email">Email</label>
+            <input asp-for="LoginRequest.Email" class="form-control form-control-lg" placeholder="Email">
         </div>
         <div class="form-group pt-3">
-            <label asp-for="Password">Password</label>
-            <input type="password" asp-for="Password" class="form-control form-control-lg" placeholder="Password">
+            <label asp-for="LoginRequest.Password">Password</label>
+            <input type="password" asp-for="LoginRequest.Password" class="form-control form-control-lg" placeholder="Password">
         </div>
         <button type="submit" class="btn btn-lg btn-success mt-5">Log in</button>
     </form>
