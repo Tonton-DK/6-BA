@@ -12,11 +12,10 @@ public class CreateUserModel : PageModel
     private readonly IUserService _userService;
     
     public Dictionary<Type, bool> ServiceStatus { get; private set; }
-    
-    public User User { get; private set; }
 
-    [BindProperty]
-    public string Password { get; private set; }
+
+    [BindProperty] 
+    public UserCreator UserCreator { get; set; } = new();
 
     public CreateUserModel(ILogger<CreateUserModel> logger,
         IUserService userService)
@@ -26,8 +25,14 @@ public class CreateUserModel : PageModel
         ServiceStatus = new Dictionary<Type, bool>();
     }
     
-    public void OnGet()
+    public IActionResult OnGet()
     {
-        
+        return Page();
+    }
+    
+    public IActionResult OnPost()
+    {
+        _userService.CreateUser(UserCreator);
+        return RedirectToPage("Login");
     }
 }

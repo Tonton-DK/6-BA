@@ -28,6 +28,12 @@ public class UserCreator : User
         Password = password;
     }
     
+    public UserCreator() 
+        : base(Guid.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false)
+    {
+        Password = string.Empty;
+    }
+    
     public string Password { get; set; }
 }
 
@@ -39,7 +45,7 @@ public class UserValidator : User
         PasswordSalt = salt;
         PasswordHash = hash;
     }
-    
+
     public string PasswordSalt { get; set; }
     public string PasswordHash { get; set; }
 }
