@@ -10,6 +10,12 @@
 </div>
 
 <div class="text-center">
+    @if (@ViewData["LoginStatus"] != null)
+        {
+            <div class="alert alert-danger login-alert form-control" role="alert">
+                @ViewData["LoginStatus"]
+            </div>
+        }
     <form method="post">
         <div class="form-group pt-3">
             <label asp-for="LoginRequest.Email">Email</label>
@@ -21,8 +27,5 @@
         </div>
         <button type="submit" class="btn btn-lg btn-success mt-5">Log in</button>
     </form>
-    <div class="alert alert-danger login-alert" role="alert">
-      @ViewData["LoginStatus"]
-    </div>
 </div>
 
