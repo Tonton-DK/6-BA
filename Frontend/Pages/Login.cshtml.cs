@@ -23,6 +23,14 @@ public class LoginModel : PageModel
     public IActionResult OnPost()
     {
         Client = _userService.ValidateUser(LoginRequest);
+        if (Client != null)
+        {
+            
+        }
+        else
+        {
+            ViewData["LoginStatus"] = "Wrong email or password";
+        }
         return RedirectToPage("Login");
     }
 }
