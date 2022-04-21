@@ -28,17 +28,17 @@ spec:
     spec:
       containers:
         - name: review-service
-          image: ghcr.io/antje12/ba/review-service:latest
+          image: 'ghcr.io/antje12/ba/review-service:latest'
           imagePullPolicy: Always
           ports:
             - containerPort: 80
           resources:
             requests:
-              cpu: "100m"
-              memory: "100Mi"
+              cpu: 100m
+              memory: 100Mi
             limits:
-              cpu: "200m"
-              memory: "200Mi"
+              cpu: 200m
+              memory: 200Mi
       imagePullSecrets:
         - name: regcred
 ---
@@ -71,31 +71,32 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: ghcr.io/antje12/ba/review-database:latest
-          args: ["--default-authentication-plugin=mysql_native_password"]
+          image: 'ghcr.io/antje12/ba/review-database:latest'
+          args:
+            - '--default-authentication-plugin=mysql_native_password'
           ports:
             - containerPort: 3306
           resources:
             requests:
-              cpu: "100m"
-              memory: "400Mi"
+              cpu: 100m
+              memory: 400Mi
             limits:
-              cpu: "200m"
-              memory: "600Mi"
+              cpu: 200m
+              memory: 600Mi
           volumeMounts:
-            - name: mysql-persistent-storage
+            - name: review-persistent-storage
               mountPath: /var/lib/mysql
       volumes:
-        - name: mysql-persistent-storage
+        - name: review-persistent-storage
           persistentVolumeClaim:
-            claimName: mysql-pv-claim
+            claimName: review-pv-claim
       imagePullSecrets:
         - name: regcred
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-claim
+  name: review-pv-claim
   labels:
     app: review-database-pod
 spec:

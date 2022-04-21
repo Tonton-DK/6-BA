@@ -32,7 +32,7 @@ Install Docker Desktop + Kind
 ```kubectl apply -f Pipeline/Kubernetes/deploy-offer.yml```
 ```kubectl apply -f Pipeline/Kubernetes/deploy-contract.yml```
 ```kubectl apply -f Pipeline/Kubernetes/deploy-review.yml```
-```kubectl apply -f Pipeline/Kubernetes/deploy-metric-server.yml```
+```kubectl apply -f Pipeline/Kubernetes/deploy-metric-server.yaml```
 
 ```kubectl port-forward services/frontend 80:80```
 

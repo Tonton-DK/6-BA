@@ -27,31 +27,31 @@ spec:
         app: user-service-pod
     spec:
       containers:
-      - name: user-service
-        image: ghcr.io/antje12/ba/user-service:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-        resources:
-          requests:
-            cpu: "100m"
-            memory: "100Mi"
-          limits:
-            cpu: "200m"
-            memory: "200Mi"
+        - name: user-service
+          image: 'ghcr.io/antje12/ba/user-service:latest'
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
       imagePullSecrets:
-      - name: regcred
+        - name: regcred
 ---
-  apiVersion: v1
-  kind: Service
-  metadata:
-    name: user-database
-  spec:
-    ports:
-      - port: 3306
-        targetPort: 3306
-    selector:
-      app: user-database-pod
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-database
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+  selector:
+    app: user-database-pod
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -71,33 +71,35 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: ghcr.io/antje12/ba/user-database:latest
-          args: ["--default-authentication-plugin=mysql_native_password"]
+          image: 'ghcr.io/antje12/ba/user-database:latest'
+          args:
+            - '--default-authentication-plugin=mysql_native_password'
           ports:
             - containerPort: 3306
           resources:
             requests:
-              cpu: "100m"
-              memory: "400Mi"
+              cpu: 100m
+              memory: 400Mi
             limits:
-              cpu: "200m"
-              memory: "600Mi"              
+              cpu: 200m
+              memory: 600Mi
           volumeMounts:
-          - name: mysql-persistent-storage
-            mountPath: /var/lib/mysql
+            - name: user-persistent-storage
+              mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistent-storage
-        persistentVolumeClaim:
-          claimName: mysql-pv-claim
+        - name: user-persistent-storage
+          persistentVolumeClaim:
+            claimName: user-pv-claim
       imagePullSecrets:
-      - name: regcred
+        - name: regcred
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-claim
+  name: user-pv-claim
   labels:
-      app: user-database-pod
+    app: user-database-pod
 spec:
   accessModes:
     - ReadWriteOnce
