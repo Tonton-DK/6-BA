@@ -5,6 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+});
 builder.Services.AddTransient<IUserService, UserBroker>();
 builder.Services.AddTransient<IJobService, JobBroker>();
 builder.Services.AddTransient<IOfferService, OfferBroker>();
@@ -23,6 +26,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+
+app.UseSession(); 
 
 app.UseRouting();
 
