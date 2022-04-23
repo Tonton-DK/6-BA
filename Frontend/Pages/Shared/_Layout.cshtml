@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@if (Context.Session.Get("_LoggedIn") != null)
+{
+    ViewData["_Name"] = Context.Session.GetString("_Name");
+    ViewData["_LoggedIn"] = BitConverter.ToBoolean(Context.Session.Get("_LoggedIn") ?? BitConverter.GetBytes(false), 0);
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -27,11 +32,9 @@
                     </ul>
                 </div>
                 @*If logged in show burger, else show buttons*@
-                <div class="navbar-nav flex-row flex-wrap">
-                    <a href="/Login" class="navbar-item btn btn-success me-2">Login</a>
-                    <a href="/Create" class="navbar-item btn btn-outline-secondary">Sign up</a>
-                </div>
-                <div class="navbar-nav flex-row flex-wrap">
+                @if (ViewData["_LoggedIn"] != null && (bool) (ViewData["_LoggedIn"] ?? false) == true)
+                {
+                    <div class="navbar-nav flex-row flex-wrap">
                     <label aria-label="Toggle navigation" aria-controls="navbarSupportedContent" for="menu-control" class="navbar-toggler d-block">
                         <span class="navbar-toggler-icon"></span>
                     </label>
@@ -63,6 +66,14 @@
                         <a class="btn btn-danger btn-logout mx-auto" href="">Log out</a>
                     </aside>
                 </div>
+                }
+                else
+                {
+                <div class="navbar-nav flex-row flex-wrap">
+                    <a href="/Login" class="navbar-item btn btn-success me-2">Login</a>
+                    <a href="/Create" class="navbar-item btn btn-outline-secondary">Sign up</a>
+                </div>
+                }
             </div>
         </nav>
     </header>
