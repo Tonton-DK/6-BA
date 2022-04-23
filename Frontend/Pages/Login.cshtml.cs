@@ -8,13 +8,14 @@ namespace Frontend.Pages;
 public class LoginModel : PageModel
 {
     private readonly ILogger<LoginModel> _logger;
-    
+    public Dictionary<Type, bool> ServiceStatus { get; private set; }
     private readonly IUserService _userService;
     
-    public Dictionary<Type, bool> ServiceStatus { get; private set; }
-
     public User? Client { get; private set; }
-
+    public string SessionName = "_Name";  
+    public string SessionAge = "_Age";
+    public string SessionLoggedIn = "_LoggedIn";
+    
     public LoginModel(ILogger<LoginModel> logger,
         IUserService userService)
     {
@@ -28,6 +29,12 @@ public class LoginModel : PageModel
 
     public IActionResult OnGet()
     {
+        ViewData[SessionName] = HttpContext.Session.GetString(SessionName);
+        if(HttpContext.Session.Get(SessionLoggedIn) != null)
+        {
+            ViewData[SessionLoggedIn] = BitConverter.ToBoolean(HttpContext.Session.Get(SessionLoggedIn) ?? BitConverter.GetBytes(false), 0);
+        }
+        
         return Page();
     }
 
@@ -37,6 +44,9 @@ public class LoginModel : PageModel
         if (Client != null)
         {
             // Set Session ID
+            HttpContext.Session.SetString(SessionName, Client.Id.ToString());
+            HttpContext.Session.SetInt32(SessionAge, 24);
+            HttpContext.Session.Set(SessionLoggedIn, BitConverter.GetBytes(true));
             return RedirectToPage("Index");
         }
         ViewData["LoginStatus"] = "Wrong email or password";
