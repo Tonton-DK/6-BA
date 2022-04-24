@@ -40,16 +40,24 @@ public class ViewUserModel : LayoutModel
     public IActionResult OnGet()
     {
         Instantiate();
+        if (!SessionLoggedIn) return RedirectToPage("Login");
         
-        OpenContracts = new List<Contract>();
-        Jobs = new List<Job>();
-        ReviewsAsClient = new List<Review>();
-        ReviewsAsProvider = new List<Review>();
-        var contracts = new List<Contract>();
-        contracts.Add(new Contract(Guid.Empty, Guid.Empty, Guid.Empty, Guid.Empty, Guid.Empty, DateTime.Now,State.Cancelled));
-        contracts.Add(new Contract(Guid.Empty, Guid.Empty, Guid.Empty, Guid.Empty, Guid.Empty, DateTime.Now,State.Open));
-        ClosedContracts = contracts;
+        Client = _userService.GetUserById(new Guid(HttpContext.Session.GetString(SessionIdKey)));
+        Jobs = _jobService.ListJobsByUser(Client.Id);
         
+        var openContracts = new List<Contract>();
+        var closedContracts = new List<Contract>();
+        foreach (var contract in _contractService.ListContracts(Client.Id))
+        {
+            if(contract.ContractState == State.Open) openContracts.Add(contract);
+            else closedContracts.Add(contract);
+        }
+        OpenContracts = openContracts;
+        ClosedContracts = closedContracts;
+        
+        ReviewsAsClient = _reviewService.ListReviews(Client.Id, ReviewType.Client);
+        ReviewsAsProvider = _reviewService.ListReviews(Client.Id, ReviewType.Provider);
+
         return Page();
     }
 }
