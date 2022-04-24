@@ -1,18 +1,19 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
+using Frontend.Pages.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages;
 
-public class LoginModel : PageModel
+public class LoginModel : LayoutModel
 {
     private readonly ILogger<LoginModel> _logger;
     public Dictionary<Type, bool> ServiceStatus { get; private set; }
     private readonly IUserService _userService;
     
     public User? Client { get; private set; }
-    public string SessionName = "_Name";  
+    public string SessionId = "_Id";
+    public string SessionName = "_Name";
     public string SessionAge = "_Age";
     public string SessionLoggedIn = "_LoggedIn";
     
@@ -29,6 +30,7 @@ public class LoginModel : PageModel
 
     public IActionResult OnGet()
     {
+        Instantiate();
         return Page();
     }
 
@@ -37,9 +39,10 @@ public class LoginModel : PageModel
         Client = _userService.ValidateUser(new LoginRequest(LoginRequest.Email, LoginRequest.Password));
         if (Client != null)
         {
-            HttpContext.Session.SetString(SessionName, Client.Id.ToString());
+            HttpContext.Session.SetString(SessionId, Client.Id.ToString());
+            HttpContext.Session.SetString(SessionName, Client.FirstName);
             HttpContext.Session.SetInt32(SessionAge, 24);
-            HttpContext.Session.Set(SessionLoggedIn, BitConverter.GetBytes(true));
+            HttpContext.Session.SetInt32(SessionLoggedIn, 1);
             return RedirectToPage("Index");
         }
         ViewData["LoginStatus"] = "Wrong email or password";

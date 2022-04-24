@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model LayoutModel
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,7 +28,7 @@
                         </li>
                     </ul>
                 </div>
-                @*If logged in show burger, else show buttons*@
+                @*Burger*@
                 @if (Model.SessionLoggedIn)
                 {
                     <div class="navbar-nav flex-row flex-wrap">
@@ -50,7 +52,7 @@
                         </div>
                         <div class="flex-grow-1">
                             <div class="sidebar-menu nav">
-                                <a class="nav-item" href="">View Profile</a>
+                                <a class="nav-item" href="/ViewUser">View Profile</a>
                                 <a class="nav-item" href="">View Inbox</a>
                                 <a class="nav-item" href="">My Contracts</a>
                                 <a class="nav-item" href="">My Tasks</a>
@@ -66,7 +68,7 @@
                 {
                 <div class="navbar-nav flex-row flex-wrap">
                     <a href="/Login" class="navbar-item btn btn-success me-2">Login</a>
-                    <a href="/Create" class="navbar-item btn btn-outline-secondary">Sign up</a>
+                    <a href="/CreateUser" class="navbar-item btn btn-outline-secondary">Sign up</a>
                 </div>
                 }
             </div>

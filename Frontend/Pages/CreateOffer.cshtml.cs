@@ -1,11 +1,11 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
+using Frontend.Pages.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages;
 
-public class CreateOfferModel : PageModel
+public class CreateOfferModel : LayoutModel
 {
     private readonly ILogger<CreateOfferModel> _logger;
     
@@ -34,6 +34,7 @@ public class CreateOfferModel : PageModel
 
     public IActionResult OnGet()
     {
+        Instantiate();
         return Page();
     }
     

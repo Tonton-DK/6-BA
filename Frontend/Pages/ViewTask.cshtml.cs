@@ -1,10 +1,11 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Frontend.Pages.Shared;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages;
 
-public class ViewJobModel : PageModel
+public class ViewJobModel : LayoutModel
 {
     private readonly ILogger<ViewJobModel> _logger;
     
@@ -29,8 +30,9 @@ public class ViewJobModel : PageModel
         _offerService = offerService;
         ServiceStatus = new Dictionary<Type, bool>();
     }
-    public void OnGet()
+    public IActionResult OnGet()
     {
-        
+        Instantiate();
+        return Page();
     }
 }

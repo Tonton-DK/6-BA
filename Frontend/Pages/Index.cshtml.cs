@@ -1,10 +1,11 @@
 ﻿using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Frontend.Pages.Shared;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages;
 
-public class IndexModel : PageModel
+public class IndexModel : LayoutModel
 {
     private readonly ILogger<IndexModel> _logger;
     
@@ -47,11 +48,13 @@ public class IndexModel : PageModel
         _reviewService = reviewService;
         ServiceStatus = new Dictionary<Type, bool>();
     }
-
-    public void OnGet()
+    
+    public IActionResult OnGet()
     {
+        Instantiate();
         GetServiceStatus();
         TestFullServiceFlow();
+        return Page();
     }
     
     private void GetServiceStatus()

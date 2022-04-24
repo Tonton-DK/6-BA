@@ -1,10 +1,11 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Frontend.Pages.Shared;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages;
 
-public class ViewUserModel : PageModel
+public class ViewUserModel : LayoutModel
 {
     private readonly ILogger<ViewUserModel> _logger;
     
@@ -35,8 +36,11 @@ public class ViewUserModel : PageModel
         _reviewService = reviewService;
         ServiceStatus = new Dictionary<Type, bool>();
     }
-    public void OnGet()
+    
+    public IActionResult OnGet()
     {
+        Instantiate();
+        
         OpenContracts = new List<Contract>();
         Jobs = new List<Job>();
         ReviewsAsClient = new List<Review>();
@@ -45,5 +49,7 @@ public class ViewUserModel : PageModel
         contracts.Add(new Contract(Guid.Empty, Guid.Empty, Guid.Empty, Guid.Empty, Guid.Empty, DateTime.Now,State.Cancelled));
         contracts.Add(new Contract(Guid.Empty, Guid.Empty, Guid.Empty, Guid.Empty, Guid.Empty, DateTime.Now,State.Open));
         ClosedContracts = contracts;
+        
+        return Page();
     }
 }

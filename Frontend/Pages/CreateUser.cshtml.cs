@@ -1,11 +1,11 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
+using Frontend.Pages.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages;
 
-public class CreateUserModel : PageModel
+public class CreateUserModel : LayoutModel
 {
     private readonly ILogger<CreateUserModel> _logger;
     
@@ -27,6 +27,7 @@ public class CreateUserModel : PageModel
     
     public IActionResult OnGet()
     {
+        Instantiate();
         return Page();
     }
     
