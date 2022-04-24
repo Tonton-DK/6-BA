@@ -5,15 +5,12 @@ namespace Frontend.Pages.Shared;
 
 public class LayoutModel : PageModel
 {
-    private const string SessionNameKey = "_Name";
-    private const string SessionLoggedInKey = "_LoggedIn";
+    public const string SessionIdKey = "_Id";
+    public const string SessionNameKey = "_Name";
+    public const string SessionLoggedInKey = "_LoggedIn";
+    public const string SessionAgeKey = "_Age";
     public string? SessionName;
     public bool SessionLoggedIn;
-
-    public LayoutModel()
-    {
-        
-    }
 
     public void Instantiate()
     {

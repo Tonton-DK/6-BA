@@ -12,11 +12,7 @@ public class LoginModel : LayoutModel
     private readonly IUserService _userService;
     
     public User? Client { get; private set; }
-    public string SessionId = "_Id";
-    public string SessionName = "_Name";
-    public string SessionAge = "_Age";
-    public string SessionLoggedIn = "_LoggedIn";
-    
+
     public LoginModel(ILogger<LoginModel> logger,
         IUserService userService)
     {
@@ -39,10 +35,10 @@ public class LoginModel : LayoutModel
         Client = _userService.ValidateUser(new LoginRequest(LoginRequest.Email, LoginRequest.Password));
         if (Client != null)
         {
-            HttpContext.Session.SetString(SessionId, Client.Id.ToString());
-            HttpContext.Session.SetString(SessionName, Client.FirstName);
-            HttpContext.Session.SetInt32(SessionAge, 24);
-            HttpContext.Session.SetInt32(SessionLoggedIn, 1);
+            HttpContext.Session.SetString(SessionIdKey, Client.Id.ToString());
+            HttpContext.Session.SetString(SessionNameKey, Client.FirstName);
+            HttpContext.Session.SetInt32(SessionAgeKey, 24);
+            HttpContext.Session.SetInt32(SessionLoggedInKey, 1);
             return RedirectToPage("Index");
         }
         ViewData["LoginStatus"] = "Wrong email or password";
