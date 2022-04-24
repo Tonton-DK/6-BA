@@ -10,7 +10,7 @@
 </div>
 
 <div class="text-center">
-    @if (@ViewData["LoginStatus"] != null)
+    @if (Layout != null)
         {
             <div class="alert alert-danger login-alert form-control" role="alert">
                 @ViewData["LoginStatus"]

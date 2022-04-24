@@ -29,12 +29,6 @@ public class LoginModel : PageModel
 
     public IActionResult OnGet()
     {
-        ViewData[SessionName] = HttpContext.Session.GetString(SessionName);
-        if(HttpContext.Session.Get(SessionLoggedIn) != null)
-        {
-            ViewData[SessionLoggedIn] = BitConverter.ToBoolean(HttpContext.Session.Get(SessionLoggedIn) ?? BitConverter.GetBytes(false), 0);
-        }
-        
         return Page();
     }
 
@@ -43,7 +37,6 @@ public class LoginModel : PageModel
         Client = _userService.ValidateUser(new LoginRequest(LoginRequest.Email, LoginRequest.Password));
         if (Client != null)
         {
-            // Set Session ID
             HttpContext.Session.SetString(SessionName, Client.Id.ToString());
             HttpContext.Session.SetInt32(SessionAge, 24);
             HttpContext.Session.Set(SessionLoggedIn, BitConverter.GetBytes(true));

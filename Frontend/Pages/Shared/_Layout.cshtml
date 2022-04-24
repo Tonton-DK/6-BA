@@ -1,9 +1,4 @@
-﻿@if (Context.Session.Get("_LoggedIn") != null)
-{
-    ViewData["_Name"] = Context.Session.GetString("_Name");
-    ViewData["_LoggedIn"] = BitConverter.ToBoolean(Context.Session.Get("_LoggedIn") ?? BitConverter.GetBytes(false), 0);
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -32,7 +27,7 @@
                     </ul>
                 </div>
                 @*If logged in show burger, else show buttons*@
-                @if (ViewData["_LoggedIn"] != null && (bool) (ViewData["_LoggedIn"] ?? false) == true)
+                @if (Model.SessionLoggedIn)
                 {
                     <div class="navbar-nav flex-row flex-wrap">
                     <label aria-label="Toggle navigation" aria-controls="navbarSupportedContent" for="menu-control" class="navbar-toggler d-block">
@@ -51,7 +46,7 @@
                                 <img class="profile-picture img" src="/images/person.jpg" width="100" height="100" alt="Your profile picture">
                             </a>
                             <span class="fs-6">Logged in as:</span>
-                            <span class="fs-5">Placeholder</span>
+                            <span class="fs-5">@Model.SessionName</span>
                         </div>
                         <div class="flex-grow-1">
                             <div class="sidebar-menu nav">
