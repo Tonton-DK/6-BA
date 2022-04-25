@@ -31,36 +31,45 @@
 </div>
 
 <!-- IF JOB OWNER -->
-<div class="text-center">
-    <h1 class="display-5">Offers</h1>
-    <div class="text-lg-start">
-        @foreach (var offer in Model.Offers)
-        {
-            <div class="row-cols-1 row-cols-lg-2">
-                <div class="card mx-auto my-3 p-2">
-                    <div class="row g-0">
-                        <div class="col-lg-3 d-flex align-items-center">
-                            <a href="#" alt="Go to offer provider">
-                                <img src="/images/person.jpg" alt="Task owner" class="img-fluid profile-picture mx-auto" width="150" height="150">
-                            </a>
-                        </div>
-                        <div class="col-lg-9">
-                            <div class="card-body">
-                                <h5 class="card-title">@offer.State - @offer.Price DKK</h5>
-                                <div><small class="text-muted">Price: @offer.Price DKK</small></div>
-                                <div><small class="text-muted">Duration: @offer.Duration</small></div>
-                                <div><small class="text-muted">Date: @offer.Date</small></div>
-                                <div><small class="text-muted">Offer provider: @offer.ProviderId</small></div>
+@if (Model.IsOwner)
+{
+    <div class="text-center">
+        <h1 class="display-5">Offers</h1>
+        <div class="text-lg-start">
+            @foreach (var offer in Model.Offers)
+            {
+                <div class="row-cols-1 row-cols-lg-2">
+                    <div class="card mx-auto my-3 p-2">
+                        <div class="row g-0">
+                            <div class="col-lg-3 d-flex align-items-center">
+                                <a href="#" alt="Go to offer provider">
+                                    <img src="/images/person.jpg" alt="Task owner" class="img-fluid profile-picture mx-auto" width="150" height="150">
+                                </a>
                             </div>
-                        </div>
-                        <div class="row mx-auto">
-                            <a href="#" class="col btn btn-success me-2">Accept</a>
-                            <a href="#" class="col btn btn-outline-secondary me-2">Counteroffer</a>
-                            <a href="#" class="col btn btn-danger">Decline</a>
+                            <div class="col-lg-9">
+                                <div class="card-body">
+                                    <h5 class="card-title">@offer.State - @offer.Price DKK</h5>
+                                    <div><small class="text-muted">Price: @offer.Price DKK</small></div>
+                                    <div><small class="text-muted">Duration: @offer.Duration</small></div>
+                                    <div><small class="text-muted">Date: @offer.Date</small></div>
+                                    <div><small class="text-muted">Offer provider: @offer.ProviderId</small></div>
+                                </div>
+                            </div>
+                            <div class="row mx-auto">
+                                <a href="#" class="col btn btn-success me-2">Accept</a>
+                                <a href="#" class="col btn btn-outline-secondary me-2">Counteroffer</a>
+                                <a href="#" class="col btn btn-danger">Decline</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-</div>
+}
+else
+{
+    <div class="text-center">
+        <a asp-page="/CreateOffer" asp-route-jobId="@Model.Job.Id" class="btn btn-success mb-3 mx-auto">Create Offer</a>
+    </div>
+}

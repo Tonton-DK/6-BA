@@ -13,10 +13,13 @@ public class ViewJobModel : LayoutModel
     private readonly IUserService _userService;
     private readonly IOfferService _offerService;
     
-    public Dictionary<Type, bool> ServiceStatus { get; private set; }
-    
+    [BindProperty]
     public Job Job { get; private set; }
+    
+    [BindProperty]
     public User Client { get; private set; }
+    
+    public bool IsOwner { get; private set; }
     public IEnumerable<Offer> Offers { get; private set; }
     
     public ViewJobModel(ILogger<ViewJobModel> logger,
@@ -28,11 +31,24 @@ public class ViewJobModel : LayoutModel
         _jobService = jobService;
         _userService = userService;
         _offerService = offerService;
-        ServiceStatus = new Dictionary<Type, bool>();
     }
-    public IActionResult OnGet()
+    
+    public IActionResult OnGet(Guid jobId)
     {
         Instantiate();
+        Job = _jobService.GetJobById(jobId);
+        Client = _userService.GetUserById(Job.ClientId);
+
+        if (HttpContext.Session.GetInt32(SessionLoggedInKey) == 1)
+        {
+            var userId = new Guid(HttpContext.Session.GetString(SessionIdKey));
+            if (Client.Id.Equals(userId))
+            {
+                IsOwner = true;
+                Offers = _offerService.ListOffersForJob(jobId); 
+            }
+        }
+        
         return Page();
     }
 }

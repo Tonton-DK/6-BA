@@ -9,6 +9,7 @@ public class LayoutModel : PageModel
     public const string SessionNameKey = "_Name";
     public const string SessionLoggedInKey = "_LoggedIn";
     public const string SessionAgeKey = "_Age";
+    
     public string? SessionName;
     public bool SessionLoggedIn;
 
