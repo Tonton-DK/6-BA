@@ -22,7 +22,7 @@ public class ViewUserModel : LayoutModel
     public IEnumerable<Contract> OpenContracts { get; private set; }
     public IEnumerable<Contract> ClosedContracts { get; private set; }
     public IEnumerable<Job> JobsForContracts { get; private set; }
-    public IEnumerable<Job> OffersForContracts { get; private set; }
+    public IEnumerable<Offer> OffersForContracts { get; private set; }
     public IEnumerable<Review> ReviewsAsClient { get; private set; }
     public IEnumerable<Review> ReviewsAsProvider { get; private set; }
 
@@ -59,12 +59,12 @@ public class ViewUserModel : LayoutModel
             if(contract.ContractState == State.Open) openContracts.Add(contract);
             else closedContracts.Add(contract);
             jobIds.Add(contract.JobId);
-            offerIds.Add(contract.JobId);
+            offerIds.Add(contract.OfferId);
         }
         OpenContracts = openContracts;
         ClosedContracts = closedContracts;
         JobsForContracts = _jobService.ListJobsByIDs(jobIds);
-        
+        OffersForContracts = _offerService.ListOffersByIDs(offerIds);
         ReviewsAsClient = _reviewService.ListReviews(Client.Id, ReviewType.Client);
         ReviewsAsProvider = _reviewService.ListReviews(Client.Id, ReviewType.Provider);
 

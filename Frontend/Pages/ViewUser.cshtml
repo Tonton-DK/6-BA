@@ -35,9 +35,9 @@
                             {
                                 foreach (var job in Model.Jobs)
                                 {
-                                    <div class="card border-warning text-center mt-2">
+                                    <div class="card border-warning text-center mb-2">
                                         <div class="card-header">
-                                            @job.Title
+                                            <a asp-page="/ViewTask" asp-route-jobId="@job.Id">@job.Title</a>
                                         </div>
                                         <div class="card-body text-warning">
                                             <p class="card-text">@job.Description</p>
@@ -66,16 +66,16 @@
                             {
                                 foreach (var contract in Model.OpenContracts)
                                 {
-                                    <div class="card border-primary text-center mt-2">
+                                    <div class="card border-primary text-center mb-2">
                                         <div class="card-header">
-                                            NAME GOES HERE - @contract.Id
+                                            @Model.JobsForContracts.First(job => job.Id == contract.JobId).Title
                                         </div>
                                         <div class="card-body text-primary">
-                                            <p class="card-text">DESCRIPTION GOES HERE - @contract.Id</p>
-                                            <div><small class="text-muted">Price: PRICE GOES HERE - @contract.Id</small></div>
+                                            <p class="card-text">@Model.JobsForContracts.First(job => job.Id == contract.JobId).Description</p>
+                                            <div><small class="text-muted">Price: @Model.OffersForContracts.First(offer => offer.Id == contract.OfferId).Price</small></div>
                                         </div>
                                         <div class="card-footer">
-                                            <small class="text-muted">Deadline: DEADLINE GOES HERE - @contract.Id</small>
+                                            <small class="text-muted">Deadline: @Model.OffersForContracts.First(offer => offer.Id == contract.OfferId).Date</small>
                                         </div>
                                     </div>
                                 }
@@ -97,16 +97,16 @@
                             {
                                 foreach (var contract in Model.ClosedContracts)
                                 {
-                                    <div class="card @Html.Raw(contract.ContractState == State.Cancelled ? "border-danger" : "border-success") text-center mt-2">
+                                    <div class="card @Html.Raw(contract.ContractState == State.Cancelled ? "border-danger" : "border-success") text-center mb-2">
                                         <div class="card-header">
-                                            NAME GOES HERE - @contract.Id
+                                            @Model.JobsForContracts.First(job => job.Id == contract.JobId).Title
                                         </div>
                                         <div class="card-body @Html.Raw(contract.ContractState == State.Cancelled ? "text-danger" : "text-success")">
-                                            <p class="card-text">DESCRIPTION GOES HERE - @contract.Id</p>
-                                            <div><small class="text-muted">Price: PRICE GOES HERE - @contract.Id</small></div>
+                                            <p class="card-text">@Model.JobsForContracts.First(job => job.Id == contract.JobId).Description</p>
+                                            <div><small class="text-muted">Price: @Model.OffersForContracts.First(offer => offer.Id == contract.OfferId).Price</small></div>
                                         </div>
                                         <div class="card-footer">
-                                            <small class="text-muted">Closing date: @contract.ClosedDate</small>
+                                            <small class="text-muted">Closing date: @Model.OffersForContracts.First(offer => offer.Id == contract.OfferId).Date</small>
                                         </div>
                                     </div>
                                 }
@@ -132,7 +132,7 @@
                             {
                                 foreach (var review in Model.ReviewsAsProvider)
                                 {
-                                    <div class="card text-center mt-3">
+                                    <div class="card text-center mb-2">
                                         <div class="card-header">
                                             Rating: @review.Rating
                                         </div>
@@ -159,7 +159,7 @@
                             {
                                 foreach (var review in Model.ReviewsAsClient)
                                 {
-                                    <div class="card text-center mt-3">
+                                    <div class="card text-center mb-2">
                                         <div class="card-header">
                                             Rating: @review.Rating
                                         </div>
