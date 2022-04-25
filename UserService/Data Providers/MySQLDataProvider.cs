@@ -16,8 +16,8 @@ public class MySQLDataProvider : IDataProvider
         con.Open();
 
         var sql =
-            @"INSERT INTO User(ID, Email, PasswordSalt, PasswordHash, Firstname, Lastname, PhoneNumber, IsServiceProvider) 
-                    VALUES(@id, @email, @passwordSalt, @passwordHash, @firstname, @lastname, @phoneNumber, @isServiceProvider)";
+            @"INSERT INTO User(ID, Email, PasswordSalt, PasswordHash, Firstname, Lastname, PhoneNumber, ProfilePicture, IsServiceProvider) 
+                    VALUES(@id, @email, @passwordSalt, @passwordHash, @firstname, @lastname, @phoneNumber, @profilePicture, @isServiceProvider)";
         using var cmd = new MySqlCommand(sql, con);
 
         user.Id = Guid.NewGuid();
@@ -28,6 +28,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@firstname", user.FirstName);
         cmd.Parameters.AddWithValue("@lastname", user.LastName);
         cmd.Parameters.AddWithValue("@phoneNumber", user.PhoneNumber);
+        cmd.Parameters.AddWithValue("@profilePicture", user.ProfilePicture);
         cmd.Parameters.AddWithValue("@isServiceProvider", user.IsServiceProvider ? 1 : 0);
         cmd.Prepare();
 
@@ -40,7 +41,7 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
 
-        var stm = @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.IsServiceProvider
+        var stm = @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.ProfilePicture, User.IsServiceProvider
                     FROM User
                     WHERE User.ID = @id";
         using var cmd = new MySqlCommand(stm, con);
@@ -58,7 +59,8 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetString(2),
                 rdr.GetString(3),
                 rdr.GetString(4),
-                rdr.GetBoolean(5));
+                rdr.GetString(5),
+                rdr.GetBoolean(6));
             return user;
         }
 
@@ -70,7 +72,7 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
 
-        var stm = @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.IsServiceProvider
+        var stm = @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.ProfilePicture, User.IsServiceProvider
                          FROM User
                          WHERE User.ID in ('" + string.Join("','", userIds) + "')";
 
@@ -88,7 +90,8 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetString(2),
                 rdr.GetString(3),
                 rdr.GetString(4),
-                rdr.GetBoolean(5));
+                rdr.GetString(5),
+                rdr.GetBoolean(6));
             users.Add(user);
         }
 
@@ -101,7 +104,7 @@ public class MySQLDataProvider : IDataProvider
         con.Open();
 
         var stm =
-            @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.IsServiceProvider, User.PasswordSalt, User.PasswordHash
+            @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.ProfilePicture, User.IsServiceProvider, User.PasswordSalt, User.PasswordHash
                     FROM User
                     WHERE User.Email = @email";
         using var cmd = new MySqlCommand(stm, con);
@@ -119,9 +122,10 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetString(2),
                 rdr.GetString(3),
                 rdr.GetString(4),
-                rdr.GetBoolean(5),
-                rdr.GetString(6),
-                rdr.GetString(7));
+                rdr.GetString(5),
+                rdr.GetBoolean(6),
+                rdr.GetString(7),
+                rdr.GetString(8));
 
             return user;
         }
@@ -135,7 +139,7 @@ public class MySQLDataProvider : IDataProvider
         con.Open();
 
         var stm =
-            @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.IsServiceProvider, User.PasswordSalt, User.PasswordHash
+            @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.ProfilePicture, User.IsServiceProvider, User.PasswordSalt, User.PasswordHash
                     FROM User
                     WHERE User.ID = @id";
         using var cmd = new MySqlCommand(stm, con);
@@ -153,9 +157,10 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetString(2),
                 rdr.GetString(3),
                 rdr.GetString(4),
-                rdr.GetBoolean(5),
-                rdr.GetString(6),
-                rdr.GetString(7));
+                rdr.GetString(5),
+                rdr.GetBoolean(6),
+                rdr.GetString(7),
+                rdr.GetString(8));
 
             return user;
         }
@@ -169,7 +174,7 @@ public class MySQLDataProvider : IDataProvider
         con.Open();
 
         var sql = @"UPDATE User 
-                    SET Email = @email, Firstname = @firstName, Lastname = @lastName, PhoneNumber = @phoneNumber, IsServiceProvider = @isServiceProvider
+                    SET Email = @email, Firstname = @firstName, Lastname = @lastName, PhoneNumber = @phoneNumber, ProfilePicture = @profilePicture, IsServiceProvider = @isServiceProvider
                     WHERE User.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
 
@@ -178,6 +183,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@firstname", user.FirstName);
         cmd.Parameters.AddWithValue("@lastname", user.LastName);
         cmd.Parameters.AddWithValue("@phoneNumber", user.PhoneNumber);
+        cmd.Parameters.AddWithValue("@profilePicture", user.ProfilePicture);
         cmd.Parameters.AddWithValue("@isServiceProvider", user.IsServiceProvider ? 1 : 0);
         cmd.Prepare();
 
