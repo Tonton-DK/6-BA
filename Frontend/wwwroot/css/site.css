@@ -115,6 +115,16 @@ nav .navbar-brand {
   height: calc(100% - 90px);
 }
 
+.contract-card-img{
+  margin-bottom: -100px;
+  z-index: 1;
+  position: relative;
+}
+.contract-card{
+  padding-top: 100px;
+  height: calc(100% - 90px);
+}
+
 .offer-card-img {
   max-width: 100%;
   height: auto;
