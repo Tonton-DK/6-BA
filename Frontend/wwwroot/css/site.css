@@ -114,7 +114,9 @@ nav .navbar-brand {
   padding-top: 60px;
   height: calc(100% - 90px);
 }
-
+.contract-card-wrapper{
+  max-width: 400px;
+}
 .contract-card-img{
   margin-bottom: -100px;
   z-index: 1;
