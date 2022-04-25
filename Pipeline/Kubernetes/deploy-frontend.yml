@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: frontend
 spec:
-  #sessionAffinity: ClientIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 80
