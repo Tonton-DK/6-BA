@@ -68,11 +68,11 @@ public class IndexModel : LayoutModel
 
     private void TestFullServiceFlow()
     {
-        var client = new UserCreator(Guid.Empty, "client@mail.dk", "Client", "Dude", "12345678", false, "secret");
+        var client = new UserCreator(Guid.Empty, "client@mail.dk", "Client", "Dude", "12345678", "/images/person.jpg",false, "secret");
         Client = _userService.CreateUser(client);
         Client = _userService.GetUserById(Client.Id);
         Client = _userService.ValidateUser(new LoginRequest(client.Email, client.Password));
-        var provider = new UserCreator(Guid.Empty, "provider@mail.dk", "Provider", "Dude", "12345678", true, "secret");
+        var provider = new UserCreator(Guid.Empty, "provider@mail.dk", "Provider", "Dude", "12345678", "/images/person.jpg",true, "secret");
         Provider = _userService.CreateUser(provider);
         Provider = _userService.GetUserById(Provider.Id);
         Provider = _userService.ValidateUser(new LoginRequest(provider.Email, provider.Password));
