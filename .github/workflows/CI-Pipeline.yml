@@ -61,7 +61,10 @@ jobs:
 
       # smoke testing: https://github.com/peter-evans/smoke-testing
       - name: Perform system healthcheck (smoke test)
-        run: bash ./Pipeline/Scripts/health-test.sh
+        run: bash ./Pipeline/Scripts/health-test.sh Services
+        
+      - name: Perform system healthcheck (integration test)
+        run: bash ./Pipeline/Scripts/health-test.sh ServiceFlow
 
       - name: Stop docker containers
         if: always()

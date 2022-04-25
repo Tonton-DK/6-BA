@@ -95,6 +95,28 @@ public class Test
     }
     
     [Test]
+    public void ListUsersByIDsTest()
+    {
+        var input1 = new UserCreator(Guid.NewGuid(), "email 1", "first name 1", "last name 1", "12345678", false, "password 1");
+        var input2 = new UserCreator(Guid.NewGuid(), "email 2", "first name 2", "last name 2", "12345678", false, "password 2");
+        var input3 = new UserCreator(Guid.NewGuid(), "email 3", "first name 3", "last name 3", "12345678", false, "password 3");
+
+        var logger = new Mock<ILogger<UserServiceController>>();
+        var dataProvider = new MySQLDataProvider();
+        dataProvider.setConnectionString(database.ConnectionString);
+
+        var service = new UserServiceController(logger.Object, dataProvider);
+        input1.Id = service.CreateUser(input1).Id;
+        input2.Id = service.CreateUser(input2).Id;
+        input3.Id = service.CreateUser(input3).Id;
+        var output = service.ListUsersByIDs(new []{input1.Id, input2.Id});
+        
+        Assert.AreEqual(2, output.Count());
+        Assert.AreEqual(true, output.Any(x => x.Id == input1.Id));
+        Assert.AreEqual(true, output.Any(x => x.Id == input2.Id));
+    }
+    
+    [Test]
     public void UpdateUserTest()
     {
         var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");

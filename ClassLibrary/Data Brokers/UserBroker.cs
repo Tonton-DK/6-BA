@@ -33,6 +33,15 @@ public class UserBroker : BaseBroker, IUserService
         return null;
     }
 
+    public IEnumerable<User> ListUsersByIDs(IEnumerable<Guid> userIds)
+    {
+        var uri = baseUri + "/ListUsersByIDs";
+        var content = new StringContent(JsonConvert.SerializeObject(userIds), Encoding.UTF8, "application/json");
+        var t = Post<User[]>(uri, content);
+        if (t != null) return new List<User>(t.Result);
+        return null;
+    }
+
     public User? UpdateUser(User user)
     {
         var uri = baseUri + "/UpdateUser";

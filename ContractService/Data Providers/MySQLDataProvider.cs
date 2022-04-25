@@ -25,8 +25,8 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@offerId", contract.OfferId);
         cmd.Parameters.AddWithValue("@clientId", contract.ClientId);
         cmd.Parameters.AddWithValue("@providerId", contract.ProviderId);
-        cmd.Parameters.AddWithValue("@creationDate", contract.CreationDate);
-        cmd.Parameters.AddWithValue("@closedDate", contract.ClosedDate ?? (object) DBNull.Value);
+        cmd.Parameters.AddWithValue("@creationDate", contract.CreationDate.ToString("yyyy-MM-dd HH:mm:ss"));
+        cmd.Parameters.AddWithValue("@closedDate", contract.ClosedDate?.ToString("yyyy-MM-dd HH:mm:ss") ?? (object) DBNull.Value);
         cmd.Parameters.AddWithValue("@state", contract.ContractState.ToString());
         cmd.Prepare();
 
@@ -55,13 +55,13 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetGuid(2),
                 rdr.GetGuid(3),
                 rdr.GetGuid(4),
-                rdr.GetDateTime(5),
+                rdr.GetMySqlDateTime(5).Value,
                 (State) Enum.Parse(typeof(State), rdr.GetString(7))
             );
 
             if (!rdr.IsDBNull(6))
             {
-                contract.ClosedDate = rdr.GetDateTime(6);
+                contract.ClosedDate = rdr.GetMySqlDateTime(6).Value;
             }
 
             return contract;
@@ -93,13 +93,13 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetGuid(2),
                 rdr.GetGuid(3),
                 rdr.GetGuid(4),
-                rdr.GetDateTime(5),
+                rdr.GetMySqlDateTime(5).Value,
                 (State) Enum.Parse(typeof(State), rdr.GetString(7))
             );
 
             if (!rdr.IsDBNull(6))
             {
-                contract.ClosedDate = rdr.GetDateTime(6);
+                contract.ClosedDate = rdr.GetMySqlDateTime(6).Value;
             }
 
             contracts.Add(contract);
@@ -122,8 +122,8 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@offerId", contract.OfferId);
         cmd.Parameters.AddWithValue("@clientId", contract.ClientId);
         cmd.Parameters.AddWithValue("@providerId", contract.ProviderId);
-        cmd.Parameters.AddWithValue("@creationDate", contract.CreationDate);
-        cmd.Parameters.AddWithValue("@closedDate", contract.ClosedDate ?? (object) DBNull.Value);
+        cmd.Parameters.AddWithValue("@creationDate", contract.CreationDate.ToString("yyyy-MM-dd HH:mm:ss"));
+        cmd.Parameters.AddWithValue("@closedDate", contract.ClosedDate?.ToString("yyyy-MM-dd HH:mm:ss") ?? (object) DBNull.Value);
         cmd.Parameters.AddWithValue("@state", contract.ContractState.ToString());
         cmd.Prepare();
 

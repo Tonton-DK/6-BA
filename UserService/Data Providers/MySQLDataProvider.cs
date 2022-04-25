@@ -59,11 +59,40 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetString(3),
                 rdr.GetString(4),
                 rdr.GetBoolean(5));
-
             return user;
         }
 
         return null;
+    }
+
+    public IEnumerable<User> ListUsersByIDs(IEnumerable<Guid> userIds)
+    {
+        using var con = new MySqlConnection(cs);
+        con.Open();
+
+        var stm = @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.IsServiceProvider
+                         FROM User
+                         WHERE User.ID in ('" + string.Join("','", userIds) + "')";
+
+        using var cmd = new MySqlCommand(stm, con);
+
+        using MySqlDataReader rdr = cmd.ExecuteReader();
+
+        var users = new List<User>();
+
+        while (rdr.Read())
+        {
+            var user = new User(
+                rdr.GetGuid(0),
+                rdr.GetString(1),
+                rdr.GetString(2),
+                rdr.GetString(3),
+                rdr.GetString(4),
+                rdr.GetBoolean(5));
+            users.Add(user);
+        }
+
+        return users;
     }
 
     public UserValidator? GetUserValidator(string email)

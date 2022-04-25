@@ -10,6 +10,15 @@
 </div>
 
 <div class="text-center">
+    <span>@Model.Job.Category.Name</span> - <span>@Model.Job.Title</span>
+    <div>@Model.Job.Description</div>
+    <div>At @Model.Job.Location.Road @Model.Job.Location.Number @Model.Job.Location.Zip</div>
+    <div>Before @Model.Job.Deadline</div>
+</div>
+
+<hr/>
+
+<div class="text-center">
     <form method="post">
         <div class="form-group pt-3">
             <label asp-for="Price">Price</label>
@@ -22,6 +31,10 @@
         <div class="form-group pt-3">
             <label asp-for="Date">Date</label>
             <input asp-for="Date" class="form-control form-control-lg" min="@DateTime.Now.ToString("yyyy-MM-dd")">
+        </div>
+        <div class="form-group pt-3">
+            <label asp-for="Comment">Comment</label>
+            <input asp-for="Comment" class="form-control form-control-lg" placeholder="Comment">
         </div>
         <button type="submit" class="btn btn-lg btn-success mt-5">Create Offer</button>
     </form>

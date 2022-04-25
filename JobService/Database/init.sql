@@ -3,7 +3,6 @@ USE db;
 
 CREATE TABLE Category (
   ID CHAR(36) PRIMARY KEY,
-
   Name NVARCHAR(500) NOT NULL,
   Description NVARCHAR(500) NOT NULL
 );
@@ -14,17 +13,13 @@ INSERT INTO Category(ID, Name, Description) VALUES("62507ed1-e247-4fb1-bbf8-0a73
 
 CREATE TABLE Job (
   ID CHAR(36) PRIMARY KEY,
-  
   Title NVARCHAR(500) NOT NULL,
   Description NVARCHAR(500) NOT NULL,
   Deadline DATETIME NOT NULL,
-  
   Road NVARCHAR(500) NOT NULL,
   Number NVARCHAR(500) NOT NULL,
   Zip NVARCHAR(500) NOT NULL,
-  
   ClientID CHAR(36) NOT NULL,
-  
   CategoryID CHAR(36),
   FOREIGN KEY(CategoryID) REFERENCES Category(ID)
 );
