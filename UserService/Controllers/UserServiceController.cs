@@ -39,6 +39,12 @@ public class UserServiceController : ControllerBase, IUserService
         return _dataProvider.GetUserById(id);
     }
 
+    [HttpPost("ListUsersByIDs")]
+    public IEnumerable<User> ListUsersByIDs([FromBody] IEnumerable<Guid> userIds)
+    {
+        return _dataProvider.ListUsersByIDs(userIds);
+    }
+
     [HttpPut("UpdateUser")]
     public User? UpdateUser([FromBody] User user)
     {

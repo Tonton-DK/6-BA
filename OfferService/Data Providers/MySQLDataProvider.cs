@@ -15,7 +15,7 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        var sql = "INSERT INTO Offer(ID, JobId, ProviderId, PreviousOfferId, Price, Duration, Date, State) VALUES(@id, @jobId, @providerId, @previousOfferId, @price, @duration, @date, @state)";
+        var sql = "INSERT INTO Offer(ID, JobId, ProviderId, PreviousOfferId, Price, Duration, Date, State, Comment) VALUES(@id, @jobId, @providerId, @previousOfferId, @price, @duration, @date, @state, @comment)";
         using var cmd = new MySqlCommand(sql, con);
 
         offer.Id = Guid.NewGuid(); 
@@ -28,6 +28,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@duration", offer.Duration);
         cmd.Parameters.AddWithValue("@date", offer.Date);
         cmd.Parameters.AddWithValue("@state", offer.State.ToString());
+        cmd.Parameters.AddWithValue("@comment", offer.Comment);
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
@@ -56,7 +57,8 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetInt32(4), 
                 rdr.GetString(5), 
                 rdr.GetDateTime(6),
-                (State) Enum.Parse(typeof(State), rdr.GetString(7))
+                (State) Enum.Parse(typeof(State), rdr.GetString(7)),
+                rdr.GetString(8)
                 );
             
             if(!rdr.IsDBNull(3))
@@ -94,7 +96,8 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetInt32(4), 
                 rdr.GetString(5), 
                 rdr.GetDateTime(6),
-                (State) Enum.Parse(typeof(State), rdr.GetString(7))
+                (State) Enum.Parse(typeof(State), rdr.GetString(7)),
+                rdr.GetString(8)
                 );
             
             if(!rdr.IsDBNull(3))
@@ -132,7 +135,8 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetInt32(4), 
                 rdr.GetString(5), 
                 rdr.GetDateTime(6),
-                (State) Enum.Parse(typeof(State), rdr.GetString(7))
+                (State) Enum.Parse(typeof(State), rdr.GetString(7)),
+                rdr.GetString(8)
             );
             
             if(!rdr.IsDBNull(3))
@@ -151,7 +155,7 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
         
-        var sql = "UPDATE Offer SET Offer.Price = @price, Offer.Duration = @duration, Offer.Date = @date, Offer.State = @state WHERE Offer.ID = @id";
+        var sql = "UPDATE Offer SET Offer.Price = @price, Offer.Duration = @duration, Offer.Date = @date, Offer.State = @state, Offer.Comment = @comment WHERE Offer.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
         
         cmd.Parameters.AddWithValue("@id", offer.Id);
@@ -159,6 +163,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@duration", offer.Duration);
         cmd.Parameters.AddWithValue("@date", offer.Date);
         cmd.Parameters.AddWithValue("@state", offer.State.ToString());
+        cmd.Parameters.AddWithValue("@comment", offer.Comment);
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();

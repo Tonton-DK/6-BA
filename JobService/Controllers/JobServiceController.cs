@@ -55,7 +55,7 @@ public class JobServiceController : ControllerBase, IJobService
     }
 
     [HttpPost("ListJobsByIDs")]
-    public IEnumerable<Job> ListJobsByIDs(IEnumerable<Guid> jobIds)
+    public IEnumerable<Job> ListJobsByIDs([FromBody] IEnumerable<Guid> jobIds)
     {
         return _dataProvider.ListJobsByIDs(jobIds);
     }

@@ -86,10 +86,10 @@ public class IndexModel : LayoutModel
         Jobs = _jobService.ListJobs(filter);
         ClientJobs = _jobService.ListJobsByUser(Client.Id);
 
-        Offer = new Offer(Guid.Empty, Job.Id, Provider.Id, 500, "2 Hours", DateTime.Now, State.Open);
+        Offer = new Offer(Guid.Empty, Job.Id, Provider.Id, 500, "2 Hours", DateTime.Now, State.Open, "Comment");
         Offer = _offerService.CreateOffer(Offer);
         Offer = _offerService.GetOfferById(Offer.Id);
-        CounterOffer = new Offer(Guid.Empty, Job.Id, Provider.Id, 400, "1 Hours", DateTime.Now, State.Open);
+        CounterOffer = new Offer(Guid.Empty, Job.Id, Provider.Id, 400, "1 Hours", DateTime.Now, State.Open, "Comment");
         CounterOffer = _offerService.CreateCounterOffer(Offer.Id, CounterOffer);
         Offers = _offerService.ListOffersForJob(Job.Id);
         Offers = _offerService.ListOffersForUser(Provider.Id);

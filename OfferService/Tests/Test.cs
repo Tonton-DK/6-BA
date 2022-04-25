@@ -34,7 +34,8 @@ public class Test
                       Price int NOT NULL,
                       Duration VARCHAR(500) NOT NULL,
                       DATE DATETIME NOT NULL,
-                      State ENUM('Open', 'Concluded', 'Cancelled')
+                      State ENUM('Open', 'Concluded', 'Cancelled'),
+                      Comment NVARCHAR(500) NOT NULL
                     );";
         using var cmd = new MySqlCommand(sql, con);
         cmd.ExecuteNonQuery();
@@ -61,7 +62,7 @@ public class Test
     [Test]
     public void CreateOfferTest()
     {
-        var input = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open);
+        var input = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
         
         var logger = new Mock<ILogger<OfferServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -79,7 +80,7 @@ public class Test
     [Test]
     public void GetOfferByIdTest()
     {
-        var input = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open);
+        var input = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
         
         var logger = new Mock<ILogger<OfferServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -105,9 +106,9 @@ public class Test
     [Test]
     public void ListOffersForJobTest()
     {
-        var input1 = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open);
-        var input2 = new Offer(Guid.NewGuid(), input1.JobId, Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open);
-        var input3 = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open);
+        var input1 = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
+        var input2 = new Offer(Guid.NewGuid(), input1.JobId, Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
+        var input3 = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
         
         var logger = new Mock<ILogger<OfferServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -131,9 +132,9 @@ public class Test
     [Test]
     public void ListOffersForUserTest()
     {
-        var input1 = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open);
-        var input2 = new Offer(Guid.NewGuid(), Guid.NewGuid(), input1.ProviderId, 500, "2 hours", DateTime.Now, State.Open);
-        var input3 = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open);
+        var input1 = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
+        var input2 = new Offer(Guid.NewGuid(), Guid.NewGuid(), input1.ProviderId, 500, "2 hours", DateTime.Now, State.Open, "Comment");
+        var input3 = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
         
         var logger = new Mock<ILogger<OfferServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -157,7 +158,7 @@ public class Test
     [Test]
     public void UpdateOfferTest()
     {
-        var input = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open);
+        var input = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
         
         var logger = new Mock<ILogger<OfferServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -178,7 +179,7 @@ public class Test
     [Test]
     public void DeleteOfferTest()
     {
-        var input = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open);
+        var input = new Offer(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
         
         var logger = new Mock<ILogger<OfferServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -202,7 +203,7 @@ public class Test
     public void AcceptOfferTest()
     {
         var job = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.NewGuid(), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid());
-        var input = new Offer(Guid.NewGuid(), job.Id, Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open);
+        var input = new Offer(Guid.NewGuid(), job.Id, Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
 
         var logger = new Mock<ILogger<OfferServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -228,8 +229,8 @@ public class Test
     public void CreateCounterOfferTest()
     {
         var job = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.NewGuid(), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid());
-        var offer = new Offer(Guid.NewGuid(), job.Id, Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open);
-        var input = new Offer(Guid.NewGuid(), job.Id, offer.ProviderId, 400, "1.5 hours", DateTime.Now, State.Open);
+        var offer = new Offer(Guid.NewGuid(), job.Id, Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
+        var input = new Offer(Guid.NewGuid(), job.Id, offer.ProviderId, 400, "1.5 hours", DateTime.Now, State.Open, "Comment");
         
         var logger = new Mock<ILogger<OfferServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -256,7 +257,7 @@ public class Test
     public void DeclineOfferTest()
     {
         var job = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.NewGuid(), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid());
-        var input = new Offer(Guid.NewGuid(), job.Id, Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open);
+        var input = new Offer(Guid.NewGuid(), job.Id, Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
 
         var logger = new Mock<ILogger<OfferServiceController>>();
         var dataProvider = new MySQLDataProvider();

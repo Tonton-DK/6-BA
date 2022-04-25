@@ -9,7 +9,8 @@ CREATE TABLE Offer (
   Price int NOT NULL,
   Duration VARCHAR(500) NOT NULL,
   DATE DATETIME NOT NULL,
-  State ENUM('Open', 'Concluded', 'Cancelled')
+  State ENUM('Open', 'Concluded', 'Cancelled'),
+  Comment NVARCHAR(500) NOT NULL
 );
 
 ALTER user 'root' IDENTIFIED WITH mysql_native_password BY '';
