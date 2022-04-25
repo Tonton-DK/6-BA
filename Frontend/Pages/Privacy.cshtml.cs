@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Frontend.Pages.Shared;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages;
 
-public class PrivacyModel : PageModel
+public class PrivacyModel : LayoutModel
 {
     private readonly ILogger<PrivacyModel> _logger;
 
@@ -12,8 +12,10 @@ public class PrivacyModel : PageModel
         _logger = logger;
     }
 
-    public void OnGet()
+    public IActionResult OnGet()
     {
+        Instantiate();
+        return Page();
     }
 }
 

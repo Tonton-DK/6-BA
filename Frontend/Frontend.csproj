@@ -15,4 +15,10 @@
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Pages\Shared\Layout.cshtml.cs">
+      <DependentUpon>_Layout.cshtml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

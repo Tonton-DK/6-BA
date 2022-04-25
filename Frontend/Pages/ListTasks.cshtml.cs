@@ -1,11 +1,12 @@
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Frontend.Pages.Shared;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Frontend.Pages;
 
-public class ListJobsModel : PageModel
+public class ListJobsModel : LayoutModel
 {
     private readonly ILogger<ListJobsModel> _logger;
     
@@ -26,10 +27,13 @@ public class ListJobsModel : PageModel
         ServiceStatus = new Dictionary<Type, bool>();
     }
     
-    public void OnGet()
+    public IActionResult OnGet()
     {
+        Instantiate();
         Filter = new Filter(null, null, null, "", "");
         Jobs = _jobService.ListJobs(Filter);
         Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
+
+        return Page();
     }
 }
