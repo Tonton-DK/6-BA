@@ -150,6 +150,43 @@ public class MySQLDataProvider : IDataProvider
         return offers;
     }
 
+    public List<Offer> ListForIDs(IEnumerable<Guid> offerIds)
+    {
+        using var con = new MySqlConnection(cs);
+        con.Open();
+
+        var stm = @"SELECT * FROM Offer WHERE Offer.ID in ('" + string.Join("','", offerIds) + "')";
+
+        using var cmd = new MySqlCommand(stm, con);
+
+        using MySqlDataReader rdr = cmd.ExecuteReader();
+
+        var offers = new List<Offer>();
+
+        while (rdr.Read())
+        {
+            var offer = new Offer(
+                rdr.GetGuid(0),
+                rdr.GetGuid(1),
+                rdr.GetGuid(2),
+                rdr.GetInt32(4), 
+                rdr.GetString(5), 
+                rdr.GetMySqlDateTime(6).Value,
+                (State) Enum.Parse(typeof(State), rdr.GetString(7)),
+                rdr.GetString(8)
+            );
+            
+            if(!rdr.IsDBNull(3))
+            {
+                offer.PreviousOfferId = rdr.GetGuid(3);
+            }
+            
+            offers.Add(offer);
+        }
+
+        return offers;
+    }
+    
     public Offer? Update(Offer offer)
     {
         using var con = new MySqlConnection(cs);

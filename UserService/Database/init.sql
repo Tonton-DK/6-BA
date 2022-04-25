@@ -9,10 +9,11 @@ CREATE TABLE User (
   Firstname NVARCHAR(500) NOT NULL,
   Lastname NVARCHAR(500) NOT NULL,
   PhoneNumber NVARCHAR(500) NOT NULL,
+  ProfilePicture NVARCHAR(500) NOT NULL,
   IsServiceProvider BIT NOT NULL
 );
 
-INSERT INTO User(ID, Email, PasswordSalt, PasswordHash, Firstname, Lastname, PhoneNumber, IsServiceProvider) VALUES("156be3a6-5537-41f8-9608-705c7cd7cbc3", "test@mail.dk", "s7eu/Mz30bvsZnjSBot7gg==", "O+3jrM6+EudEJ3WwNS67aFqEi5eztupag3u+YG3Es64=", "John", "Doe", "12345678", 0);
+INSERT INTO User(ID, Email, PasswordSalt, PasswordHash, Firstname, Lastname, PhoneNumber, ProfilePicture, IsServiceProvider) VALUES("156be3a6-5537-41f8-9608-705c7cd7cbc3", "test@mail.dk", "s7eu/Mz30bvsZnjSBot7gg==", "O+3jrM6+EudEJ3WwNS67aFqEi5eztupag3u+YG3Es64=", "John", "Doe", "12345678", "/images/person.jpg", 0);
 
 ALTER user 'root' IDENTIFIED WITH mysql_native_password BY '';
 flush privileges;

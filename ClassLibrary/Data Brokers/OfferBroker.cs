@@ -45,6 +45,15 @@ public class OfferBroker : BaseBroker, IOfferService
         return null;
     }
 
+    public IEnumerable<Offer> ListOffersByIDs(IEnumerable<Guid> offerIds)
+    {
+        var uri = baseUri + "/ListOffersByIDs";
+        var content = new StringContent(JsonConvert.SerializeObject(offerIds), Encoding.UTF8, "application/json");
+        var t = Post<Offer[]>(uri, content);
+        if (t != null) return new List<Offer>(t.Result);
+        return null;
+    }
+
     public Offer? UpdateOffer(Offer offer)
     {
         var content = new StringContent(JsonConvert.SerializeObject(offer), Encoding.UTF8, "application/json");
