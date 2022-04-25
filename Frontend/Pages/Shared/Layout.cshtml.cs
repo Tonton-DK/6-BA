@@ -10,6 +10,7 @@ public class LayoutModel : PageModel
     public const string SessionProfilePictureKey = "_ProfilePicture";
     public const string SessionLoggedInKey = "_LoggedIn";
     public const string SessionAgeKey = "_Age";
+    
     public string? SessionName;
     public string? SessionProfilePicture;
     public bool SessionLoggedIn;

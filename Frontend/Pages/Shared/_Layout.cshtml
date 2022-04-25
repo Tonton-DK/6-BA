@@ -17,14 +17,14 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">I Know A Guy!</a>
+                <a asp-page="/Index" class="navbar-brand">I Know A Guy!</a>
                 <div class="navbar-collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Post">Create Task</a>
+                            <a asp-page="/CreateTask" class="nav-link text-dark">Create Task</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Find">Find Work</a>
+                            <a asp-page="/ListTasks" class="nav-link text-dark">Find Work</a>
                         </li>
                     </ul>
                 </div>
