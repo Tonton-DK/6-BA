@@ -37,7 +37,7 @@ public class LoginModel : LayoutModel
         {
             HttpContext.Session.SetString(SessionIdKey, Client.Id.ToString());
             HttpContext.Session.SetString(SessionNameKey, Client.FirstName);
-            HttpContext.Session.SetInt32(SessionAgeKey, 24);
+            HttpContext.Session.SetString(SessionProfilePictureKey, Client.ProfilePicture);
             HttpContext.Session.SetInt32(SessionLoggedInKey, 1);
             return RedirectToPage("Index");
         }

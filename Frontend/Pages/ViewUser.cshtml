@@ -9,7 +9,7 @@
 <div class="text-center">
     <div class="col">
         <div class="mx-auto">
-            <img class="profile-picture img" src="/images/person.jpg" alt="Profile picture" width="150" height="150">
+            <img class="profile-picture img" src="@Model.Client.ProfilePicture" alt="Profile picture" width="150" height="150">
             <h1 class="fs-4">@ViewData["Title"]</h1>
         </div>
     </div>
@@ -31,18 +31,28 @@
                     <div class="card">
                         <div class="card-header">TO-DO</div>
                         <div class="card-body">
-                            @foreach (var job in Model.Jobs)
+                            @if (Model.Jobs.Any())
                             {
-                                <div class="card border-warning text-center mt-2">
-                                    <div class="card-header">
-                                        @job.Title
+                                foreach (var job in Model.Jobs)
+                                {
+                                    <div class="card border-warning text-center mt-2">
+                                        <div class="card-header">
+                                            @job.Title
+                                        </div>
+                                        <div class="card-body text-warning">
+                                            <p class="card-text">@job.Description</p>
+                                        </div>
+                                        <div class="card-footer">
+                                            <small class="text-muted">Deadline: @job.Deadline</small>
+                                        </div>
                                     </div>
-                                    <div class="card-body text-warning">
-                                        <p class="card-text">@job.Description</p>
-                                    </div>
-                                    <div class="card-footer">
-                                        <small class="text-muted">Deadline: @job.Deadline</small>
-                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div role="alert" class="alert alert-secondary">
+                                    You have no active tasks listed.
+                                    <a href="/CreateTask" class="btn btn btn-success mt-1">Create task</a>
                                 </div>
                             }
                         </div>
@@ -52,19 +62,28 @@
                     <div class="card">
                         <div class="card-header">IN PROGRESS</div>
                         <div class="card-body">
-                            @foreach (var contract in Model.OpenContracts)
+                            @if (Model.OpenContracts.Any())
                             {
-                                <div class="card border-primary text-center mt-2">
-                                    <div class="card-header">
-                                        NAME GOES HERE - @contract.Id
+                                foreach (var contract in Model.OpenContracts)
+                                {
+                                    <div class="card border-primary text-center mt-2">
+                                        <div class="card-header">
+                                            NAME GOES HERE - @contract.Id
+                                        </div>
+                                        <div class="card-body text-primary">
+                                            <p class="card-text">DESCRIPTION GOES HERE - @contract.Id</p>
+                                            <div><small class="text-muted">Price: PRICE GOES HERE - @contract.Id</small></div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <small class="text-muted">Deadline: DEADLINE GOES HERE - @contract.Id</small>
+                                        </div>
                                     </div>
-                                    <div class="card-body text-primary">
-                                        <p class="card-text">DESCRIPTION GOES HERE - @contract.Id</p>
-                                        <div><small class="text-muted">Price: PRICE GOES HERE - @contract.Id</small></div>
-                                    </div>
-                                    <div class="card-footer">
-                                        <small class="text-muted">Deadline: DEADLINE GOES HERE - @contract.Id</small>
-                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div role="alert" class="alert alert-secondary">
+                                    You currently do not have any tasks in progress.
                                 </div>
                             }
                         </div>
@@ -74,19 +93,28 @@
                     <div class="card">
                         <div class="card-header">COMPLETED</div>
                         <div class="card-body">
-                            @foreach (var contract in Model.ClosedContracts)
+                            @if (Model.ClosedContracts.Any())
                             {
-                                <div class="card @Html.Raw(contract.ContractState == State.Cancelled ? "border-danger" : "border-success") text-center mt-2">
-                                    <div class="card-header">
-                                        NAME GOES HERE - @contract.Id
+                                foreach (var contract in Model.ClosedContracts)
+                                {
+                                    <div class="card @Html.Raw(contract.ContractState == State.Cancelled ? "border-danger" : "border-success") text-center mt-2">
+                                        <div class="card-header">
+                                            NAME GOES HERE - @contract.Id
+                                        </div>
+                                        <div class="card-body @Html.Raw(contract.ContractState == State.Cancelled ? "text-danger" : "text-success")">
+                                            <p class="card-text">DESCRIPTION GOES HERE - @contract.Id</p>
+                                            <div><small class="text-muted">Price: PRICE GOES HERE - @contract.Id</small></div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <small class="text-muted">Closing date: @contract.ClosedDate</small>
+                                        </div>
                                     </div>
-                                    <div class="card-body @Html.Raw(contract.ContractState == State.Cancelled ? "text-danger" : "text-success")">
-                                        <p class="card-text">DESCRIPTION GOES HERE - @contract.Id</p>
-                                        <div><small class="text-muted">Price: PRICE GOES HERE - @contract.Id</small></div>
-                                    </div>
-                                    <div class="card-footer">
-                                        <small class="text-muted">Closing date: @contract.ClosedDate</small>
-                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div role="alert" class="alert alert-secondary">
+                                    You currently do not have any completed tasks.
                                 </div>
                             }
                         </div>
@@ -100,7 +128,9 @@
                     <div class="card">
                         <div class="card-header">MY WORK</div>
                         <div class="card-body">
-                            @foreach (var review in Model.ReviewsAsProvider)
+                            @if (Model.ReviewsAsProvider.Any())
+                            {
+                                foreach (var review in Model.ReviewsAsProvider)
                                 {
                                     <div class="card text-center mt-3">
                                         <div class="card-header">
@@ -111,6 +141,13 @@
                                         </div>
                                     </div>
                                 }
+                            }
+                            else
+                            {
+                                <div role="alert" class="alert alert-secondary">
+                                    There are no reviews to be found.
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -118,7 +155,9 @@
                     <div class="card">
                         <div class="card-header">WORKING FOR OTHERS</div>
                         <div class="card-body">
-                            @foreach (var review in Model.ReviewsAsClient)
+                            @if (Model.ReviewsAsClient.Any())
+                            {
+                                foreach (var review in Model.ReviewsAsClient)
                                 {
                                     <div class="card text-center mt-3">
                                         <div class="card-header">
@@ -129,6 +168,13 @@
                                         </div>
                                     </div>
                                 }
+                            }
+                            else
+                            {
+                                <div role="alert" class="alert alert-secondary">
+                                    There are no reviews to be found.
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
