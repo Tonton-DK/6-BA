@@ -61,7 +61,7 @@ public class Test
     [Test]
     public void CreateUserTest()
     {
-        var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");
+        var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", "urlPath", false, "password");
 
         var logger = new Mock<ILogger<UserServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -76,7 +76,7 @@ public class Test
     [Test]
     public void GetUserByIdTest()
     {
-        var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");
+        var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", "urlPath", false, "password");
 
         var logger = new Mock<ILogger<UserServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -97,9 +97,9 @@ public class Test
     [Test]
     public void ListUsersByIDsTest()
     {
-        var input1 = new UserCreator(Guid.NewGuid(), "email 1", "first name 1", "last name 1", "12345678", false, "password 1");
-        var input2 = new UserCreator(Guid.NewGuid(), "email 2", "first name 2", "last name 2", "12345678", false, "password 2");
-        var input3 = new UserCreator(Guid.NewGuid(), "email 3", "first name 3", "last name 3", "12345678", false, "password 3");
+        var input1 = new UserCreator(Guid.NewGuid(), "email 1", "first name 1", "last name 1", "12345678", "urlPath",false, "password 1");
+        var input2 = new UserCreator(Guid.NewGuid(), "email 2", "first name 2", "last name 2", "12345678", "urlPath", false, "password 2");
+        var input3 = new UserCreator(Guid.NewGuid(), "email 3", "first name 3", "last name 3", "12345678", "urlPath", false, "password 3");
 
         var logger = new Mock<ILogger<UserServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -119,7 +119,7 @@ public class Test
     [Test]
     public void UpdateUserTest()
     {
-        var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");
+        var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", "urlPath", false, "password");
 
         var logger = new Mock<ILogger<UserServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -138,7 +138,7 @@ public class Test
     [Test]
     public void DeleteUserByIdTest()
     {
-        var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");
+        var input = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", "urlPath", false, "password");
 
         var logger = new Mock<ILogger<UserServiceController>>();
         var dataProvider = new MySQLDataProvider();
@@ -158,7 +158,7 @@ public class Test
     [Test]
     public void ValidateUserTest()
     {
-        var user = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");
+        var user = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", "urlPath", false, "password");
         var input = new LoginRequest(user.Email, user.Password);
         
         var logger = new Mock<ILogger<UserServiceController>>();
@@ -180,7 +180,7 @@ public class Test
     [Test]
     public void ChangePasswordTest()
     {
-        var user = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", false, "password");
+        var user = new UserCreator(Guid.NewGuid(), "email", "first name", "last name", "12345678", "urlPath", false, "password");
         var input = new PasswordRequest(user.Id, user.Password, "more secret");
         
         var logger = new Mock<ILogger<UserServiceController>>();
