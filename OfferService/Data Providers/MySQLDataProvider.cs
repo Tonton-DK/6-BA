@@ -26,7 +26,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@previousOfferId", offer.PreviousOfferId ?? (object) DBNull.Value);
         cmd.Parameters.AddWithValue("@price", offer.Price);
         cmd.Parameters.AddWithValue("@duration", offer.Duration);
-        cmd.Parameters.AddWithValue("@date", offer.Date);
+        cmd.Parameters.AddWithValue("@date", offer.Date.ToString("yyyy-MM-dd HH:mm:ss"));
         cmd.Parameters.AddWithValue("@state", offer.State.ToString());
         cmd.Parameters.AddWithValue("@comment", offer.Comment);
         cmd.Prepare();
@@ -56,7 +56,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetGuid(2),
                 rdr.GetInt32(4), 
                 rdr.GetString(5), 
-                rdr.GetDateTime(6),
+                rdr.GetMySqlDateTime(6).Value,
                 (State) Enum.Parse(typeof(State), rdr.GetString(7)),
                 rdr.GetString(8)
                 );
@@ -95,7 +95,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetGuid(2),
                 rdr.GetInt32(4), 
                 rdr.GetString(5), 
-                rdr.GetDateTime(6),
+                rdr.GetMySqlDateTime(6).Value,
                 (State) Enum.Parse(typeof(State), rdr.GetString(7)),
                 rdr.GetString(8)
                 );
@@ -134,7 +134,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetGuid(2),
                 rdr.GetInt32(4), 
                 rdr.GetString(5), 
-                rdr.GetDateTime(6),
+                rdr.GetMySqlDateTime(6).Value,
                 (State) Enum.Parse(typeof(State), rdr.GetString(7)),
                 rdr.GetString(8)
             );
@@ -161,7 +161,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@id", offer.Id);
         cmd.Parameters.AddWithValue("@price", offer.Price);
         cmd.Parameters.AddWithValue("@duration", offer.Duration);
-        cmd.Parameters.AddWithValue("@date", offer.Date);
+        cmd.Parameters.AddWithValue("@date", offer.Date.ToString("yyyy-MM-dd HH:mm:ss"));
         cmd.Parameters.AddWithValue("@state", offer.State.ToString());
         cmd.Parameters.AddWithValue("@comment", offer.Comment);
         cmd.Prepare();

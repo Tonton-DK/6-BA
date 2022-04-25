@@ -102,8 +102,8 @@ public class MySQLDataProvider : IDataProvider
         using var cmd = new MySqlCommand(stm, con);
 
         cmd.Parameters.AddWithValue("@cat", filter.CategoryId);
-        cmd.Parameters.AddWithValue("@from", filter.StartDate?.Ticks);
-        cmd.Parameters.AddWithValue("@to", filter.EndDate?.Ticks);
+        cmd.Parameters.AddWithValue("@from", filter.StartDate?.ToString("yyyy-MM-dd HH:mm:ss"));
+        cmd.Parameters.AddWithValue("@to", filter.EndDate?.ToString("yyyy-MM-dd HH:mm:ss"));
         cmd.Parameters.AddWithValue("@Zip", filter.Zip);
         cmd.Parameters.AddWithValue("@query", filter.SearchQuery);
         cmd.Prepare();
@@ -118,7 +118,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetGuid(0),
                 rdr.GetString(1), 
                 rdr.GetString(2), 
-                rdr.GetDateTime(3),
+                rdr.GetMySqlDateTime(3).Value,
                 new Category(rdr.GetGuid(8), rdr.GetString(9), rdr.GetString(10)),
                 new Address(rdr.GetString(4), rdr.GetString(5), rdr.GetString(6)),
                 rdr.GetGuid(7));
@@ -153,7 +153,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetGuid(0),
                 rdr.GetString(1), 
                 rdr.GetString(2), 
-                rdr.GetDateTime(3),
+                rdr.GetMySqlDateTime(3).Value,
                 new Category(rdr.GetGuid(8), rdr.GetString(9), rdr.GetString(10)),
                 new Address(rdr.GetString(4), rdr.GetString(5), rdr.GetString(6)),
                 rdr.GetGuid(7));
@@ -185,7 +185,7 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetGuid(0),
                 rdr.GetString(1), 
                 rdr.GetString(2), 
-                rdr.GetDateTime(3),
+                rdr.GetMySqlDateTime(3).Value,
                 new Category(rdr.GetGuid(8), rdr.GetString(9), rdr.GetString(10)),
                 new Address(rdr.GetString(4), rdr.GetString(5), rdr.GetString(6)),
                 rdr.GetGuid(7));
