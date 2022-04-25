@@ -34,6 +34,7 @@ public class Test
                       Firstname NVARCHAR(500) NOT NULL,
                       Lastname NVARCHAR(500) NOT NULL,
                       PhoneNumber NVARCHAR(500) NOT NULL,
+                      ProfilePicture NVARCHAR(500) NOT NULL,
                       IsServiceProvider BIT NOT NULL
                     );";
         using var cmd = new MySqlCommand(sql, con);
