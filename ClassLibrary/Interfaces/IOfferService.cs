@@ -8,6 +8,7 @@ public interface IOfferService : IBaseService
     public Offer? GetOfferById(Guid id);
     public IEnumerable<Offer> ListOffersForJob(Guid jobId);
     public IEnumerable<Offer> ListOffersForUser(Guid userId);
+    public IEnumerable<Offer> ListOffersByIDs(IEnumerable<Guid> offerIds);
     public Offer? UpdateOffer(Offer offer);
     public bool DeleteOffer(Guid id);
     public Contract? AcceptOffer(Guid id);

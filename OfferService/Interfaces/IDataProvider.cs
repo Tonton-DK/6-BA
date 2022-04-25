@@ -8,6 +8,7 @@ public interface IDataProvider
     public Offer? Get(Guid id);
     public List<Offer> ListForJob(Guid jobId);
     public List<Offer> ListForUser(Guid userId);
+    public List<Offer> ListForIDs(IEnumerable<Guid> offerIds);
     public Offer? Update(Offer offer);
     public bool Delete(Guid id);
 

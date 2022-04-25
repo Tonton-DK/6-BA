@@ -64,6 +64,12 @@ public class OfferServiceController : ControllerBase, IOfferService
         return offers.ToArray();
     }
 
+    [HttpPost("ListOffersByIDs")]
+    public IEnumerable<Offer> ListOffersByIDs([FromBody] IEnumerable<Guid> offerIds)
+    {
+        return _dataProvider.ListForIDs(offerIds);
+    }
+
     [HttpPut("UpdateOffer")]
     public Offer? UpdateOffer([FromBody]Offer offer)
     {
