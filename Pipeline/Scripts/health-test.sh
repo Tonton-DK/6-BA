@@ -5,7 +5,7 @@ CURRENT_ATTEMPT=1
 
 while [ $CURRENT_ATTEMPT -le $MAX_ATTEMPTS ]; do
     echo "Testing connection - Attempt: ${CURRENT_ATTEMPT} of ${MAX_ATTEMPTS}"
-    RESULT=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080/api/HealthCheck/)
+    RESULT=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080/api/HealthCheck/Services)
     
     if [ $RESULT -e '200' ]; then
      echo "All connection attempts were successful"

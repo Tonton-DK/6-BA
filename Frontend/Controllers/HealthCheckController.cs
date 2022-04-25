@@ -44,9 +44,10 @@ public class HealthCheckController : ControllerBase
         _reviewService = reviewService;
     }
 
+    [HttpGet("Services")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult Get()
+    public IActionResult Services()
     {
         _userService.Get();
         _jobService.Get();
@@ -55,10 +56,11 @@ public class HealthCheckController : ControllerBase
         _reviewService.Get();
         return Ok();
     }
-
+    
+    [HttpGet("ServiceFlow")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult FullServiceFlow()
+    public IActionResult ServiceFlow()
     {
         var client = new UserCreator(Guid.Empty, "client@mail.dk", "Client", "Dude", "12345678", false, "secret");
         Client = _userService.CreateUser(client);
