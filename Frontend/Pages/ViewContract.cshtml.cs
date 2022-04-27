@@ -39,14 +39,15 @@ public class ViewContractModel : LayoutModel
         Instantiate();
         
         Contract = _contractService.GetContractById(contractId);
-
-        if (!SessionLoggedIn || (Contract.ClientId == contractId || Contract.ProviderId == contractId))
+        
+        if (!SessionLoggedIn || !Contract.ClientId.Equals(new Guid(HttpContext.Session.GetString(SessionIdKey))) || !Contract.ProviderId.Equals(new Guid(HttpContext.Session.GetString(SessionIdKey))))
         {
             ViewData["Title"] = "Not allowed";
             ViewData["Message"] = "You are not allowed to view this contract.";
             ValidContract = false;
             return Page();
         }
+        ValidContract = true; 
         
         Client = _userService.GetUserById(Contract.ClientId);
         Provider = _userService.GetUserById(Contract.ProviderId);
