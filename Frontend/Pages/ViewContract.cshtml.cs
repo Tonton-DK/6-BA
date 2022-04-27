@@ -34,14 +34,6 @@ public class ViewContractModel : LayoutModel
         _offerService = offerService;
     }
 
-    public IActionResult OnGet()
-    {
-        ViewData["Title"] = "No contract";
-        ViewData["Message"] = "There is no contract with the given ID.";
-        ValidContract = false;
-        return Page();
-    }
-    
     public IActionResult OnGet(Guid contractId)
     {
         Instantiate();
