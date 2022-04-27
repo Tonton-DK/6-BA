@@ -1,12 +1,10 @@
 @page
 @model ViewContractModel
 
-@{
-    ViewData["Title"] = "Contract";
-}
-
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
+    @if (Model.ValidContract)
+    {
     <div class="row mt-2">
         <div class="col col-12 col-md-6 mt-3 text-lg-start">
             <div class="fw-bold">TITLE GOES HERE</div>
@@ -60,4 +58,9 @@
             <a asp-page="/ViewUser" asp-route-jobId="" class="btn btn-success mb-3 mx-auto">Mark as done</a>
         </div>
     </div>
+    }
+    else
+    {
+        
+    }
 </div>

@@ -1,6 +1,8 @@
+using System.Net;
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
 using Frontend.Pages.Shared;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages;
