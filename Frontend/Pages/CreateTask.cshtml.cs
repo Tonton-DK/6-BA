@@ -12,9 +12,8 @@ public class CreateJobModel : LayoutModel
     
     private readonly IJobService _jobService;
     
-    public Dictionary<Type, bool> ServiceStatus { get; private set; }
-    
-    public Job Job { get; private set; }
+    [BindProperty]
+    public Job Job { get; set; }
     public SelectList Categories { get; set; }
 
     public CreateJobModel(ILogger<CreateJobModel> logger,
@@ -22,7 +21,7 @@ public class CreateJobModel : LayoutModel
     {
         _logger = logger;
         _jobService = jobService;
-        ServiceStatus = new Dictionary<Type, bool>();
+        Job = new Job();
     }
 
     public IActionResult OnGet(Guid? categoryId)
@@ -34,5 +33,13 @@ public class CreateJobModel : LayoutModel
             Categories.FirstOrDefault(x => x.Value == categoryId.ToString())!.Selected = true;
         }
         return Page();
+    }
+    
+    public async Task<IActionResult> OnPost()
+    {
+        var clientId = new Guid(HttpContext.Session.GetString(SessionIdKey));
+        Job.ClientId = clientId;
+        var jobId = _jobService.CreateJob(Job);
+        return RedirectToPage("ViewTask", new { jobId = jobId });
     }
 }

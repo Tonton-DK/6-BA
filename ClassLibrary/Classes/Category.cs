@@ -8,6 +8,10 @@ public class Category
         Name = name;
         Description = description;
     }
+    
+    public Category()
+    {
+    }
 
     public Guid Id { get; set; }
     public string Name { get; set; }

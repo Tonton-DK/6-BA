@@ -13,6 +13,12 @@ public class Job
         ClientId = clientId;
     }
 
+    public Job()
+    {
+        Category = new Category();
+        Location = new Address();
+    }
+
     public Guid Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
