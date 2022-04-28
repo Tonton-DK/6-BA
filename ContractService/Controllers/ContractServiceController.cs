@@ -55,7 +55,7 @@ public class ContractServiceController : ControllerBase, IContractService
         return null;
     }
 
-    [HttpDelete("CancelContract/{id}")]
+    [HttpPut("CancelContract/{id}")]
     public Contract? CancelContract(Guid id)
     {
         var contract = _dataProvider.Get(id);
