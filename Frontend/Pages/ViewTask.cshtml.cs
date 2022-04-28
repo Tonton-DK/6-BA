@@ -32,7 +32,7 @@ public class ViewJobModel : LayoutModel
         _userService = userService;
         _offerService = offerService;
     }
-    
+
     public IActionResult OnGet(Guid jobId)
     {
         Instantiate();
