@@ -16,7 +16,14 @@ public class ListJobsModel : LayoutModel
     public Dictionary<Type, bool> ServiceStatus { get; private set; }
 
     public IEnumerable<Job> Jobs { get; private set; }
+    
     public IEnumerable<User> Clients { get; private set; }
+    
+    /*
+    [BindProperty]
+    public Filter CustomFilter { get; set; }
+    */
+    
     public Filter Filter { get; set; }
     public SelectList Categories { get; set; }
     
@@ -34,8 +41,29 @@ public class ListJobsModel : LayoutModel
     public IActionResult OnGet()
     {
         Instantiate();
+        
         Filter = new Filter(null, null, null, "", "");
+        
         Jobs = _jobService.ListJobs(Filter);
+        Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
+        
+        var clientIds = new List<Guid>();
+        foreach (var job in Jobs)
+        {
+            clientIds.Add(job.ClientId);
+        }
+        Clients = _userService.ListUsersByIDs(clientIds);
+        
+        
+        return Page();
+    }
+    
+    /*
+    public IActionResult OnPost()
+    {
+        Instantiate();
+        
+        Jobs = _jobService.ListJobs(CustomFilter);
         Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
 
         var clientIds = new List<Guid>();
@@ -44,7 +72,8 @@ public class ListJobsModel : LayoutModel
             clientIds.Add(job.ClientId);
         }
         Clients = _userService.ListUsersByIDs(clientIds);
-        
+
         return Page();
     }
+    */
 }
