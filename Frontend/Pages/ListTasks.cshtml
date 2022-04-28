@@ -40,7 +40,7 @@
             foreach (var job in Model.Jobs)
             {
                 <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12">
-                    <div class="h-100"><img src="/images/person.jpg" alt="Task owner" class="profile-picture job-card-img" width="150" height="150">
+                    <div class="h-100"><img src="@Model.Clients.First(user => user.Id == job.ClientId).ProfilePicture" alt="Task owner" class="profile-picture job-card-img" width="150" height="150">
                         <div class="card job-card">
                             <div class="card-body">
                                 <h5 class="card-title">@job.Title</h5>
