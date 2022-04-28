@@ -12,7 +12,7 @@ public class IndexModel : LayoutModel
 
     private readonly IJobService _jobService;
 
-    public Category Category { get; set; }
+    public Category SelectedCategory { get; set; }
     public SelectList Categories { get; set; }
 
     public IndexModel(ILogger<IndexModel> logger,
@@ -25,13 +25,13 @@ public class IndexModel : LayoutModel
     public IActionResult OnGet()
     {
         Instantiate();
-        //Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
+        Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
         return Page();
     }
     
     public async Task<IActionResult> OnPost()
     {
-        var id = Category.Id;
+        var id = SelectedCategory.Id;
         return RedirectToPage("CreateTask");
     }
 }

@@ -19,11 +19,9 @@ public class ListJobsModel : LayoutModel
     
     public IEnumerable<User> Clients { get; private set; }
     
-    /*
     [BindProperty]
     public Filter CustomFilter { get; set; }
-    */
-    
+
     public Filter Filter { get; set; }
     public SelectList Categories { get; set; }
     
@@ -42,7 +40,7 @@ public class ListJobsModel : LayoutModel
     {
         Instantiate();
         
-        Filter = new Filter(null, null, null, "", "");
+        Filter = new Filter();
         
         Jobs = _jobService.ListJobs(Filter);
         Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
@@ -54,11 +52,9 @@ public class ListJobsModel : LayoutModel
         }
         Clients = _userService.ListUsersByIDs(clientIds);
         
-        
         return Page();
     }
     
-    /*
     public IActionResult OnPost()
     {
         Instantiate();
@@ -75,5 +71,4 @@ public class ListJobsModel : LayoutModel
 
         return Page();
     }
-    */
 }

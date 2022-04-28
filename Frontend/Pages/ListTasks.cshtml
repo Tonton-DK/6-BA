@@ -13,28 +13,30 @@
     <div class="row">
         <h5 class="card-title">Filters</h5>
     </div>
-    <div class="row card-body pt-2">
-        <form method="post">
-            <div class="col">
-                <select asp-for="Filter.CategoryId" asp-items="Model.Categories" class="form-select">
+    <form method="post">
+        <div class="row card-body pt-2">
+            <div class="col col-12 col-md-4 col-xl-2 mb-3">
+                <select asp-for="CustomFilter.CategoryId" asp-items="Model.Categories" class="form-select">
                     <option value="default">Select A Category</option>
                 </select>
             </div>
-            <div class="col">
-                <input asp-for="Filter.StartDate" class="form-control" >
+            <div class="col col-12 col-md-4 col-xl-3 mb-3">
+                <input asp-for="CustomFilter.StartDate" class="form-control" >
             </div>
-            <div class="col">
-                <input asp-for="Filter.EndDate" class="form-control">
+            <div class="col col-12 col-md-4 col-xl-3 mb-3">
+                <input asp-for="CustomFilter.EndDate" class="form-control">
             </div>
-            <div class="col">
-                <input asp-for="Filter.Zip" class="form-control" placeholder="Postal code">
+            <div class="col col-12 col-md-4 col-xl-2 mb-3">
+                <input asp-for="CustomFilter.Zip" class="form-control" placeholder="Postal code">
             </div>
-            <div class="col">
-                <input asp-for="Filter.SearchQuery" class="form-control" placeholder="Search">
+            <div class="col col-12 col-md-4 col-xl-2 mb-3">
+                <input asp-for="CustomFilter.SearchQuery" class="form-control" placeholder="Search">
             </div>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
-    </div>
+            <div class="col col-12 col-md-4 col-xl-12 mb-3">
+                <button type="submit" class="btn btn-primary form-btn">Search</button>
+            </div>
+        </div>
+    </form>
 </div>
 
 <div class="text-center">
@@ -43,7 +45,8 @@
             foreach (var job in Model.Jobs)
             {
                 <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12">
-                    <div class="h-100"><img src="/Test" alt="Task owner" class="profile-picture job-card-img" width="150" height="150">
+                    <div class="h-100">
+                        <img src="@Model.Clients.First(user => user.Id == job.ClientId).ProfilePicture" alt="Task owner" class="profile-picture job-card-img" width="150" height="150">
                         <div class="card job-card">
                             <div class="card-body">
                                 <h5 class="card-title">@job.Title</h5>
