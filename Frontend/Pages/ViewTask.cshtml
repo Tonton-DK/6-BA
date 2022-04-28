@@ -8,9 +8,15 @@
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>@Model.Job.Description</p>
-    <small class="text-muted">Deadline: @Model.Job.Deadline</small>
-    <small class="text-muted">Task location: @Model.Job.Location.Zip</small>
-    <small class="text-muted">Category: @Model.Job.Category.Name - @Model.Job.Category.Description</small>
+    <div>
+        <small class="text-muted">Deadline: @Model.Job.Deadline</small>
+    </div>
+    <div>
+        <small class="text-muted">Task location: @Model.Job.Location.Zip</small>
+    </div>
+    <div>
+        <small class="text-muted">Category: @Model.Job.Category.Name - @Model.Job.Category.Description</small>
+    </div>
 </div>
 
 <div class="text-center">
@@ -70,6 +76,6 @@
 else
 {
     <div class="text-center">
-        <a asp-page="/CreateOffer" asp-route-jobId="@Model.Job.Id" class="btn btn-success mb-3 mx-auto">Create Offer</a>
+        <a asp-page="/CreateOffer" asp-route-jobId="@Model.Job.Id" class="btn btn-success my-3 mx-auto">Create Offer</a>
     </div>
 }
