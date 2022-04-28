@@ -9,6 +9,13 @@ public class Category
         Description = description;
     }
 
+    public Category()
+    {
+        Id = Guid.Empty;
+        Name = String.Empty;
+        Description = String.Empty;
+    }
+
     public Guid Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }

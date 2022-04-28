@@ -38,12 +38,21 @@ public class ListJobsModel : LayoutModel
     
     public IActionResult OnGet()
     {
+        return OnGetCategory(null);
+    }
+
+    public IActionResult OnGetCategory(Guid? categoryId)
+    {
         Instantiate();
         
         Filter = new Filter();
         
         Jobs = _jobService.ListJobs(Filter);
         Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
+        if (categoryId != null)
+        {
+            CustomFilter.CategoryId = categoryId;
+        }
         
         var clientIds = new List<Guid>();
         foreach (var job in Jobs)
@@ -54,7 +63,7 @@ public class ListJobsModel : LayoutModel
         
         return Page();
     }
-    
+
     public IActionResult OnPost()
     {
         Instantiate();

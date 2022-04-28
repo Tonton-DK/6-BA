@@ -12,6 +12,7 @@ public class IndexModel : LayoutModel
 
     private readonly IJobService _jobService;
 
+    [BindProperty]
     public Category SelectedCategory { get; set; }
     public SelectList Categories { get; set; }
 
@@ -29,9 +30,8 @@ public class IndexModel : LayoutModel
         return Page();
     }
     
-    public async Task<IActionResult> OnPost()
+    public IActionResult OnPost()
     {
-        var id = SelectedCategory.Id;
-        return RedirectToPage("CreateTask");
+        return RedirectToAction("OnGetCategory", "ListTasks", new { categoryId=SelectedCategory.Id});
     }
 }
