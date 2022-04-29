@@ -33,6 +33,7 @@ public class JobServiceController : ControllerBase, IJobService
     [HttpPost("CreateJob")]
     public Job? CreateJob([FromBody] Job job)
     {
+        _logger.Log(LogLevel.Warning, "At server");
         return _dataProvider.CreateJob(job);
     }
     

@@ -13,6 +13,17 @@ public class Job
         ClientId = clientId;
     }
 
+    public Job()
+    {
+        Id = Guid.Empty;
+        Title = "";
+        Description = "";
+        Deadline = DateTime.Now.Date;
+        Category = new Category();
+        Location = new Address();
+        ClientId = Guid.Empty;
+    }
+
     public Guid Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }

@@ -8,6 +8,13 @@ public class Category
         Name = name;
         Description = description;
     }
+    
+    public Category()
+    {
+        Id = Guid.Empty;
+        Name = "";
+        Description = "";
+    }
 
     public Guid Id { get; set; }
     public string Name { get; set; }
