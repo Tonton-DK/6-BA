@@ -38,6 +38,8 @@ public class CreateOfferModel : LayoutModel
     
     public async Task<IActionResult> OnPost()
     {
+        Instantiate();
+        
         Offer.JobId = JobId;
         Offer.ProviderId = ProviderId;
         Offer.PreviousOfferId = null;
