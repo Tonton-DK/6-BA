@@ -11,6 +11,15 @@ public class Filter
         SearchQuery = searchQuery;
     }
 
+    public Filter()
+    {
+        CategoryId = null;
+        StartDate = null;
+        EndDate = null;
+        Zip = "";
+        SearchQuery = "";
+    }
+
     public Guid? CategoryId { get; set; }
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }

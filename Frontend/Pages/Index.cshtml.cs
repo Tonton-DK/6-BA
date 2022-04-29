@@ -11,7 +11,7 @@ public class IndexModel : LayoutModel
     private readonly ILogger<IndexModel> _logger;
 
     private readonly IJobService _jobService;
-
+    
     public SelectList Categories { get; set; }
     
     [BindProperty]
@@ -31,7 +31,7 @@ public class IndexModel : LayoutModel
         return Page();
     }
     
-    public async Task<IActionResult> OnPost()
+    public IActionResult OnPost()
     {
         var id = CategoryId;
         return RedirectToPage("CreateTask", new { categoryId = CategoryId });
