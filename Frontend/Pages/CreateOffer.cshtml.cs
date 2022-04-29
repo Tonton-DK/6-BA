@@ -12,6 +12,7 @@ public class CreateOfferModel : LayoutModel
     private readonly IJobService _jobService;
     private readonly IOfferService _offerService;
     
+    [BindProperty]
     public Offer Offer { get; private set; }
     
     public CreateOfferModel(ILogger<CreateOfferModel> logger,
