@@ -23,7 +23,7 @@
     <h1 class="display-5">Created by</h1>
     <div class="row row-cols-1 row-cols-md-4 g-4">
         <div class="col mx-auto">
-            <div class="h-100"><img src="/images/person.jpg" alt="Task owner" class="profile-picture job-card-img" width="150" height="150">
+            <div class="h-100"><img src="@Model.Client.ProfilePicture" alt="Task owner" class="profile-picture job-card-img" width="150" height="150">
                 <div class="card job-card">
                     <div class="card-body">
                         <h5 class="card-title">@Model.Client.FirstName</h5>
@@ -49,7 +49,7 @@
                         <div class="row g-0">
                             <div class="col-lg-3 d-flex align-items-center">
                                 <a href="#" alt="Go to offer provider">
-                                    <img src="/images/person.jpg" alt="Task owner" class="img-fluid profile-picture mx-auto" width="150" height="150">
+                                    <img src="@Model.Clients.First(user => user.Id == offer.ProviderId).ProfilePicture" alt="Task owner" class="img-fluid profile-picture mx-auto" width="150" height="150">
                                 </a>
                             </div>
                             <div class="col-lg-9">

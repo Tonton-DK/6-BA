@@ -24,7 +24,7 @@ public class CreateOfferModel : LayoutModel
     }
     
     public Guid JobId { get; set; }
-    public Guid ProviderId { get; set;}
+                                           public Guid ProviderId { get; set;}
     
     [BindProperty]
     public int Price { get; set; }
