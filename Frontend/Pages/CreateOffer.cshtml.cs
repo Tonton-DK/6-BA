@@ -11,10 +11,7 @@ public class CreateOfferModel : LayoutModel
     
     private readonly IJobService _jobService;
     private readonly IOfferService _offerService;
-    
-    [BindProperty]
-    public Offer Offer { get; private set; }
-    
+
     public CreateOfferModel(ILogger<CreateOfferModel> logger,
         IJobService jobService,
         IOfferService offerService)
@@ -28,15 +25,8 @@ public class CreateOfferModel : LayoutModel
     public Guid ProviderId { get; set;}
     
     [BindProperty]
-    public int Price { get; set; }
-    [BindProperty]
-    public string Duration { get; set;}
-    [BindProperty]
-    public DateTime Date { get; set;}
-    [BindProperty]
-    public string Comment { get; set;}
-
-    [BindProperty]
+    public Offer Offer { get; private set; }
+    
     public Job Job { get; set;}
     
     public IActionResult OnGet(Guid jobId)
@@ -48,7 +38,10 @@ public class CreateOfferModel : LayoutModel
     
     public async Task<IActionResult> OnPost()
     {
-        Offer = new Offer(Guid.Empty, JobId, ProviderId, Price, Duration, Date, State.Open, Comment);
+        Offer.JobId = JobId;
+        Offer.ProviderId = ProviderId;
+        Offer.PreviousOfferId = null;
+
         _offerService.CreateOffer(Offer);
         return RedirectToPage("Index");
     }
