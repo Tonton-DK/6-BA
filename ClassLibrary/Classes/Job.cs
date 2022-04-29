@@ -16,8 +16,8 @@ public class Job
     public Job()
     {
         Id = Guid.Empty;
-        Title = "";
-        Description = "";
+        Title = String.Empty;
+        Description = String.Empty;
         Deadline = DateTime.Now.Date;
         Category = new Category();
         Location = new Address();
