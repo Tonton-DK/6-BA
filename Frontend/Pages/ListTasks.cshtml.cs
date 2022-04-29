@@ -54,11 +54,7 @@ public class ListJobsModel : LayoutModel
             CustomFilter.CategoryId = categoryId;
         }
         
-        var clientIds = new List<Guid>();
-        foreach (var job in Jobs)
-        {
-            clientIds.Add(job.ClientId);
-        }
+        var clientIds = Jobs.Select(job => job.ClientId).ToList();
         Clients = _userService.ListUsersByIDs(clientIds);
         
         return Page();

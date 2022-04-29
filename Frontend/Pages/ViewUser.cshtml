@@ -69,7 +69,9 @@
                                         </div>
                                         <div class="card-body text-primary">
                                             <p class="card-text">@Model.JobsForContracts.First(job => job.Id == contract.JobId).Description</p>
-                                            <div><small class="text-muted">Price: @Model.OffersForContracts.First(offer => offer.Id == contract.OfferId).Price</small></div>
+                                            <div>
+                                                <small class="text-muted">Price: @Model.OffersForContracts.First(offer => offer.Id == contract.OfferId).Price</small>
+                                            </div>
                                         </div>
                                         <div class="card-footer">
                                             <small class="text-muted">Deadline: @Model.OffersForContracts.First(offer => offer.Id == contract.OfferId).Date</small>
@@ -100,7 +102,9 @@
                                         </div>
                                         <div class="card-body @Html.Raw(contract.ContractState == State.Cancelled ? "text-danger" : "text-success")">
                                             <p class="card-text">@Model.JobsForContracts.First(job => job.Id == contract.JobId).Description</p>
-                                            <div><small class="text-muted">Price: @Model.OffersForContracts.First(offer => offer.Id == contract.OfferId).Price</small></div>
+                                            <div>
+                                                <small class="text-muted">Price: @Model.OffersForContracts.First(offer => offer.Id == contract.OfferId).Price</small>
+                                            </div>
                                         </div>
                                         <div class="card-footer">
                                             <small class="text-muted">Closing date: @Model.OffersForContracts.First(offer => offer.Id == contract.OfferId).Date</small>
@@ -123,11 +127,11 @@
             <div class="row mt-2">
                 <div class="col-lg-6 mt-lg-0 mt-3">
                     <div class="card">
-                        <div class="card-header">MY TASKS</div>
+                        <div class="card-header">WHAT WAS IT LIKE WORKING FOR ME?</div>
                         <div class="card-body">
-                            @if (Model.ReviewsAsProvider.Any())
+                            @if (Model.ReviewsAsClient.Any())
                             {
-                                foreach (var review in Model.ReviewsAsProvider)
+                                foreach (var review in Model.ReviewsAsClient)
                                 {
                                     <div class="card text-center mb-2">
                                         <div class="card-header">
@@ -145,16 +149,17 @@
                                     There are no reviews to be found.
                                 </div>
                             }
+
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6 mt-lg-0 mt-3">
                     <div class="card">
-                        <div class="card-header">TASKS I DID FOR OTHERS</div>
+                        <div class="card-header">WHAT WAS IT LIKE HAVING ME WORK FOR YOU?</div>
                         <div class="card-body">
-                            @if (Model.ReviewsAsClient.Any())
+                            @if (Model.ReviewsAsProvider.Any())
                             {
-                                foreach (var review in Model.ReviewsAsClient)
+                                foreach (var review in Model.ReviewsAsProvider)
                                 {
                                     <div class="card text-center mb-2">
                                         <div class="card-header">

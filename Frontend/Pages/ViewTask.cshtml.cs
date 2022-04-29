@@ -21,6 +21,7 @@ public class ViewJobModel : LayoutModel
     
     public bool IsOwner { get; private set; }
     public IEnumerable<Offer> Offers { get; private set; }
+    public IEnumerable<User> Clients { get; private set; }
     
     public ViewJobModel(ILogger<ViewJobModel> logger,
         IJobService jobService,
@@ -46,6 +47,8 @@ public class ViewJobModel : LayoutModel
             {
                 IsOwner = true;
                 Offers = _offerService.ListOffersForJob(jobId); 
+                var clientIds = Offers.Select(job => job.ProviderId).ToList();
+                Clients = _userService.ListUsersByIDs(clientIds);
             }
         }
         

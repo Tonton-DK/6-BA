@@ -28,9 +28,9 @@ public class CreateJobModel : LayoutModel
     {
         Instantiate();
         Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
-        if (categoryId != null && Categories.Any(x => x.Value == categoryId.ToString()))
+        if (categoryId != null)
         {
-            Categories.FirstOrDefault(x => x.Value == categoryId.ToString())!.Selected = true;
+            Job.Category.Id = categoryId.Value;
         }
         return Page();
     }

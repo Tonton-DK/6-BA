@@ -56,6 +56,18 @@ public class HealthCheckController : ControllerBase
         _reviewService.Get();
         return Ok();
     }
+
+    [HttpGet("TestClients")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult TestClients()
+    {
+        var client1 = new UserCreator(Guid.Empty, "1", "Client 1", "", "", "https://upload.wikimedia.org/wikipedia/commons/0/08/Un1.svg",true, "1");
+        _userService.CreateUser(client1);
+        var client2 = new UserCreator(Guid.Empty, "2", "Client 2", "", "", "https://upload.wikimedia.org/wikipedia/commons/3/3b/Deux.svg",true, "2");
+        _userService.CreateUser(client2);
+        return Ok();
+    }
     
     [HttpGet("ServiceFlow")]
     [ProducesResponseType(StatusCodes.Status200OK)]
