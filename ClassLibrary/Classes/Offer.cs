@@ -14,6 +14,18 @@ public class Offer
         Comment = comment;
     }
 
+    public Offer()
+    {
+        Id = Guid.Empty;
+        JobId = Guid.Empty;
+        ProviderId = Guid.Empty;
+        Price = 0;
+        Duration = string.Empty;
+        Date = DateTime.Now;
+        State = State.Open;
+        Comment = string.Empty;
+    }
+
     public Guid Id{get;set;}
     public Guid JobId{get;set;}
     public Guid ProviderId{get;set;}

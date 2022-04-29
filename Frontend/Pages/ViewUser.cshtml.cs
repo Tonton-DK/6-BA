@@ -42,12 +42,19 @@ public class ViewUserModel : LayoutModel
         ServiceStatus = new Dictionary<Type, bool>();
     }
     
-    public IActionResult OnGet()
+    public IActionResult OnGet(Guid? clientId = null)
     {
         Instantiate();
         if (!SessionLoggedIn) return RedirectToPage("Login");
-        
-        Client = _userService.GetUserById(new Guid(HttpContext.Session.GetString(SessionIdKey)));
+
+        if (clientId == null)
+        {
+            Client = _userService.GetUserById(new Guid(HttpContext.Session.GetString(SessionIdKey)));
+        }
+        else
+        {
+            Client = _userService.GetUserById(clientId.Value);
+        }
         Jobs = _jobService.ListJobsByUser(Client.Id);
         
         var openContracts = new List<Contract>();

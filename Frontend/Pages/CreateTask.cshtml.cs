@@ -44,6 +44,6 @@ public class CreateJobModel : LayoutModel
         {
             return RedirectToPage("ViewTask", new {jobId = job.Id});
         }
-        return RedirectToPage("CreateJob");
+        return RedirectToPage("CreateTask");
     }
 }

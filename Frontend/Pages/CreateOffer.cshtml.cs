@@ -1,3 +1,4 @@
+using System.Net;
 using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
 using Frontend.Pages.Shared;
@@ -11,9 +12,7 @@ public class CreateOfferModel : LayoutModel
     
     private readonly IJobService _jobService;
     private readonly IOfferService _offerService;
-    
-    public Offer Offer { get; private set; }
-    
+
     public CreateOfferModel(ILogger<CreateOfferModel> logger,
         IJobService jobService,
         IOfferService offerService)
@@ -21,33 +20,39 @@ public class CreateOfferModel : LayoutModel
         _logger = logger;
         _jobService = jobService;
         _offerService = offerService;
+        Offer = new Offer();
     }
-    
-    public Guid JobId { get; set; }
-                                           public Guid ProviderId { get; set;}
-    
-    [BindProperty]
-    public int Price { get; set; }
-    [BindProperty]
-    public string Duration { get; set;}
-    [BindProperty]
-    public DateTime Date { get; set;}
-    [BindProperty]
-    public string Comment { get; set;}
 
     [BindProperty]
+    public Offer Offer { get; set; }
+    
     public Job Job { get; set;}
+    
+    [BindProperty]
+    public Guid JobId { get; set;}
     
     public IActionResult OnGet(Guid jobId)
     {
         Instantiate();
+        
         Job = _jobService.GetJobById(jobId);
+        JobId = Job.Id;
+        
         return Page();
     }
     
     public async Task<IActionResult> OnPost()
     {
-        Offer = new Offer(Guid.Empty, JobId, ProviderId, Price, Duration, Date, State.Open, Comment);
+        Instantiate();
+        
+        Offer.JobId = JobId;
+        
+        //TODO: If any previous offers set provider id to same as this.
+        Offer.ProviderId = new Guid(HttpContext.Session.GetString(SessionIdKey));
+        
+        //TODO: Set previous offer id
+        Offer.PreviousOfferId = Guid.Empty;
+
         _offerService.CreateOffer(Offer);
         return RedirectToPage("Index");
     }
