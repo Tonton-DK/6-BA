@@ -28,6 +28,7 @@ public class CreateOfferModel : LayoutModel
     
     public Job Job { get; set;}
     
+    [BindProperty]
     public Guid JobId { get; set;}
     
     public IActionResult OnGet(Guid jobId)

@@ -19,7 +19,7 @@ public class Offer
         Id = Guid.Empty;
         JobId = Guid.Empty;
         ProviderId = Guid.Empty;
-        Price = int.MinValue;
+        Price = 0;
         Duration = string.Empty;
         Date = DateTime.Now;
         State = State.Open;
