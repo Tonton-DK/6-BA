@@ -11,10 +11,11 @@ public class IndexModel : LayoutModel
     private readonly ILogger<IndexModel> _logger;
 
     private readonly IJobService _jobService;
-
-    [BindProperty]
-    public Category SelectedCategory { get; set; }
+    
     public SelectList Categories { get; set; }
+    
+    [BindProperty]
+    public Guid CategoryId { get; set; }
 
     public IndexModel(ILogger<IndexModel> logger,
         IJobService jobService)
@@ -32,6 +33,7 @@ public class IndexModel : LayoutModel
     
     public IActionResult OnPost()
     {
-        return RedirectToAction("OnGetCategory", "ListTasks", new { categoryId=SelectedCategory.Id});
+        var id = CategoryId;
+        return RedirectToPage("CreateTask", new { categoryId = CategoryId });
     }
 }

@@ -25,10 +25,14 @@ public class CreateJobModel : LayoutModel
         ServiceStatus = new Dictionary<Type, bool>();
     }
 
-    public IActionResult OnGet()
+    public IActionResult OnGet(Guid? categoryId)
     {
         Instantiate();
         Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
+        if (categoryId != null && Categories.Any(x => x.Value == categoryId.ToString()))
+        {
+            Categories.FirstOrDefault(x => x.Value == categoryId.ToString())!.Selected = true;
+        }
         return Page();
     }
 }
