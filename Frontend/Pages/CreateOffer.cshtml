@@ -20,6 +20,7 @@
 
 <div class="text-center">
     <form method="post">
+        @Html.HiddenFor(x=>x.JobId)
         <div class="form-group pt-3">
             <label asp-for="Offer.Price">Price</label>
             <input asp-for="Offer.Price" class="form-control form-control-lg" placeholder="Price">
