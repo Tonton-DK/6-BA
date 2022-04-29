@@ -11,6 +11,9 @@ public class Category
     
     public Category()
     {
+        Id = Guid.Empty;
+        Name = "";
+        Description = "";
     }
 
     public Guid Id { get; set; }

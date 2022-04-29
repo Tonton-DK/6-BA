@@ -39,7 +39,11 @@ public class CreateJobModel : LayoutModel
     {
         var clientId = new Guid(HttpContext.Session.GetString(SessionIdKey));
         Job.ClientId = clientId;
-        var jobId = _jobService.CreateJob(Job);
-        return RedirectToPage("ViewTask", new { jobId = jobId });
+        var job = _jobService.CreateJob(Job);
+        if (job != null)
+        {
+            return RedirectToPage("ViewTask", new {jobId = job.Id});
+        }
+        return RedirectToPage("CreateJob");
     }
 }

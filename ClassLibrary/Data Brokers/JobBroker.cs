@@ -8,7 +8,7 @@ namespace ClassLibrary.Data_Brokers;
 public class JobBroker : BaseBroker, IJobService
 {
     private static readonly string baseUri = "http://job-service:80/JobService";
-    
+
     public bool Get()
     {
         var t = Get<bool>(baseUri+"/Get");

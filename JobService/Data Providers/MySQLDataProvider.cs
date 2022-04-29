@@ -9,7 +9,14 @@ public class MySQLDataProvider : IDataProvider
 {
     private string cs = @"server=job-database;userid=root;password=;database=db";
     public void setConnectionString(string connectionString) => cs = connectionString;
+    
+    private readonly ILogger<MySQLDataProvider>? _logger;
 
+    public MySQLDataProvider(ILogger<MySQLDataProvider>? logger = null)
+    {
+        _logger = logger;
+    }
+    
     # region Job
     public Job? CreateJob(Job job)
     {
@@ -33,7 +40,9 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@zip", job.Location.Zip);
         cmd.Prepare();
 
+        _logger?.Log(LogLevel.Warning, "Before SQL");
         var result = cmd.ExecuteNonQuery();
+        _logger?.Log(LogLevel.Warning, "SQL result: " + result);
         return result > 0 ? job : null;
     }
     
