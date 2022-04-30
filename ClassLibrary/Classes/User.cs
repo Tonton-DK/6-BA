@@ -31,7 +31,7 @@ public class UserCreator : User
     }
     
     public UserCreator() 
-        : base(Guid.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false)
+        : base(Guid.Empty, string.Empty, string.Empty, string.Empty, string.Empty, "/images/person.jpg", false)
     {
         Password = string.Empty;
     }
