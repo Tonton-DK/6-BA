@@ -41,7 +41,8 @@
 
 <div class="text-center">
     <div class="row row-cols-1 row-cols-md-4 g-4">
-        @{
+        @if (Model.Jobs.Any())
+        {
             foreach (var job in Model.Jobs)
             {
                 <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12">
@@ -61,6 +62,12 @@
                     </div>
                 </div>
             }
+        }
+        else
+        {
+            <div role="alert" class="alert alert-secondary">
+                No jobs match the chosen filter.
+            </div>
         }
     </div>
 </div>

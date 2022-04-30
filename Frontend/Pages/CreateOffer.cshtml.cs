@@ -49,12 +49,12 @@ public class CreateOfferModel : LayoutModel
         
         Offer.JobId = JobId;
         
+        //TODO: Set previous offer id
+        Offer.PreviousOfferId = Guid.Empty;
+        
         //TODO: If any previous offers set provider id to same as this.
         Offer.ProviderId = new Guid(HttpContext.Session.GetString(SessionIdKey));
         
-        //TODO: Set previous offer id
-        Offer.PreviousOfferId = Guid.Empty;
-
         _offerService.CreateOffer(Offer);
         return RedirectToPage("Index");
     }
