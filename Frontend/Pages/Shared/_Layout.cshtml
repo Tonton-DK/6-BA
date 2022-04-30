@@ -60,7 +60,9 @@
                                 <a class="nav-item" href="">Find Work</a>
                             </div>
                         </div>
-                        <a class="btn btn-danger btn-logout mx-auto" href="">Log out</a>
+                        <form method="post" asp-page-handler="Logout">
+                            <button type="submit" class="btn btn-danger btn-logout mx-auto">Log out</button>
+                        </form>
                     </aside>
                 </div>
                 }

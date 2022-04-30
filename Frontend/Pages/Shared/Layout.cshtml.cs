@@ -21,4 +21,13 @@ public class LayoutModel : PageModel
         SessionName = HttpContext.Session.GetString(SessionNameKey);
         SessionProfilePicture = HttpContext.Session.GetString(SessionProfilePictureKey);
     }
+
+    public IActionResult OnPostLogout()
+    {
+        HttpContext.Session.SetString(SessionIdKey, "");
+        HttpContext.Session.SetString(SessionNameKey, "");
+        HttpContext.Session.SetString(SessionProfilePictureKey, "");
+        HttpContext.Session.SetInt32(SessionLoggedInKey, 0);
+        return RedirectToPage("Index");
+    }
 }
