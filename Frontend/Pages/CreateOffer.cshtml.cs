@@ -34,6 +34,7 @@ public class CreateOfferModel : LayoutModel
     public IActionResult OnGet(Guid jobId)
     {
         Instantiate();
+        if (!SessionLoggedIn) return RedirectToPage("Login");
         
         Job = _jobService.GetJobById(jobId);
         JobId = Job.Id;
@@ -44,6 +45,7 @@ public class CreateOfferModel : LayoutModel
     public async Task<IActionResult> OnPost()
     {
         Instantiate();
+        if (!SessionLoggedIn) return RedirectToPage("Login");
         
         Offer.JobId = JobId;
         
