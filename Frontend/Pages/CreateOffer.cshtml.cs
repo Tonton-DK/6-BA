@@ -34,6 +34,7 @@ public class CreateOfferModel : LayoutModel
     public IActionResult OnGet(Guid jobId)
     {
         Instantiate();
+        if (!SessionLoggedIn) return RedirectToPage("Login");
         
         Job = _jobService.GetJobById(jobId);
         JobId = Job.Id;
@@ -44,15 +45,16 @@ public class CreateOfferModel : LayoutModel
     public async Task<IActionResult> OnPost()
     {
         Instantiate();
+        if (!SessionLoggedIn) return RedirectToPage("Login");
         
         Offer.JobId = JobId;
+        
+        //TODO: Set previous offer id
+        Offer.PreviousOfferId = Guid.Empty;
         
         //TODO: If any previous offers set provider id to same as this.
         Offer.ProviderId = new Guid(HttpContext.Session.GetString(SessionIdKey));
         
-        //TODO: Set previous offer id
-        Offer.PreviousOfferId = Guid.Empty;
-
         _offerService.CreateOffer(Offer);
         return RedirectToPage("Index");
     }

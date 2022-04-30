@@ -27,6 +27,8 @@ public class CreateJobModel : LayoutModel
     public IActionResult OnGet(Guid? categoryId)
     {
         Instantiate();
+        if (!SessionLoggedIn) return RedirectToPage("Login");
+        
         Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
         if (categoryId != null)
         {
@@ -37,6 +39,9 @@ public class CreateJobModel : LayoutModel
     
     public async Task<IActionResult> OnPost()
     {
+        Instantiate();
+        if (!SessionLoggedIn) return RedirectToPage("Login");
+        
         var clientId = new Guid(HttpContext.Session.GetString(SessionIdKey));
         Job.ClientId = clientId;
         var job = _jobService.CreateJob(Job);

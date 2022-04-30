@@ -51,6 +51,7 @@ public class ListJobsModel : LayoutModel
         Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
         if (categoryId != null)
         {
+            //TODO: Should be done before listing jobs, but nvm, we dont use this
             CustomFilter.CategoryId = categoryId;
         }
         
@@ -67,11 +68,7 @@ public class ListJobsModel : LayoutModel
         Jobs = _jobService.ListJobs(CustomFilter);
         Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
 
-        var clientIds = new List<Guid>();
-        foreach (var job in Jobs)
-        {
-            clientIds.Add(job.ClientId);
-        }
+        var clientIds = Jobs.Select(job => job.ClientId).ToList();
         Clients = _userService.ListUsersByIDs(clientIds);
 
         return Page();
