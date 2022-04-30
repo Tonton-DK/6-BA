@@ -98,16 +98,26 @@ public class MySQLDataProvider : IDataProvider
         }
         
         if (filter.CategoryId != null)
+        {
             stm += "AND Job.CategoryID = @cat ";
+        }
         if (filter.StartDate != null)
+        {
             stm += "AND @from <= Job.Deadline ";
+        }
         if (filter.EndDate != null)
+        {
             stm += "AND Job.Deadline <= @to ";
+        }
         if (filter.Zip.Length > 0)
+        {
             stm += "AND Job.Zip = @zip ";
+        }
         if (filter.SearchQuery.Length > 0)
+        {
             stm += "AND (Job.Title LIKE @query OR Job.Description LIKE @query)";
-
+        }
+        
         using var cmd = new MySqlCommand(stm, con);
 
         cmd.Parameters.AddWithValue("@cat", filter.CategoryId);
@@ -116,7 +126,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@Zip", filter.Zip);
         cmd.Parameters.AddWithValue("@query", filter.SearchQuery);
         cmd.Prepare();
-        
+
         using MySqlDataReader rdr = cmd.ExecuteReader();
 
         var jobs = new List<Job>();
