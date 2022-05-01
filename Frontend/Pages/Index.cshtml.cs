@@ -26,7 +26,6 @@ public class IndexModel : LayoutModel
 
     public IActionResult OnGet()
     {
-        Instantiate();
         Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
         return Page();
     }

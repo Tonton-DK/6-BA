@@ -35,17 +35,16 @@ public class ViewJobModel : LayoutModel
 
     public IActionResult OnGet(Guid jobId)
     {
-        Instantiate();
         Job = _jobService.GetJobById(jobId);
         Client = _userService.GetUserById(Job.ClientId);
 
-        if (HttpContext.Session.GetInt32(SessionLoggedInKey) == 1)
+        if (SessionLoggedIn)
         {
-            var userId = new Guid(HttpContext.Session.GetString(SessionIdKey));
+            var userId = SessionId;
             if (Client.Id.Equals(userId))
             {
                 IsOwner = true;
-                Offers = _offerService.ListOffersForJob(jobId); 
+                Offers = _offerService.ListOffersForJob(jobId).Where(x => x.State == State.Open); 
                 var clientIds = Offers.Select(job => job.ProviderId).ToList();
                 Clients = _userService.ListUsersByIDs(clientIds);
             }

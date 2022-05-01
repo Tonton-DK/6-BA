@@ -14,9 +14,7 @@ public class ViewUserModel : LayoutModel
     private readonly IOfferService _offerService;
     private readonly IContractService _contractService;
     private readonly IReviewService _reviewService;
-
-    public Dictionary<Type, bool> ServiceStatus { get; private set; }
-
+    
     public User? Client { get; private set; }
     public IEnumerable<Job> Jobs { get; private set; }
     public IEnumerable<Contract> OpenContracts { get; private set; }
@@ -39,17 +37,15 @@ public class ViewUserModel : LayoutModel
         _offerService = offerService;
         _contractService = contractService;
         _reviewService = reviewService;
-        ServiceStatus = new Dictionary<Type, bool>();
     }
     
     public IActionResult OnGet(Guid? clientId = null)
     {
-        Instantiate();
         if (!SessionLoggedIn) return RedirectToPage("Login");
 
         if (clientId == null)
         {
-            Client = _userService.GetUserById(new Guid(HttpContext.Session.GetString(SessionIdKey)));
+            Client = _userService.GetUserById(SessionId);
         }
         else
         {

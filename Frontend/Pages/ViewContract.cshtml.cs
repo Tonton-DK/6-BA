@@ -61,8 +61,6 @@ public class ViewContractModel : LayoutModel
     
     public IActionResult OnGet(Guid contractId)
     {
-        Instantiate();
-
         /*if (_contractService.GetContractById(contractId) == null)
         {
             TestContract();
@@ -71,8 +69,8 @@ public class ViewContractModel : LayoutModel
         Contract = _contractService.GetContractById(contractId);
         
         if (!SessionLoggedIn || 
-            !Contract.ClientId.Equals(new Guid(HttpContext.Session.GetString(SessionIdKey))) && 
-            !Contract.ProviderId.Equals(new Guid(HttpContext.Session.GetString(SessionIdKey))))
+            !Contract.ClientId.Equals(SessionId) && 
+            !Contract.ProviderId.Equals(SessionId))
         {
             ViewData["Title"] = "Not allowed";
             ViewData["Message"] = "You are not allowed to view this contract.";

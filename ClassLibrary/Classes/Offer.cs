@@ -21,7 +21,7 @@ public class Offer
         ProviderId = Guid.Empty;
         Price = 0;
         Duration = string.Empty;
-        Date = DateTime.Now;
+        Date = DateTime.Now.Date;
         State = State.Open;
         Comment = string.Empty;
     }

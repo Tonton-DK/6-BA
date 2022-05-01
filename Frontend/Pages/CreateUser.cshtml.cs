@@ -10,9 +10,6 @@ public class CreateUserModel : LayoutModel
     private readonly ILogger<CreateUserModel> _logger;
     
     private readonly IUserService _userService;
-    
-    public Dictionary<Type, bool> ServiceStatus { get; private set; }
-
 
     [BindProperty] 
     public UserCreator UserCreator { get; set; } = new();
@@ -22,12 +19,10 @@ public class CreateUserModel : LayoutModel
     {
         _logger = logger;
         _userService = userService;
-        ServiceStatus = new Dictionary<Type, bool>();
     }
     
     public IActionResult OnGet()
     {
-        Instantiate();
         return Page();
     }
     

@@ -21,7 +21,6 @@ public class ErrorModel : LayoutModel
     
     public IActionResult OnGet()
     {
-        Instantiate();
         RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         return Page();
     }

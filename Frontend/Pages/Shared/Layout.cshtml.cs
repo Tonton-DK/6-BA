@@ -1,3 +1,4 @@
+using ClassLibrary.Classes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -5,23 +6,26 @@ namespace Frontend.Pages.Shared;
 
 public class LayoutModel : PageModel
 {
-    public const string SessionIdKey = "_Id";
-    public const string SessionNameKey = "_Name";
-    public const string SessionProfilePictureKey = "_ProfilePicture";
-    public const string SessionLoggedInKey = "_LoggedIn";
-    public const string SessionAgeKey = "_Age";
-    
-    public string? SessionName;
-    public string? SessionProfilePicture;
-    public bool SessionLoggedIn;
+    private const string SessionLoggedInKey = "_LoggedIn";
+    private const string SessionIdKey = "_Id";
+    private const string SessionNameKey = "_Name";
+    private const string SessionProfilePictureKey = "_ProfilePicture";
+    private const string SessionAgeKey = "_Age";
 
-    public void Instantiate()
+    public bool SessionLoggedIn => HttpContext.Session.GetInt32(SessionLoggedInKey) == 1;
+    public Guid SessionId => Guid.Parse(HttpContext.Session.GetString(SessionIdKey));
+    public string? SessionName => HttpContext.Session.GetString(SessionNameKey);
+    public string? SessionProfilePicture => HttpContext.Session.GetString(SessionProfilePictureKey);
+    public string? SessionAge => HttpContext.Session.GetString(SessionAgeKey);
+
+    public void SetUser(User client)
     {
-        SessionLoggedIn = HttpContext.Session.GetInt32(SessionLoggedInKey) == 1;
-        SessionName = HttpContext.Session.GetString(SessionNameKey);
-        SessionProfilePicture = HttpContext.Session.GetString(SessionProfilePictureKey);
+        HttpContext.Session.SetString(SessionIdKey, client.Id.ToString());
+        HttpContext.Session.SetString(SessionNameKey, client.FirstName);
+        HttpContext.Session.SetString(SessionProfilePictureKey, client.ProfilePicture);
+        HttpContext.Session.SetInt32(SessionLoggedInKey, 1);
     }
-
+    
     public IActionResult OnPostLogout()
     {
         HttpContext.Session.SetString(SessionIdKey, "");

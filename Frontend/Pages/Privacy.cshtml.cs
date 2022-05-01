@@ -14,7 +14,6 @@ public class PrivacyModel : LayoutModel
 
     public IActionResult OnGet()
     {
-        Instantiate();
         return Page();
     }
 }
