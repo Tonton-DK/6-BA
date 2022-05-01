@@ -12,6 +12,17 @@ public class Review
         Rating = rating;
         Type = type;
     }
+    
+    public Review()
+    {
+        Id = Guid.Empty;
+        ContractId = Guid.Empty;
+        CreatorId = Guid.Empty;
+        TargetId = Guid.Empty;
+        Comment = String.Empty;
+        Rating = 0;
+        Type = ReviewType.All;
+    }
 
     public Guid Id { get; set; }
     public Guid ContractId { get; set; }
@@ -20,7 +31,6 @@ public class Review
     public string Comment { get; set; }
     public int Rating { get; set; }
     public ReviewType Type { get; set; }
-
 }
 
 public enum ReviewType

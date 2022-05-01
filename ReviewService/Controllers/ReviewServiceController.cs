@@ -36,6 +36,12 @@ public class ReviewServiceController : ControllerBase, IReviewService
         return _dataProvider.Get(id);
     }
 
+    [HttpGet("GetReviewByCreatorId/{contractId}/{creatorId}")]
+    public Review? GetReviewByCreatorId(Guid contractId, Guid creatorId)
+    {
+        return _dataProvider.Get(contractId, creatorId);
+    }
+
     [HttpPost("ListReviews/{userId}")]
     public IEnumerable<Review> ListReviews(Guid userId, [FromBody]ReviewType type)
     {

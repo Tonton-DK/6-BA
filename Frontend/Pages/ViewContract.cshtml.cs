@@ -2,6 +2,7 @@ using ClassLibrary.Classes;
 using ClassLibrary.Interfaces;
 using Frontend.Pages.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Frontend.Pages;
 
@@ -24,8 +25,10 @@ public class ViewContractModel : LayoutModel
     public Job Job { get; set; }
     public Offer Offer { get; set; }
 
-    [BindProperty] 
-    public State State { get; set; }
+    [BindProperty]
+    public Review Review { get; set; }
+    
+    public bool Reviewed { get; set; }
     
     public ViewContractModel(ILogger<ViewContractModel> logger,
         IJobService jobService,
@@ -40,32 +43,11 @@ public class ViewContractModel : LayoutModel
         _contractService = contractService;
         _reviewService = reviewService;
         _offerService = offerService;
+        Review = new Review();
     }
 
-    public void TestContract()
-    {
-        var client = new UserCreator(Guid.Empty, "client@mail.dk", "Client", "Dude", "12345678", "/images/person.jpg",false, "secret");
-        Client = _userService.CreateUser(client);
-        var provider = new UserCreator(Guid.Empty, "provider@mail.dk", "Provider", "Dude", "12345678", "/images/person.jpg",true, "secret");
-        Provider = _userService.CreateUser(provider);
-
-        var categories = _jobService.ListCategories();
-        var address = new Address("Campusvej", "55", "5230");
-        Job = new Job(Guid.Empty, "Dog walker", "Walk my dog, please. He is a good boy.", DateTime.Now, categories.First(), address, Client.Id);
-        Job = _jobService.CreateJob(Job);
-
-        Offer = new Offer(Guid.Empty, Job.Id, Provider.Id, 500, "2 Hours", DateTime.Now, State.Open, "Comment");
-        Offer = _offerService.CreateOffer(Offer);
-        Contract = _offerService.AcceptOffer(Offer.Id);
-    }
-    
     public IActionResult OnGet(Guid contractId)
     {
-        /*if (_contractService.GetContractById(contractId) == null)
-        {
-            TestContract();
-            return Page();
-        }*/
         Contract = _contractService.GetContractById(contractId);
         
         if (!SessionLoggedIn || 
@@ -87,6 +69,13 @@ public class ViewContractModel : LayoutModel
         Job = _jobService.GetJobById(Contract.JobId);
         Offer = _offerService.GetOfferById(Contract.OfferId);
 
+        Review.ContractId = contractId;
+        Review.CreatorId = SessionId;
+        Review.TargetId = SessionId == Client.Id ? Provider.Id : Client.Id;
+        Review.Type = SessionId == Client.Id ? ReviewType.Provider : ReviewType.Client;
+
+        Reviewed = _reviewService.GetReviewByCreatorId(contractId, SessionId) != null;
+        
         return Page();
     }
     
@@ -102,9 +91,10 @@ public class ViewContractModel : LayoutModel
         return OnGet(Contract.Id);
     }
 
-    public IActionResult OnPostReview(Guid contractId)
+    public IActionResult OnPostReview()
     {
-        Contract = _contractService.GetContractById(contractId);
-        return OnGet(Contract.Id);
+        _logger.Log(LogLevel.Warning, "Sending: " + JsonConvert.SerializeObject(Review));
+        var review = _reviewService.CreateReview(Review);
+        return OnGet(Review.ContractId);
     }
 }

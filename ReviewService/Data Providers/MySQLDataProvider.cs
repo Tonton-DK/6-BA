@@ -64,6 +64,38 @@ public class MySQLDataProvider : IDataProvider
         return null;
     }
 
+    public Review? Get(Guid contractId, Guid creatorId)
+    {
+        using var con = new MySqlConnection(cs);
+        con.Open();
+        
+        var sql = "SELECT * FROM Review WHERE Review.ContractId = @contractId AND Review.CreatorId = @creatorId";
+        using var cmd = new MySqlCommand(sql, con);
+        
+        cmd.Parameters.AddWithValue("@contractId", contractId);
+        cmd.Parameters.AddWithValue("@creatorId", creatorId);
+        cmd.Prepare();
+
+        using MySqlDataReader rdr = cmd.ExecuteReader();
+
+        if (rdr.Read())
+        {
+            var review = new Review(
+                rdr.GetGuid(0),
+                rdr.GetGuid(1),
+                rdr.GetGuid(2),
+                rdr.GetGuid(3),
+                rdr.GetString(4),
+                rdr.GetInt32(5),
+                (ReviewType) Enum.Parse(typeof(ReviewType), rdr.GetString(6))
+            );
+
+            return review;
+        }
+
+        return null;
+    }
+
     public List<Review> List(Guid userId)
     {
         using var con = new MySqlConnection(cs);

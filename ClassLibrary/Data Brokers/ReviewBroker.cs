@@ -33,6 +33,14 @@ public class ReviewBroker : BaseBroker, IReviewService
         return null;
     }
 
+    public Review? GetReviewByCreatorId(Guid contractId, Guid creatorId)
+    {
+        var uri = baseUri + "/GetReviewByCreatorId/" + contractId + "/" + creatorId;
+        var t = Get<Review?>(uri);
+        if (t != null) return t.Result;
+        return null;
+    }
+
     public IEnumerable<Review> ListReviews(Guid userId, ReviewType type)
     {
         var uri = baseUri + "/ListReviews/"+userId;
