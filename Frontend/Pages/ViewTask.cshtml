@@ -23,7 +23,8 @@
     <h1 class="display-5">Created by</h1>
     <div class="row row-cols-1 row-cols-md-4 g-4">
         <div class="col mx-auto">
-            <div class="h-100"><img src="@Model.Client.ProfilePicture" alt="Task owner" class="profile-picture job-card-img" width="150" height="150">
+            <div class="h-100">
+                <img src="@Model.Client.ProfilePicture" alt="Task owner" class="profile-picture job-card-img" width="150" height="150">
                 <div class="card job-card">
                     <div class="card-body">
                         <h5 class="card-title">@Model.Client.FirstName</h5>
@@ -57,16 +58,30 @@
                                 <div class="col-lg-9">
                                     <div class="card-body">
                                         <h5 class="card-title">@offer.State - @offer.Price DKK</h5>
-                                        <div><small class="text-muted">Price: @offer.Price DKK</small></div>
-                                        <div><small class="text-muted">Duration: @offer.Duration</small></div>
-                                        <div><small class="text-muted">Date: @offer.Date</small></div>
-                                        <div><small class="text-muted">Offer provider: @offer.ProviderId</small></div>
+                                        <div>
+                                            <small class="text-muted">Price: @offer.Price DKK</small>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted">Duration: @offer.Duration</small>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted">Date: @offer.Date</small>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted">Offer provider: @Model.Clients.First(user => user.Id == offer.ProviderId).FullName</small>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row mx-auto">
-                                    <a href="#" class="col btn btn-success me-2">Accept</a>
-                                    <a href="#" class="col btn btn-outline-secondary me-2">Counteroffer</a>
-                                    <a href="#" class="col btn btn-danger">Decline</a>
+                                    <form method="post" asp-page-handler="Accept" asp-route-offerId="@offer.Id">
+                                        <button type="submit" class="col btn btn-success me-2">Accept</button>
+                                    </form>
+                                    <form method="post" asp-page-handler="Counteroffer" asp-route-offerId="@offer.Id">
+                                        <button type="submit" class="col btn btn-outline-secondary me-2">Counteroffer</button>
+                                    </form>
+                                    <form method="post" asp-page-handler="Decline" asp-route-offerId="@offer.Id">
+                                        <button type="submit" class="col btn btn-danger">Decline</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

@@ -63,22 +63,22 @@ public class ViewContractModel : LayoutModel
     {
         Instantiate();
 
-        if (_contractService.GetContractById(contractId) == null)
+        /*if (_contractService.GetContractById(contractId) == null)
         {
             TestContract();
             return Page();
-        }
+        }*/
         Contract = _contractService.GetContractById(contractId);
         
-        /*
-        if (!SessionLoggedIn || !Contract.ClientId.Equals(new Guid(HttpContext.Session.GetString(SessionIdKey))) || !Contract.ProviderId.Equals(new Guid(HttpContext.Session.GetString(SessionIdKey))))
+        if (!SessionLoggedIn || 
+            !Contract.ClientId.Equals(new Guid(HttpContext.Session.GetString(SessionIdKey))) && 
+            !Contract.ProviderId.Equals(new Guid(HttpContext.Session.GetString(SessionIdKey))))
         {
             ViewData["Title"] = "Not allowed";
             ViewData["Message"] = "You are not allowed to view this contract.";
             ValidContract = false;
             return Page();
         }
-        */
         
         ValidContract = true; 
         
@@ -101,6 +101,12 @@ public class ViewContractModel : LayoutModel
     public IActionResult OnPostConclude(Guid contractId)
     {
         Contract = _contractService.ConcludeContract(contractId);
+        return OnGet(Contract.Id);
+    }
+
+    public IActionResult OnPostReview(Guid contractId)
+    {
+        Contract = _contractService.GetContractById(contractId);
         return OnGet(Contract.Id);
     }
 }

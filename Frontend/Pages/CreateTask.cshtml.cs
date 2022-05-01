@@ -24,7 +24,7 @@ public class CreateJobModel : LayoutModel
         Job = new Job();
     }
 
-    public IActionResult OnGet(Guid? categoryId)
+    public IActionResult OnGet(Guid? categoryId = null)
     {
         Instantiate();
         if (!SessionLoggedIn) return RedirectToPage("Login");
@@ -49,6 +49,6 @@ public class CreateJobModel : LayoutModel
         {
             return RedirectToPage("ViewTask", new {jobId = job.Id});
         }
-        return RedirectToPage("CreateTask");
+        return OnGet();
     }
 }

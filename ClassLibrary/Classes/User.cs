@@ -12,11 +12,23 @@ public class User
         ProfilePicture = profilePicture;
         IsServiceProvider = isServiceProvider;
     }
+    
+    public User()
+    {
+        Id = Guid.Empty;
+        Email = String.Empty;
+        FirstName = String.Empty;
+        LastName = String.Empty;
+        PhoneNumber = String.Empty;
+        ProfilePicture = String.Empty;
+        IsServiceProvider = false;
+    }
 
     public Guid Id { get; set; }
     public string Email { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public string FullName => FirstName + " " + LastName;
     public string PhoneNumber { get; set; }
     public string ProfilePicture { get; set; }
     public bool IsServiceProvider { get; set; }

@@ -8,7 +8,6 @@ namespace Frontend.Pages;
 public class ViewJobModel : LayoutModel
 {
     private readonly ILogger<ViewJobModel> _logger;
-    
     private readonly IJobService _jobService;
     private readonly IUserService _userService;
     private readonly IOfferService _offerService;
@@ -53,5 +52,30 @@ public class ViewJobModel : LayoutModel
         }
         
         return Page();
+    }
+    
+    public IActionResult OnPostAccept(Guid offerId)
+    {
+        _logger.Log(LogLevel.Warning, "OnPostAccept");
+        var contract = _offerService.AcceptOffer(offerId);
+        if (contract != null)
+        {
+            return RedirectToPage("ViewContract", new {contractId = contract.Id});
+        }
+        return OnGet(offerId);
+    }
+    
+    public IActionResult OnPostCounteroffer(Guid offerId)
+    {
+        _logger.Log(LogLevel.Warning, "OnPostCounteroffer");
+        //var contract = _offerService.CreateCounterOffer();
+        return OnGet(offerId);
+    }
+    
+    public IActionResult OnPostDecline(Guid offerId)
+    {
+        _logger.Log(LogLevel.Warning, "OnPostAccept");
+        var result = _offerService.DeclineOffer(offerId);
+        return OnGet(offerId);
     }
 }

@@ -56,6 +56,6 @@ public class CreateOfferModel : LayoutModel
         Offer.ProviderId = new Guid(HttpContext.Session.GetString(SessionIdKey));
         
         _offerService.CreateOffer(Offer);
-        return RedirectToPage("Index");
+        return RedirectToPage("ViewTask", new {jobId = JobId});
     }
 }
