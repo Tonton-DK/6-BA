@@ -52,12 +52,11 @@
                         </div>
                         <div class="flex-grow-1">
                             <div class="sidebar-menu nav">
-                                <a class="nav-item" href="/ViewUser">View Profile</a>
-                                <a class="nav-item" href="">View Inbox</a>
-                                <a class="nav-item" href="">My Contracts</a>
-                                <a class="nav-item" href="">My Tasks</a>
-                                <a class="nav-item" href="">Create Task</a>
-                                <a class="nav-item" href="">Find Work</a>
+                                <a class="nav-item" asp-page="ViewUser">View Profile</a>
+                                <a class="nav-item text-danger" href="#">View Inbox (WIP)</a>
+                                <a class="nav-item" asp-page="ViewUser">Active Tasks</a>
+                                <a class="nav-item" asp-page="CreateTask">Create Task</a>
+                                <a class="nav-item" asp-page="ListTasks">Find Work</a>
                             </div>
                         </div>
                         <form method="post" asp-page-handler="Logout">
