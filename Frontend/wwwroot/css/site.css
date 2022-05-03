@@ -20,7 +20,8 @@ body {
 }
 
 main .btn {
-  width: 200px;
+  width: 100%;
+  max-width: 200px;
 }
 
 nav .navbar-brand {
