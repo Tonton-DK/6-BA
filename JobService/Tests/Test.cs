@@ -255,6 +255,6 @@ public class Test
         Assert.AreEqual(input.Deadline.ToString("yyyy-mm-dd HH:MM"), output.Deadline.ToString("yyyy-mm-dd HH:MM"));
         Assert.AreEqual(input.Category.Id, output.Category.Id);
         Assert.AreEqual(input.ClientId, output.ClientId);
-        Assert.AreEqual(State.Open, output.JobState);
+        Assert.AreEqual(State.Concluded, output.JobState);
     }
 }
