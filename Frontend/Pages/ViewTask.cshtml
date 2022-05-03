@@ -71,24 +71,20 @@
                                 </div>
                                 <div class="row gy-2 mx-auto">
                                     <div class="col-md-4">
-                                    <form method="post" asp-page-handler="Accept" asp-route-offerId="@offer.Id">
-                                        <button type="submit" class="btn btn-success me-2">Accept</button>
-                                    </form>
-                                        
+                                        <form method="post" asp-page-handler="Accept" asp-route-offerId="@offer.Id">
+                                            <button type="submit" class="btn btn-success me-2">Accept</button>
+                                        </form>
                                     </div>
                                     <div class="col-md-4">
-                                    <form method="post" asp-page-handler="Counteroffer" asp-route-offerId="@offer.Id">
-                                        <button type="submit" class="col btn btn-outline-secondary me-2">Counteroffer</button>
-                                    </form>
-                                                                            
+                                        <form method="post" asp-page-handler="Counteroffer" asp-route-offerId="@offer.Id">
+                                            <button type="submit" class="col btn btn-outline-secondary me-2">Counteroffer</button>
+                                        </form>
                                     </div>
                                     <div class="col-md-4">
-                                    <form method="post" asp-page-handler="Decline" asp-route-offerId="@offer.Id">
-                                        <button type="submit" class="col btn btn-danger">Decline</button>
-                                    </form>
-                                                                            
+                                        <form method="post" asp-page-handler="Decline" asp-route-offerId="@offer.Id">
+                                            <button type="submit" class="col btn btn-danger">Decline</button>
+                                        </form>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>
