@@ -239,7 +239,7 @@ public class Test
     [Test]
     public void CloseJobByIdTest()
     {
-        var input = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.NewGuid(), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid(), State.Open);
+        var input = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.Parse("156be3a6-5537-41f8-9608-705c7cd7cbc3"), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid(), State.Open);
 
         var logger = new Mock<ILogger<JobServiceController>>();
         var dataProvider = new MySQLDataProvider();
