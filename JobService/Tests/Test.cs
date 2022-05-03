@@ -252,7 +252,7 @@ public class Test
         Assert.AreEqual(input.Id, output.Id);
         Assert.AreEqual(input.Title, output.Title);
         Assert.AreEqual(input.Description, output.Description);
-        Assert.AreEqual(input.Deadline, output.Deadline);
+        Assert.AreEqual(input.Deadline.ToString("yyyy-mm-dd HH:MM"), output.Deadline.ToString("yyyy-mm-dd HH:MM"));
         Assert.AreEqual(input.Category.Id, output.Category.Id);
         Assert.AreEqual(input.ClientId, output.ClientId);
         Assert.AreEqual(State.Open, output.JobState);

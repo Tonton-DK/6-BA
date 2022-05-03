@@ -210,7 +210,7 @@ public class Test
         dataProvider.setConnectionString(database.ConnectionString);
         
         var jobService = new Mock<IJobService>();
-        jobService.Setup(x => x.GetJobById(input.JobId)).Returns(job);
+        jobService.Setup(x => x.CloseJobById(input.JobId)).Returns(job);
         var contractService = new Mock<IContractService>();
         contractService.Setup(x => x.CreateContract(It.IsAny<Contract>())).Returns<Contract>(x => x);
         
