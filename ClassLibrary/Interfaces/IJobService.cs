@@ -12,4 +12,5 @@ public interface IJobService : IBaseService
     public IEnumerable<Job> ListJobsByIDs(IEnumerable<Guid> jobIds);
     public Job? UpdateJob(Job job);
     public bool DeleteJobById(Guid id);
+    public Job? CloseJobById(Guid id);
 }

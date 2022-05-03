@@ -202,7 +202,7 @@ public class Test
     [Test]
     public void AcceptOfferTest()
     {
-        var job = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.NewGuid(), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid());
+        var job = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.NewGuid(), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid(), State.Open);
         var input = new Offer(Guid.NewGuid(), job.Id, Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
 
         var logger = new Mock<ILogger<OfferServiceController>>();
@@ -228,7 +228,7 @@ public class Test
     [Test]
     public void CreateCounterOfferTest()
     {
-        var job = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.NewGuid(), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid());
+        var job = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.NewGuid(), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid(), State.Open);
         var offer = new Offer(Guid.NewGuid(), job.Id, Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
         var input = new Offer(Guid.NewGuid(), job.Id, offer.ProviderId, 400, "1.5 hours", DateTime.Now, State.Open, "Comment");
         
@@ -256,7 +256,7 @@ public class Test
     [Test]
     public void DeclineOfferTest()
     {
-        var job = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.NewGuid(), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid());
+        var job = new Job(Guid.NewGuid(), "title", "description", DateTime.Now, new Category(Guid.NewGuid(), "name", "description"), new Address("road", "2", "5000"), Guid.NewGuid(), State.Open);
         var input = new Offer(Guid.NewGuid(), job.Id, Guid.NewGuid(), 500, "2 hours", DateTime.Now, State.Open, "Comment");
 
         var logger = new Mock<ILogger<OfferServiceController>>();

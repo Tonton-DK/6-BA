@@ -23,8 +23,8 @@ public class MySQLDataProvider : IDataProvider
         using var con = new MySqlConnection(cs);
         con.Open();
 
-        var sql = @"INSERT INTO Job(ID, Title, Description, Deadline, ClientID, CategoryID, Road, Number, Zip) 
-                    VALUES(@id, @title, @description, @deadline, @client, @category, @road, @number, @zip)";
+        var sql = @"INSERT INTO Job(ID, Title, Description, Deadline, ClientID, CategoryID, Road, Number, Zip, State) 
+                    VALUES(@id, @title, @description, @deadline, @client, @category, @road, @number, @zip, @state)";
         using var cmd = new MySqlCommand(sql, con);
 
         job.Id = Guid.NewGuid();
@@ -38,11 +38,10 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@road", job.Location.Road);
         cmd.Parameters.AddWithValue("@number", job.Location.Number);
         cmd.Parameters.AddWithValue("@zip", job.Location.Zip);
+        cmd.Parameters.AddWithValue("@state", job.JobState.ToString());
         cmd.Prepare();
 
-        _logger?.Log(LogLevel.Warning, "Before SQL");
         var result = cmd.ExecuteNonQuery();
-        _logger?.Log(LogLevel.Warning, "SQL result: " + result);
         return result > 0 ? job : null;
     }
     
@@ -52,7 +51,7 @@ public class MySQLDataProvider : IDataProvider
         con.Open();
         
         var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
-                        Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription 
+                        Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription, Job.State
                     FROM Job join Category on Job.CategoryID = Category.ID WHERE Job.ID = @id";
         using var cmd = new MySqlCommand(stm, con);
 
@@ -70,7 +69,8 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetMySqlDateTime(3).Value,
                 new Category(rdr.GetGuid(8), rdr.GetString(9), rdr.GetString(10)),
                 new Address(rdr.GetString(4), rdr.GetString(5), rdr.GetString(6)),
-                rdr.GetGuid(7));
+                rdr.GetGuid(7),
+                (State) Enum.Parse(typeof(State), rdr.GetString(11)));
 
             return job;
         }
@@ -84,7 +84,7 @@ public class MySQLDataProvider : IDataProvider
         con.Open();
         
         var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
-                        Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription 
+                        Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription, Job.State
                     FROM Job join Category on Job.CategoryID = Category.ID";
 
         // Apply generic filter start
@@ -140,7 +140,8 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetMySqlDateTime(3).Value,
                 new Category(rdr.GetGuid(8), rdr.GetString(9), rdr.GetString(10)),
                 new Address(rdr.GetString(4), rdr.GetString(5), rdr.GetString(6)),
-                rdr.GetGuid(7));
+                rdr.GetGuid(7),
+                (State) Enum.Parse(typeof(State), rdr.GetString(11)));
             jobs.Add(job);
         }
 
@@ -153,7 +154,7 @@ public class MySQLDataProvider : IDataProvider
         con.Open();
         
         var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
-                        Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription 
+                        Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription, Job.State
                     FROM Job join Category on Job.CategoryID = Category.ID
                     WHERE Job.ClientID = @clientID";
         
@@ -175,7 +176,8 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetMySqlDateTime(3).Value,
                 new Category(rdr.GetGuid(8), rdr.GetString(9), rdr.GetString(10)),
                 new Address(rdr.GetString(4), rdr.GetString(5), rdr.GetString(6)),
-                rdr.GetGuid(7));
+                rdr.GetGuid(7),
+                (State) Enum.Parse(typeof(State), rdr.GetString(11)));
             jobs.Add(job);
         }
 
@@ -188,7 +190,7 @@ public class MySQLDataProvider : IDataProvider
         con.Open();
         
         var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
-                        Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription 
+                        Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription, Job.State
                     FROM Job join Category on Job.CategoryID = Category.ID
                     WHERE Job.ID in ('" + string.Join("','", jobIds) + "')";
 
@@ -207,7 +209,8 @@ public class MySQLDataProvider : IDataProvider
                 rdr.GetMySqlDateTime(3).Value,
                 new Category(rdr.GetGuid(8), rdr.GetString(9), rdr.GetString(10)),
                 new Address(rdr.GetString(4), rdr.GetString(5), rdr.GetString(6)),
-                rdr.GetGuid(7));
+                rdr.GetGuid(7),
+                (State) Enum.Parse(typeof(State), rdr.GetString(11)));
             jobs.Add(job);
         }
 
@@ -220,7 +223,7 @@ public class MySQLDataProvider : IDataProvider
         con.Open();
 
         var sql = @"UPDATE Job 
-                    SET Title = @title, Description = @description, Deadline = @deadline, Road = @road, Number = @number, Zip = @zip
+                    SET Title = @title, Description = @description, Deadline = @deadline, Road = @road, Number = @number, Zip = @zip, State = @state
                     WHERE Job.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
 
@@ -231,6 +234,7 @@ public class MySQLDataProvider : IDataProvider
         cmd.Parameters.AddWithValue("@road", job.Location.Road);
         cmd.Parameters.AddWithValue("@number", job.Location.Number);
         cmd.Parameters.AddWithValue("@zip", job.Location.Zip);
+        cmd.Parameters.AddWithValue("@state", job.JobState.ToString());
         cmd.Prepare();
 
         var result = cmd.ExecuteNonQuery();
@@ -250,6 +254,22 @@ public class MySQLDataProvider : IDataProvider
 
         var result = cmd.ExecuteNonQuery();
         return result > 0 ? true : false;
+    }
+
+    public Job? CloseJobById(Guid id)
+    {
+        using var con = new MySqlConnection(cs);
+        con.Open();
+        
+        var sql = "UPDATE Job SET Job.State = @state WHERE Job.ID = @id";
+        using var cmd = new MySqlCommand(sql, con);
+        
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Parameters.AddWithValue("@state", State.Concluded.ToString());
+        cmd.Prepare();
+
+        var result = cmd.ExecuteNonQuery();
+        return result > 0 ? GetJob(id) : null;
     }
     # endregion
 

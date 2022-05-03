@@ -37,7 +37,8 @@ CREATE TABLE Job (
   Zip NVARCHAR(500) NOT NULL,
   ClientID CHAR(36) NOT NULL,
   CategoryID CHAR(36),
-  FOREIGN KEY(CategoryID) REFERENCES Category(ID)
+  FOREIGN KEY(CategoryID) REFERENCES Category(ID),
+  State ENUM('Open', 'Concluded', 'Cancelled')
 );
 
 ALTER user 'root' IDENTIFIED WITH mysql_native_password BY '';

@@ -88,7 +88,8 @@ public class OfferServiceController : ControllerBase, IOfferService
         // TODO
         // Accept offer
         var offer = _dataProvider.AcceptOffer(id);
-        var job = _jobService.GetJobById(offer.JobId);
+        //var job = _jobService.GetJobById(offer.JobId);
+        var job = _jobService.CloseJobById(offer.JobId);
         
         // Create contract
         var contractId = Guid.NewGuid(); 

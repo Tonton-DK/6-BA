@@ -16,4 +16,5 @@ public interface IDataProvider
     public List<Category> ListCategories();
     public Category UpdateCategory(Category category);
     public bool DeleteCategory(Guid id);
+    public Job? CloseJobById(Guid id);
 }

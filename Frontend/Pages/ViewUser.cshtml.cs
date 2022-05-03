@@ -51,7 +51,7 @@ public class ViewUserModel : LayoutModel
         {
             Client = _userService.GetUserById(clientId.Value);
         }
-        Jobs = _jobService.ListJobsByUser(Client.Id);
+        Jobs = _jobService.ListJobsByUser(Client.Id).Where(x => x.JobState == State.Open);
         
         var openContracts = new List<Contract>();
         var closedContracts = new List<Contract>();

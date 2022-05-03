@@ -85,7 +85,7 @@ public class HealthCheckController : ControllerBase
 
         Categories = _jobService.ListCategories();
         var address = new Address("Campusvej", "55", "5230");
-        Job = new Job(Guid.Empty, "Dog walker", "Walk my dog, please. He is a good boy.", DateTime.Now, Categories.First(), address, Client.Id);
+        Job = new Job(Guid.Empty, "Dog walker", "Walk my dog, please. He is a good boy.", DateTime.Now, Categories.First(), address, Client.Id, State.Open);
         Job = _jobService.CreateJob(Job);
         Job = _jobService.GetJobById(Job.Id);
         var filter = new Filter(null, null, null, "", "");

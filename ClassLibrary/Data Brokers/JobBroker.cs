@@ -83,4 +83,13 @@ public class JobBroker : BaseBroker, IJobService
         if (t != null) return t.Result;
         return false;
     }
+
+    public Job? CloseJobById(Guid id)
+    {
+        var uri = baseUri + "/CloseJobById/" + id;
+        var content = new StringContent("", Encoding.UTF8, "application/json");
+        var t = Put<Job?>(uri, content);
+        if (t != null) return t.Result;
+        return null;
+    }
 }
