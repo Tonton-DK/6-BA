@@ -30,7 +30,7 @@
                         <h5 class="card-title">@Model.Client.FirstName</h5>
                         <p class="card-text"></p>
                     </div>
-                    <a href="#" class="btn btn-success mb-3 mx-auto">See Client</a>
+                    <a asp-page="ViewUser" asp-route-clientId="@Model.Client.Id" class="btn btn-success mb-3 mx-auto">See Client</a>
                 </div>
             </div>
         </div>
