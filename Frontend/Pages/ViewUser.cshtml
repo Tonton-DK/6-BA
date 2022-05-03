@@ -65,7 +65,7 @@
                                 {
                                     <div class="card border-primary text-center mb-2">
                                         <div class="card-header">
-                                            @Model.JobsForContracts.First(job => job.Id == contract.JobId).Title
+                                            <a asp-page="/ViewContract" asp-route-contractId="@contract.Id">@Model.JobsForContracts.First(job => job.Id == contract.JobId).Title</a>
                                         </div>
                                         <div class="card-body text-primary">
                                             <p class="card-text">@Model.JobsForContracts.First(job => job.Id == contract.JobId).Description</p>
@@ -98,7 +98,7 @@
                                 {
                                     <div class="card @Html.Raw(contract.ContractState == State.Cancelled ? "border-danger" : "border-success") text-center mb-2">
                                         <div class="card-header">
-                                            @Model.JobsForContracts.First(job => job.Id == contract.JobId).Title
+                                            <a asp-page="/ViewContract" asp-route-contractId="@contract.Id">@Model.JobsForContracts.First(job => job.Id == contract.JobId).Title</a>
                                         </div>
                                         <div class="card-body @Html.Raw(contract.ContractState == State.Cancelled ? "text-danger" : "text-success")">
                                             <p class="card-text">@Model.JobsForContracts.First(job => job.Id == contract.JobId).Description</p>
