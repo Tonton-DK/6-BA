@@ -53,7 +53,7 @@ public class ViewJobModel : LayoutModel
         return Page();
     }
     
-    public IActionResult OnPostAccept(Guid offerId)
+    public IActionResult OnPostAccept(Guid jobId, Guid offerId)
     {
         _logger.Log(LogLevel.Warning, "OnPostAccept");
         var contract = _offerService.AcceptOffer(offerId);
@@ -61,20 +61,20 @@ public class ViewJobModel : LayoutModel
         {
             return RedirectToPage("ViewContract", new {contractId = contract.Id});
         }
-        return OnGet(offerId);
+        return OnGet(jobId);
     }
     
-    public IActionResult OnPostCounteroffer(Guid offerId)
+    public IActionResult OnPostCounteroffer(Guid jobId, Guid offerId)
     {
         _logger.Log(LogLevel.Warning, "OnPostCounteroffer");
         //var contract = _offerService.CreateCounterOffer();
-        return OnGet(offerId);
+        return OnGet(jobId);
     }
     
-    public IActionResult OnPostDecline(Guid offerId)
+    public IActionResult OnPostDecline(Guid jobId, Guid offerId)
     {
         _logger.Log(LogLevel.Warning, "OnPostAccept");
         var result = _offerService.DeclineOffer(offerId);
-        return OnGet(offerId);
+        return OnGet(jobId);
     }
 }
