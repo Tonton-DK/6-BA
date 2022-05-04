@@ -53,10 +53,10 @@
                                 <h5 class="card-title">@job.Title</h5>
                                 <p class="card-text">@job.Description</p>
                             </div>
-                            <a asp-page="/ViewTask" asp-route-jobId="@job.Id">View Task</a>
+                            <a asp-page="/ViewTask" asp-route-jobId="@job.Id" class="my-2">View Task</a>
                             <a asp-page="/CreateOffer" asp-route-jobId="@job.Id" class="btn btn-success mb-3 mx-auto">Create Offer</a>
                             <div class="card-footer">
-                                <small class="text-muted">Deadline: @job.Deadline</small>
+                                <small class="text-muted">Deadline: @job.Deadline</small>s
                             </div>
                         </div>
                     </div>

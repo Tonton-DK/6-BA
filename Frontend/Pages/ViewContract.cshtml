@@ -32,11 +32,11 @@
                         <div class="card contract-card">
                             <div class="card-body">
                                 <div class="fs-4">@Model.Client.FirstName</div>
-                                <div class="mt-2">@Model.ClientRating</div>
-                                <a asp-page="/ViewUser" asp-route-clientId="@Model.Client.Id" class="btn btn-success mb-3 mx-auto">View profile</a>
+                                <div class="my-2">Rating: @Model.ClientRating</div>
+                                <a asp-page="/ViewUser" asp-route-clientId="@Model.Client.Id" class="btn btn-outline-primary mb-3 mx-auto">View profile</a>
                                 @if (!Model.Reviewed && Model.Contract.ContractState == State.Concluded && !Model.SessionId.Equals(Model.Client.Id))
                                 {
-                                    <button class="btn btn-sm btn-dark review" data-toggle="modal" data-target="#review-modal">Review</button>
+                                    <button class="btn btn-outline-success review" data-toggle="modal" data-target="#review-modal">Review</button>
                                 }
                             </div>
                         </div>
@@ -53,11 +53,11 @@
                         <div class="card contract-card">
                             <div class="card-body">
                                 <div class="fs-4">@Model.Provider.FirstName</div>
-                                <div class="mt-2">@Model.ProviderRating</div>
-                                <a asp-page="/ViewUser" asp-route-clientId="@Model.Provider.Id" class="btn btn-success mb-3 mx-auto">View profile</a>
+                                <div class="my-2">Rating: @Model.ProviderRating</div>
+                                <a asp-page="/ViewUser" asp-route-clientId="@Model.Provider.Id" class="btn btn-outline-primary mb-3 mx-auto">View profile</a>
                                 @if (!Model.Reviewed && Model.Contract.ContractState == State.Concluded && !Model.SessionId.Equals(Model.Provider.Id))
                                 {
-                                    <button class="btn btn-sm btn-dark review" data-toggle="modal" data-target="#review-modal">Review</button>
+                                    <button class="btn btn-outline-success review" data-toggle="modal" data-target="#review-modal">Review</button>
                                 }
                             </div>
                         </div>
