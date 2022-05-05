@@ -233,12 +233,12 @@ jobs:
       
       # Deploy the Docker image to the GKE cluster
       - name: Deploy
-        run: >-
-          kubectl apply
-            -f Pipeline/Kubernetes/deploy-frontend.yml
-            -f Pipeline/Kubernetes/deploy-user.yml
-            -f Pipeline/Kubernetes/deploy-job.yml
-            -f Pipeline/Kubernetes/deploy-offer.yml
-            -f Pipeline/Kubernetes/deploy-contract.yml
-            -f Pipeline/Kubernetes/deploy-review.yml
-            -f Pipeline/Kubernetes/deploy-metric-server.yaml
+        run: |
+          kubectl apply \
+            -f Pipeline/Kubernetes/deploy-frontend.yml \
+            -f Pipeline/Kubernetes/deploy-user.yml \
+            -f Pipeline/Kubernetes/deploy-job.yml \
+            -f Pipeline/Kubernetes/deploy-offer.yml \
+            -f Pipeline/Kubernetes/deploy-contract.yml \
+            -f Pipeline/Kubernetes/deploy-review.yml \
+            -f Pipeline/Kubernetes/deploy-metric-server.yaml \
