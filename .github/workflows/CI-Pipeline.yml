@@ -27,7 +27,7 @@ jobs:
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@v0.2.0
         with:
-          service_account_key: {
+          service_account_key: '{
             "type": "service_account",
             "project_id": "ba-project-349314",
             "private_key_id": "637fb8f06c613657eff6c709b35d30d033fed7a6",
@@ -38,7 +38,7 @@ jobs:
             "token_uri": "https://oauth2.googleapis.com/token",
             "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
             "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/myserviceaccount%40ba-project-349314.iam.gserviceaccount.com"
-          }
+          }'
           project_id: ba-project-349314
 
       # Configure Docker to use the gcloud command-line tool as a credential
@@ -50,7 +50,7 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
-          credentials: {
+          credentials: '{
             "type": "service_account",
             "project_id": "ba-project-349314",
             "private_key_id": "637fb8f06c613657eff6c709b35d30d033fed7a6",
@@ -61,7 +61,7 @@ jobs:
             "token_uri": "https://oauth2.googleapis.com/token",
             "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
             "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/myserviceaccount%40ba-project-349314.iam.gserviceaccount.com"
-          }
+          }'
           
       # Deploy the Docker image to the GKE cluster
       - name: Deploy
