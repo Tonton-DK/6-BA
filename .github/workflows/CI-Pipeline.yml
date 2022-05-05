@@ -17,227 +17,228 @@ env:
   GKE_ZONE: europe-north1-a   # Add your cluster zone here.
   
 jobs:
+  unit-test-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --nologo --no-restore --verbosity quiet
   
-  google:
-    runs-on: ubuntu-latest    
+  integration-test-job:
+    runs-on: ubuntu-latest
+    needs: [unit-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+      
+      - name: Build docker images
+        run: docker-compose build
+        
+      - name: Run docker containers
+        run: docker-compose up -d
+
+      - name: Sleep for 60 seconds
+        run: sleep 60s
+        shell: bash
+          
+      - name: Check running containers
+        run: docker ps -a
+
+      # smoke testing: https://github.com/peter-evans/smoke-testing
+      - name: Perform system healthcheck (smoke test)
+        run: bash ./Pipeline/Scripts/health-test.sh Services
+        
+      - name: Perform system healthcheck (integration test)
+        run: bash ./Pipeline/Scripts/health-test.sh ServiceFlow
+
+      - name: Stop docker containers
+        if: always()
+        run: docker-compose down
+  
+  build-and-deploy-frontend-image:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+      
+      - name: Build and push frontend image to registry
+        run: docker buildx build --push --file Frontend/Dockerfile --tag ghcr.io/antje12/ba/frontend .
+
+  build-and-deploy-user-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+
+      - name: Build and push user-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/user-database ./UserService/Database/
+
+      - name: Build and push user-service image to registry
+        run: docker buildx build --push --file UserService/Dockerfile --tag ghcr.io/antje12/ba/user-service .
+  
+  build-and-deploy-job-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+      
+      - name: Build and push job-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/job-database ./JobService/Database/
+
+      - name: Build and push job-service image to registry
+        run: docker buildx build --push --file JobService/Dockerfile --tag ghcr.io/antje12/ba/job-service .
+
+  build-and-deploy-offer-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+
+      - name: Build and push offer-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/offer-database ./OfferService/Database/
+
+      - name: Build and push offer-service image to registry
+        run: docker buildx build --push --file OfferService/Dockerfile --tag ghcr.io/antje12/ba/offer-service .
+
+  build-and-deploy-contract-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+      
+      - name: Build and push contract-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/contract-database ./ContractService/Database/
+
+      - name: Build and push contract-service image to registry
+        run: docker buildx build --push --file ContractService/Dockerfile --tag ghcr.io/antje12/ba/contract-service .
+
+  build-and-deploy-review-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+      
+      - name: Build and push review-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/review-database ./ReviewService/Database/
+
+      - name: Build and push review-service image to registry
+        run: docker buildx build --push --file ReviewService/Dockerfile --tag ghcr.io/antje12/ba/review-service .
+  
+  #production-deploy-job:
+  #  name: production deploy job
+  #  runs-on: self-hosted
+  #  needs: [build-and-deploy-frontend-image, build-and-deploy-user-image,build-and-deploy-job-image, build-and-deploy-offer-image, build-and-deploy-contract-image, build-and-deploy-review-image]
+  #  if: github.ref == 'refs/heads/main'
+  #  steps:
+  #    - name: Checkout
+  #      uses: actions/checkout@v2
+  #    - name: Change frotnend deploy file tags
+  #      run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" ./kubernetes/prod-env/deployment-frontend.yaml
+  #    - name: Change backend deploy file tags
+  #      run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" ./kubernetes/prod-env/deployment-backend.yaml
+  #    - name: Deploy to Kubernetes
+  #      run: >- 
+  #        kubectl apply 
+  #        -f ./kubernetes/prod-env/pvc-redis.yaml
+  #        -f ./kubernetes/prod-env/deployment-redis.yaml
+  #        -f ./kubernetes/prod-env/service-redis.yaml
+  #        -f ./kubernetes/prod-env/deployment-backend.yaml
+  #        -f ./kubernetes/prod-env/service-backend.yaml
+  #        -f ./kubernetes/prod-env/deployment-frontend.yaml
+  #        -f ./kubernetes/prod-env/service-frontend.yaml
+
+  google-cloud-deploy:
+    runs-on: ubuntu-latest
+    needs: [build-and-deploy-frontend-image, build-and-deploy-user-image,build-and-deploy-job-image, build-and-deploy-offer-image, build-and-deploy-contract-image, build-and-deploy-review-image]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        
+      
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@v0.2.0
         with:
           service_account_key: '{
-            "type": "service_account",
-            "project_id": "ba-project-349314",
-            "private_key_id": "637fb8f06c613657eff6c709b35d30d033fed7a6",
-            "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDApoOXc8on/9+7\nE5piBILjmsioEYstnOi6Z/TQt3T1u0lAEYeV8IzKOsxZdknMEqGSjayiY/sZaZkX\nreg+Uff76IxywzRo/SouZEztXr0sfgKyxCPUocjp7M8+eXLbfIBQJJyxY6f4reCB\nk/boiLTZzj1ZPigHEwR+9WyoY7C7FJlPKbWizn08Gr5B2VKM5pdW241MKM/dP/ba\nDoAK3of9fQ5lqSI/0OxuVhj7xm3Jxx9Cs3caDiQKCBZ8gEiyHBNAUE7hccZK7+FZ\nw55Wgc/OPBFHmWCbozEpIC2GCN1trkNcQZoqtRWMrhRXTzzxWB+xdyF3l7+dVFbH\n/Sm7www1AgMBAAECggEABtrl+9Gm891q/KEp8Srv7WFomnJlXW4j6d4hG/wrMUNE\ny/7TsEYq/FczRkurPJO9JBXeerjMCo9zXyBVD0KjbFdOCBdiGgpIIfZ3tkqUuKyT\nNAE+tSY8m/ZNOY/gwmafujpTSQyewX6Oao31TzjuFoH8NNy9V+MZWdspzqQdecqm\nBJxNPVsWbunzmSRhm8kS87R50/ZM1I9LQAjTKiF1VosgJ5T4Q+a+Y349pHtKJ+od\nd11paR7uAXte4RG0InBSW4B5/JYUN7o1KlIu3DnlFv9bPfqAe2tD0CH3ZYUVPvsU\nS07GH+prLNEMwwiU5ZrUDJhT63ZJHgUaUNG8Jh/UUQKBgQDr1pGtXzwG2tmJQC0s\n18GZ/w43MsEEb/7KpJdzBNqjcbB54LIfhWJL1yTeoZ3JluD+xUt0pY6ldarvid/H\ntVagifCTaGqfUs8Pz7/OTpS/RENyhp0FBczKrYk8tkF8rFvm+hQUZln1OQIQQHeb\nQqe+lkm0skpnQknbtTcyhSa9xwKBgQDRHsLcnDxrnyBv8k5QuM1OfhE605K9gB9h\n2o+6lflpmHt88w69QOhyrYSIp1bltpoCd9IwSIzDeW1cCBRL1vU5NWd5DQAJyjHY\ngb5Nyl41w+JrO04zamTBcbvgnvw01lz6o7UMt4/rR1orKSMqca7hY5bBGj865t9p\nTEp4U5gWIwKBgQCVkQfkdwBfrI3HoJ7F0LNkkcAXO6XzxX9GTuoJtOtgOqrcMKdm\nnDYBuRkV5FNoVLqueLto59I2lxBoR/1W72dX+wNKyS7NijvtYCjZkzZ8srM/v6V3\nWP1PEI13pnKTuc+zBaiUY3Drt1LasbfpDHXLxg5KfcP4Bq9Gmn++F3nBYwKBgQCo\nk7KkIvJ2E4YTmHJXklI3B1ueX3Y4ezNRL96TnFi+LiTGOi3UlKGN6KEhhDyB26zV\ndoAjWijXX2iwOvcZmASBBLMQG1G/kpaSIS0nCo7dqrY4mUtWGVt1sdixn5hSg8fa\naOQHh2ZmVVOz3WqyyYgfu6eIrT7xnbHV8aFK1KCSnwKBgFN7hjng7GlaoQC3JaOS\nRtjyq9+zShmetSuIbeS/YwBElEsDweNywIaop784PbFSij3pW7sIkjjUyC83U0uT\nEdys1lnVjxQ9VMSIWfaGxOWMiKbgc8V0lCt1cS3wxG4cViy+q/GgCklAG4rvYGln\nzBcqxVwKImHHIh2ZUTlhPz5Q\n-----END PRIVATE KEY-----\n",
-            "client_email": "myserviceaccount@ba-project-349314.iam.gserviceaccount.com",
-            "client_id": "103023978877185413948",
-            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-            "token_uri": "https://oauth2.googleapis.com/token",
-            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/myserviceaccount%40ba-project-349314.iam.gserviceaccount.com"
-          }'
+              "type": "service_account",
+              "project_id": "ba-project-349314",
+              "private_key_id": "637fb8f06c613657eff6c709b35d30d033fed7a6",
+              "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDApoOXc8on/9+7\nE5piBILjmsioEYstnOi6Z/TQt3T1u0lAEYeV8IzKOsxZdknMEqGSjayiY/sZaZkX\nreg+Uff76IxywzRo/SouZEztXr0sfgKyxCPUocjp7M8+eXLbfIBQJJyxY6f4reCB\nk/boiLTZzj1ZPigHEwR+9WyoY7C7FJlPKbWizn08Gr5B2VKM5pdW241MKM/dP/ba\nDoAK3of9fQ5lqSI/0OxuVhj7xm3Jxx9Cs3caDiQKCBZ8gEiyHBNAUE7hccZK7+FZ\nw55Wgc/OPBFHmWCbozEpIC2GCN1trkNcQZoqtRWMrhRXTzzxWB+xdyF3l7+dVFbH\n/Sm7www1AgMBAAECggEABtrl+9Gm891q/KEp8Srv7WFomnJlXW4j6d4hG/wrMUNE\ny/7TsEYq/FczRkurPJO9JBXeerjMCo9zXyBVD0KjbFdOCBdiGgpIIfZ3tkqUuKyT\nNAE+tSY8m/ZNOY/gwmafujpTSQyewX6Oao31TzjuFoH8NNy9V+MZWdspzqQdecqm\nBJxNPVsWbunzmSRhm8kS87R50/ZM1I9LQAjTKiF1VosgJ5T4Q+a+Y349pHtKJ+od\nd11paR7uAXte4RG0InBSW4B5/JYUN7o1KlIu3DnlFv9bPfqAe2tD0CH3ZYUVPvsU\nS07GH+prLNEMwwiU5ZrUDJhT63ZJHgUaUNG8Jh/UUQKBgQDr1pGtXzwG2tmJQC0s\n18GZ/w43MsEEb/7KpJdzBNqjcbB54LIfhWJL1yTeoZ3JluD+xUt0pY6ldarvid/H\ntVagifCTaGqfUs8Pz7/OTpS/RENyhp0FBczKrYk8tkF8rFvm+hQUZln1OQIQQHeb\nQqe+lkm0skpnQknbtTcyhSa9xwKBgQDRHsLcnDxrnyBv8k5QuM1OfhE605K9gB9h\n2o+6lflpmHt88w69QOhyrYSIp1bltpoCd9IwSIzDeW1cCBRL1vU5NWd5DQAJyjHY\ngb5Nyl41w+JrO04zamTBcbvgnvw01lz6o7UMt4/rR1orKSMqca7hY5bBGj865t9p\nTEp4U5gWIwKBgQCVkQfkdwBfrI3HoJ7F0LNkkcAXO6XzxX9GTuoJtOtgOqrcMKdm\nnDYBuRkV5FNoVLqueLto59I2lxBoR/1W72dX+wNKyS7NijvtYCjZkzZ8srM/v6V3\nWP1PEI13pnKTuc+zBaiUY3Drt1LasbfpDHXLxg5KfcP4Bq9Gmn++F3nBYwKBgQCo\nk7KkIvJ2E4YTmHJXklI3B1ueX3Y4ezNRL96TnFi+LiTGOi3UlKGN6KEhhDyB26zV\ndoAjWijXX2iwOvcZmASBBLMQG1G/kpaSIS0nCo7dqrY4mUtWGVt1sdixn5hSg8fa\naOQHh2ZmVVOz3WqyyYgfu6eIrT7xnbHV8aFK1KCSnwKBgFN7hjng7GlaoQC3JaOS\nRtjyq9+zShmetSuIbeS/YwBElEsDweNywIaop784PbFSij3pW7sIkjjUyC83U0uT\nEdys1lnVjxQ9VMSIWfaGxOWMiKbgc8V0lCt1cS3wxG4cViy+q/GgCklAG4rvYGln\nzBcqxVwKImHHIh2ZUTlhPz5Q\n-----END PRIVATE KEY-----\n",
+              "client_email": "myserviceaccount@ba-project-349314.iam.gserviceaccount.com",
+              "client_id": "103023978877185413948",
+              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+              "token_uri": "https://oauth2.googleapis.com/token",
+              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/myserviceaccount%40ba-project-349314.iam.gserviceaccount.com"
+            }'
           project_id: ba-project-349314
-
-      # Configure Docker to use the gcloud command-line tool as a credential
-      # helper for authentication
-      - run: |-
-          gcloud --quiet auth configure-docker
+      
       # Get the GKE credentials so we can deploy to the cluster
       - uses: google-github-actions/get-gke-credentials@v0.2.1
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
           credentials: '{
-            "type": "service_account",
-            "project_id": "ba-project-349314",
-            "private_key_id": "637fb8f06c613657eff6c709b35d30d033fed7a6",
-            "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDApoOXc8on/9+7\nE5piBILjmsioEYstnOi6Z/TQt3T1u0lAEYeV8IzKOsxZdknMEqGSjayiY/sZaZkX\nreg+Uff76IxywzRo/SouZEztXr0sfgKyxCPUocjp7M8+eXLbfIBQJJyxY6f4reCB\nk/boiLTZzj1ZPigHEwR+9WyoY7C7FJlPKbWizn08Gr5B2VKM5pdW241MKM/dP/ba\nDoAK3of9fQ5lqSI/0OxuVhj7xm3Jxx9Cs3caDiQKCBZ8gEiyHBNAUE7hccZK7+FZ\nw55Wgc/OPBFHmWCbozEpIC2GCN1trkNcQZoqtRWMrhRXTzzxWB+xdyF3l7+dVFbH\n/Sm7www1AgMBAAECggEABtrl+9Gm891q/KEp8Srv7WFomnJlXW4j6d4hG/wrMUNE\ny/7TsEYq/FczRkurPJO9JBXeerjMCo9zXyBVD0KjbFdOCBdiGgpIIfZ3tkqUuKyT\nNAE+tSY8m/ZNOY/gwmafujpTSQyewX6Oao31TzjuFoH8NNy9V+MZWdspzqQdecqm\nBJxNPVsWbunzmSRhm8kS87R50/ZM1I9LQAjTKiF1VosgJ5T4Q+a+Y349pHtKJ+od\nd11paR7uAXte4RG0InBSW4B5/JYUN7o1KlIu3DnlFv9bPfqAe2tD0CH3ZYUVPvsU\nS07GH+prLNEMwwiU5ZrUDJhT63ZJHgUaUNG8Jh/UUQKBgQDr1pGtXzwG2tmJQC0s\n18GZ/w43MsEEb/7KpJdzBNqjcbB54LIfhWJL1yTeoZ3JluD+xUt0pY6ldarvid/H\ntVagifCTaGqfUs8Pz7/OTpS/RENyhp0FBczKrYk8tkF8rFvm+hQUZln1OQIQQHeb\nQqe+lkm0skpnQknbtTcyhSa9xwKBgQDRHsLcnDxrnyBv8k5QuM1OfhE605K9gB9h\n2o+6lflpmHt88w69QOhyrYSIp1bltpoCd9IwSIzDeW1cCBRL1vU5NWd5DQAJyjHY\ngb5Nyl41w+JrO04zamTBcbvgnvw01lz6o7UMt4/rR1orKSMqca7hY5bBGj865t9p\nTEp4U5gWIwKBgQCVkQfkdwBfrI3HoJ7F0LNkkcAXO6XzxX9GTuoJtOtgOqrcMKdm\nnDYBuRkV5FNoVLqueLto59I2lxBoR/1W72dX+wNKyS7NijvtYCjZkzZ8srM/v6V3\nWP1PEI13pnKTuc+zBaiUY3Drt1LasbfpDHXLxg5KfcP4Bq9Gmn++F3nBYwKBgQCo\nk7KkIvJ2E4YTmHJXklI3B1ueX3Y4ezNRL96TnFi+LiTGOi3UlKGN6KEhhDyB26zV\ndoAjWijXX2iwOvcZmASBBLMQG1G/kpaSIS0nCo7dqrY4mUtWGVt1sdixn5hSg8fa\naOQHh2ZmVVOz3WqyyYgfu6eIrT7xnbHV8aFK1KCSnwKBgFN7hjng7GlaoQC3JaOS\nRtjyq9+zShmetSuIbeS/YwBElEsDweNywIaop784PbFSij3pW7sIkjjUyC83U0uT\nEdys1lnVjxQ9VMSIWfaGxOWMiKbgc8V0lCt1cS3wxG4cViy+q/GgCklAG4rvYGln\nzBcqxVwKImHHIh2ZUTlhPz5Q\n-----END PRIVATE KEY-----\n",
-            "client_email": "myserviceaccount@ba-project-349314.iam.gserviceaccount.com",
-            "client_id": "103023978877185413948",
-            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-            "token_uri": "https://oauth2.googleapis.com/token",
-            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/myserviceaccount%40ba-project-349314.iam.gserviceaccount.com"
-          }'
-          
+              "type": "service_account",
+              "project_id": "ba-project-349314",
+              "private_key_id": "637fb8f06c613657eff6c709b35d30d033fed7a6",
+              "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDApoOXc8on/9+7\nE5piBILjmsioEYstnOi6Z/TQt3T1u0lAEYeV8IzKOsxZdknMEqGSjayiY/sZaZkX\nreg+Uff76IxywzRo/SouZEztXr0sfgKyxCPUocjp7M8+eXLbfIBQJJyxY6f4reCB\nk/boiLTZzj1ZPigHEwR+9WyoY7C7FJlPKbWizn08Gr5B2VKM5pdW241MKM/dP/ba\nDoAK3of9fQ5lqSI/0OxuVhj7xm3Jxx9Cs3caDiQKCBZ8gEiyHBNAUE7hccZK7+FZ\nw55Wgc/OPBFHmWCbozEpIC2GCN1trkNcQZoqtRWMrhRXTzzxWB+xdyF3l7+dVFbH\n/Sm7www1AgMBAAECggEABtrl+9Gm891q/KEp8Srv7WFomnJlXW4j6d4hG/wrMUNE\ny/7TsEYq/FczRkurPJO9JBXeerjMCo9zXyBVD0KjbFdOCBdiGgpIIfZ3tkqUuKyT\nNAE+tSY8m/ZNOY/gwmafujpTSQyewX6Oao31TzjuFoH8NNy9V+MZWdspzqQdecqm\nBJxNPVsWbunzmSRhm8kS87R50/ZM1I9LQAjTKiF1VosgJ5T4Q+a+Y349pHtKJ+od\nd11paR7uAXte4RG0InBSW4B5/JYUN7o1KlIu3DnlFv9bPfqAe2tD0CH3ZYUVPvsU\nS07GH+prLNEMwwiU5ZrUDJhT63ZJHgUaUNG8Jh/UUQKBgQDr1pGtXzwG2tmJQC0s\n18GZ/w43MsEEb/7KpJdzBNqjcbB54LIfhWJL1yTeoZ3JluD+xUt0pY6ldarvid/H\ntVagifCTaGqfUs8Pz7/OTpS/RENyhp0FBczKrYk8tkF8rFvm+hQUZln1OQIQQHeb\nQqe+lkm0skpnQknbtTcyhSa9xwKBgQDRHsLcnDxrnyBv8k5QuM1OfhE605K9gB9h\n2o+6lflpmHt88w69QOhyrYSIp1bltpoCd9IwSIzDeW1cCBRL1vU5NWd5DQAJyjHY\ngb5Nyl41w+JrO04zamTBcbvgnvw01lz6o7UMt4/rR1orKSMqca7hY5bBGj865t9p\nTEp4U5gWIwKBgQCVkQfkdwBfrI3HoJ7F0LNkkcAXO6XzxX9GTuoJtOtgOqrcMKdm\nnDYBuRkV5FNoVLqueLto59I2lxBoR/1W72dX+wNKyS7NijvtYCjZkzZ8srM/v6V3\nWP1PEI13pnKTuc+zBaiUY3Drt1LasbfpDHXLxg5KfcP4Bq9Gmn++F3nBYwKBgQCo\nk7KkIvJ2E4YTmHJXklI3B1ueX3Y4ezNRL96TnFi+LiTGOi3UlKGN6KEhhDyB26zV\ndoAjWijXX2iwOvcZmASBBLMQG1G/kpaSIS0nCo7dqrY4mUtWGVt1sdixn5hSg8fa\naOQHh2ZmVVOz3WqyyYgfu6eIrT7xnbHV8aFK1KCSnwKBgFN7hjng7GlaoQC3JaOS\nRtjyq9+zShmetSuIbeS/YwBElEsDweNywIaop784PbFSij3pW7sIkjjUyC83U0uT\nEdys1lnVjxQ9VMSIWfaGxOWMiKbgc8V0lCt1cS3wxG4cViy+q/GgCklAG4rvYGln\nzBcqxVwKImHHIh2ZUTlhPz5Q\n-----END PRIVATE KEY-----\n",
+              "client_email": "myserviceaccount@ba-project-349314.iam.gserviceaccount.com",
+              "client_id": "103023978877185413948",
+              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+              "token_uri": "https://oauth2.googleapis.com/token",
+              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/myserviceaccount%40ba-project-349314.iam.gserviceaccount.com"
+            }'
+      
       # Deploy the Docker image to the GKE cluster
       - name: Deploy
         run: |-
-          kubectl get pods
-  
-  
-#  unit-test-job:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Set up MySQL
-#        run: |
-#          sudo /etc/init.d/mysql start
-#          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
-#
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Setup .NET Core
-#        uses: actions/setup-dotnet@v1
-#        with:
-#          dotnet-version: '6.0.x'
-#
-#      - name: Install dependencies
-#        run: dotnet restore
-#
-#      - name: Build
-#        run: dotnet build --configuration Release --no-restore
-#
-#      - name: Test
-#        run: dotnet test --nologo --no-restore --verbosity quiet
-#  
-#  integration-test-job:
-#    runs-on: ubuntu-latest
-#    needs: [unit-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#      
-#      - name: Build docker images
-#        run: docker-compose build
-#        
-#      - name: Run docker containers
-#        run: docker-compose up -d
-#
-#      - name: Sleep for 60 seconds
-#        run: sleep 60s
-#        shell: bash
-#          
-#      - name: Check running containers
-#        run: docker ps -a
-#
-#      # smoke testing: https://github.com/peter-evans/smoke-testing
-#      - name: Perform system healthcheck (smoke test)
-#        run: bash ./Pipeline/Scripts/health-test.sh Services
-#        
-#      - name: Perform system healthcheck (integration test)
-#        run: bash ./Pipeline/Scripts/health-test.sh ServiceFlow
-#
-#      - name: Stop docker containers
-#        if: always()
-#        run: docker-compose down
-#  
-#  build-and-deploy-frontend-image:
-#    runs-on: ubuntu-latest
-#    needs: [integration-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Login to container registry
-#        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
-#      
-#      - name: Build and push frontend image to registry
-#        run: docker buildx build --push --file Frontend/Dockerfile --tag ghcr.io/antje12/ba/frontend .
-#
-#  build-and-deploy-user-images:
-#    runs-on: ubuntu-latest
-#    needs: [integration-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Login to container registry
-#        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
-#
-#      - name: Build and push user-database image to registry
-#        run: docker buildx build --push --tag ghcr.io/antje12/ba/user-database ./UserService/Database/
-#
-#      - name: Build and push user-service image to registry
-#        run: docker buildx build --push --file UserService/Dockerfile --tag ghcr.io/antje12/ba/user-service .
-#  
-#  build-and-deploy-job-images:
-#    runs-on: ubuntu-latest
-#    needs: [integration-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Login to container registry
-#        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
-#      
-#      - name: Build and push job-database image to registry
-#        run: docker buildx build --push --tag ghcr.io/antje12/ba/job-database ./JobService/Database/
-#
-#      - name: Build and push job-service image to registry
-#        run: docker buildx build --push --file JobService/Dockerfile --tag ghcr.io/antje12/ba/job-service .
-#
-#  build-and-deploy-offer-images:
-#    runs-on: ubuntu-latest
-#    needs: [integration-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Login to container registry
-#        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
-#
-#      - name: Build and push offer-database image to registry
-#        run: docker buildx build --push --tag ghcr.io/antje12/ba/offer-database ./OfferService/Database/
-#
-#      - name: Build and push offer-service image to registry
-#        run: docker buildx build --push --file OfferService/Dockerfile --tag ghcr.io/antje12/ba/offer-service .
-#
-#  build-and-deploy-contract-images:
-#    runs-on: ubuntu-latest
-#    needs: [integration-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Login to container registry
-#        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
-#      
-#      - name: Build and push contract-database image to registry
-#        run: docker buildx build --push --tag ghcr.io/antje12/ba/contract-database ./ContractService/Database/
-#
-#      - name: Build and push contract-service image to registry
-#        run: docker buildx build --push --file ContractService/Dockerfile --tag ghcr.io/antje12/ba/contract-service .
-#
-#  build-and-deploy-review-images:
-#    runs-on: ubuntu-latest
-#    needs: [integration-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Login to container registry
-#        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
-#      
-#      - name: Build and push review-database image to registry
-#        run: docker buildx build --push --tag ghcr.io/antje12/ba/review-database ./ReviewService/Database/
-#
-#      - name: Build and push review-service image to registry
-#        run: docker buildx build --push --file ReviewService/Dockerfile --tag ghcr.io/antje12/ba/review-service .
-#  
-#  #production-deploy-job:
-#  #  name: production deploy job
-#  #  runs-on: self-hosted
-#  #  needs: [build-and-deploy-frontend-image, build-and-deploy-user-image,build-and-deploy-job-image, build-and-deploy-offer-image, build-and-deploy-contract-image, build-and-deploy-review-image]
-#  #  if: github.ref == 'refs/heads/main'
-#  #  steps:
-#  #    - name: Checkout
-#  #      uses: actions/checkout@v2
-#  #    - name: Change frotnend deploy file tags
-#  #      run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" ./kubernetes/prod-env/deployment-frontend.yaml
-#  #    - name: Change backend deploy file tags
-#  #      run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" ./kubernetes/prod-env/deployment-backend.yaml
-#  #    - name: Deploy to Kubernetes
-#  #      run: >- 
-#  #        kubectl apply 
-#  #        -f ./kubernetes/prod-env/pvc-redis.yaml
-#  #        -f ./kubernetes/prod-env/deployment-redis.yaml
-#  #        -f ./kubernetes/prod-env/service-redis.yaml
-#  #        -f ./kubernetes/prod-env/deployment-backend.yaml
-#  #        -f ./kubernetes/prod-env/service-backend.yaml
-#  #        -f ./kubernetes/prod-env/deployment-frontend.yaml
-#  #        -f ./kubernetes/prod-env/service-frontend.yaml
-#
+          kubectl apply 
+            -f Pipeline/Kubernetes/deploy-frontend.yml
+            -f Pipeline/Kubernetes/deploy-user.yml
+            -f Pipeline/Kubernetes/deploy-job.yml
+            -f Pipeline/Kubernetes/deploy-offer.yml
+            -f Pipeline/Kubernetes/deploy-contract.yml
+            -f Pipeline/Kubernetes/deploy-review.yml
+            -f Pipeline/Kubernetes/deploy-metric-server.yaml
