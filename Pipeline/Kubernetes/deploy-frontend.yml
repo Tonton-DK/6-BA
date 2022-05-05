@@ -19,6 +19,12 @@ metadata:
   name: frontend-deployment
 spec:
   replicas: 1
+    minReadySeconds: 5
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
   selector:
     matchLabels:
       app: frontend-pod
@@ -40,5 +46,12 @@ spec:
             limits:
               cpu: 200m
               memory: 200Mi
+      readinessProbe:
+        httpGet:
+          path: /Get
+          port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
       imagePullSecrets:
         - name: regcred
