@@ -50,11 +50,11 @@ spec:
               memory: 100Mi
           readinessProbe:
             httpGet:
-              initialDelaySeconds: 5
-              path: /Get
-              periodSeconds: 5
               port: 80
-              successThreshold: 1
+              path: /Get
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
       imagePullSecrets:
         -
           name: regcred
