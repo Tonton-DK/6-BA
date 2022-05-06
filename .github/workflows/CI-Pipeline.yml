@@ -17,181 +17,158 @@ env:
   GKE_ZONE: europe-north1-a   # Add your cluster zone here.
   
 jobs:
-#  unit-test-job:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Set up MySQL
-#        run: |
-#          sudo /etc/init.d/mysql start
-#          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
-#
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Setup .NET Core
-#        uses: actions/setup-dotnet@v1
-#        with:
-#          dotnet-version: '6.0.x'
-#
-#      - name: Install dependencies
-#        run: dotnet restore
-#
-#      - name: Build
-#        run: dotnet build --configuration Release --no-restore
-#
-#      - name: Test
-#        run: dotnet test --nologo --no-restore --verbosity quiet
-#  
-#  integration-test-job:
-#    runs-on: ubuntu-latest
-#    needs: [unit-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#      
-#      - name: Build docker images
-#        run: docker-compose build
-#        
-#      - name: Run docker containers
-#        run: docker-compose up -d
-#
-#      - name: Sleep for 60 seconds
-#        run: sleep 60s
-#        shell: bash
-#          
-#      - name: Check running containers
-#        run: docker ps -a
-#
-#      # smoke testing: https://github.com/peter-evans/smoke-testing
-#      - name: Perform system healthcheck (smoke test)
-#        run: bash ./Pipeline/Scripts/health-test.sh Services
-#        
-#      - name: Perform system healthcheck (integration test)
-#        run: bash ./Pipeline/Scripts/health-test.sh ServiceFlow
-#
-#      - name: Stop docker containers
-#        if: always()
-#        run: docker-compose down
-#  
-#  build-and-deploy-frontend-image:
-#    runs-on: ubuntu-latest
-#    needs: [integration-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Login to container registry
-#        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
-#      
-#      - name: Build and push frontend image to registry
-#        run: docker buildx build --push --file Frontend/Dockerfile --tag ghcr.io/antje12/ba/frontend .
-#
-#  build-and-deploy-user-images:
-#    runs-on: ubuntu-latest
-#    needs: [integration-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Login to container registry
-#        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
-#
-#      - name: Build and push user-database image to registry
-#        run: docker buildx build --push --tag ghcr.io/antje12/ba/user-database ./UserService/Database/
-#
-#      - name: Build and push user-service image to registry
-#        run: docker buildx build --push --file UserService/Dockerfile --tag ghcr.io/antje12/ba/user-service .
-#  
-#  build-and-deploy-job-images:
-#    runs-on: ubuntu-latest
-#    needs: [integration-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Login to container registry
-#        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
-#      
-#      - name: Build and push job-database image to registry
-#        run: docker buildx build --push --tag ghcr.io/antje12/ba/job-database ./JobService/Database/
-#
-#      - name: Build and push job-service image to registry
-#        run: docker buildx build --push --file JobService/Dockerfile --tag ghcr.io/antje12/ba/job-service .
-#
-#  build-and-deploy-offer-images:
-#    runs-on: ubuntu-latest
-#    needs: [integration-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Login to container registry
-#        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
-#
-#      - name: Build and push offer-database image to registry
-#        run: docker buildx build --push --tag ghcr.io/antje12/ba/offer-database ./OfferService/Database/
-#
-#      - name: Build and push offer-service image to registry
-#        run: docker buildx build --push --file OfferService/Dockerfile --tag ghcr.io/antje12/ba/offer-service .
-#
-#  build-and-deploy-contract-images:
-#    runs-on: ubuntu-latest
-#    needs: [integration-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Login to container registry
-#        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
-#      
-#      - name: Build and push contract-database image to registry
-#        run: docker buildx build --push --tag ghcr.io/antje12/ba/contract-database ./ContractService/Database/
-#
-#      - name: Build and push contract-service image to registry
-#        run: docker buildx build --push --file ContractService/Dockerfile --tag ghcr.io/antje12/ba/contract-service .
-#
-#  build-and-deploy-review-images:
-#    runs-on: ubuntu-latest
-#    needs: [integration-test-job]
-#    steps:
-#      - name: Checkout code base
-#        uses: actions/checkout@v2
-#
-#      - name: Login to container registry
-#        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
-#      
-#      - name: Build and push review-database image to registry
-#        run: docker buildx build --push --tag ghcr.io/antje12/ba/review-database ./ReviewService/Database/
-#
-#      - name: Build and push review-service image to registry
-#        run: docker buildx build --push --file ReviewService/Dockerfile --tag ghcr.io/antje12/ba/review-service .
+  unit-test-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --nologo --no-restore --verbosity quiet
   
-  #production-deploy-job:
-  #  name: production deploy job
-  #  runs-on: self-hosted
-  #  needs: [build-and-deploy-frontend-image, build-and-deploy-user-image,build-and-deploy-job-image, build-and-deploy-offer-image, build-and-deploy-contract-image, build-and-deploy-review-image]
-  #  if: github.ref == 'refs/heads/main'
-  #  steps:
-  #    - name: Checkout
-  #      uses: actions/checkout@v2
-  #    - name: Change frotnend deploy file tags
-  #      run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" ./kubernetes/prod-env/deployment-frontend.yaml
-  #    - name: Change backend deploy file tags
-  #      run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" ./kubernetes/prod-env/deployment-backend.yaml
-  #    - name: Deploy to Kubernetes
-  #      run: >- 
-  #        kubectl apply 
-  #        -f ./kubernetes/prod-env/pvc-redis.yaml
-  #        -f ./kubernetes/prod-env/deployment-redis.yaml
-  #        -f ./kubernetes/prod-env/service-redis.yaml
-  #        -f ./kubernetes/prod-env/deployment-backend.yaml
-  #        -f ./kubernetes/prod-env/service-backend.yaml
-  #        -f ./kubernetes/prod-env/deployment-frontend.yaml
-  #        -f ./kubernetes/prod-env/service-frontend.yaml
+  integration-test-job:
+    runs-on: ubuntu-latest
+    needs: [unit-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+      
+      - name: Build docker images
+        run: docker-compose build
+        
+      - name: Run docker containers
+        run: docker-compose up -d
+
+      - name: Sleep for 60 seconds
+        run: sleep 60s
+        shell: bash
+          
+      - name: Check running containers
+        run: docker ps -a
+
+      # smoke testing: https://github.com/peter-evans/smoke-testing
+      - name: Perform system healthcheck (smoke test)
+        run: bash ./Pipeline/Scripts/health-test.sh Services
+        
+      - name: Perform system healthcheck (integration test)
+        run: bash ./Pipeline/Scripts/health-test.sh ServiceFlow
+
+      - name: Stop docker containers
+        if: always()
+        run: docker-compose down
+  
+  build-and-deploy-frontend-image:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+      
+      - name: Build and push frontend image to registry
+        run: docker buildx build --push --file Frontend/Dockerfile --tag ghcr.io/antje12/ba/frontend .
+
+  build-and-deploy-user-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+
+      - name: Build and push user-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/user-database ./UserService/Database/
+
+      - name: Build and push user-service image to registry
+        run: docker buildx build --push --file UserService/Dockerfile --tag ghcr.io/antje12/ba/user-service .
+  
+  build-and-deploy-job-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+      
+      - name: Build and push job-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/job-database ./JobService/Database/
+
+      - name: Build and push job-service image to registry
+        run: docker buildx build --push --file JobService/Dockerfile --tag ghcr.io/antje12/ba/job-service .
+
+  build-and-deploy-offer-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+
+      - name: Build and push offer-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/offer-database ./OfferService/Database/
+
+      - name: Build and push offer-service image to registry
+        run: docker buildx build --push --file OfferService/Dockerfile --tag ghcr.io/antje12/ba/offer-service .
+
+  build-and-deploy-contract-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+      
+      - name: Build and push contract-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/contract-database ./ContractService/Database/
+
+      - name: Build and push contract-service image to registry
+        run: docker buildx build --push --file ContractService/Dockerfile --tag ghcr.io/antje12/ba/contract-service .
+
+  build-and-deploy-review-images:
+    runs-on: ubuntu-latest
+    needs: [integration-test-job]
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Login to container registry
+        run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
+      
+      - name: Build and push review-database image to registry
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/review-database ./ReviewService/Database/
+
+      - name: Build and push review-service image to registry
+        run: docker buildx build --push --file ReviewService/Dockerfile --tag ghcr.io/antje12/ba/review-service .
 
   google-cloud-deploy:
     runs-on: ubuntu-latest
-    #needs: [build-and-deploy-frontend-image,build-and-deploy-user-images,build-and-deploy-job-images,build-and-deploy-offer-images,build-and-deploy-contract-images,build-and-deploy-review-images]
+    needs: [build-and-deploy-frontend-image,build-and-deploy-user-images,build-and-deploy-job-images,build-and-deploy-offer-images,build-and-deploy-contract-images,build-and-deploy-review-images]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
