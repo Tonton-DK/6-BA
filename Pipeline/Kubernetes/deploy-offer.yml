@@ -18,7 +18,6 @@ kind: Deployment
 metadata:
   name: offer-service-deployment
 spec:
-  minReadySeconds: 5
   replicas: 1
   selector:
     matchLabels:

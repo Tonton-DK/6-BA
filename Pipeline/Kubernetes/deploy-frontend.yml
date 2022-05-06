@@ -19,7 +19,6 @@ kind: Deployment
 metadata:
   name: frontend-deployment
 spec:
-  minReadySeconds: 5
   replicas: 1
   selector:
     matchLabels:
