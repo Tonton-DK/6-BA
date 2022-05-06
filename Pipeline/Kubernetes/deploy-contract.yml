@@ -4,7 +4,8 @@ metadata:
   name: contract-service
 spec:
   ports:
-    - name: http
+    -
+      name: http
       port: 80
       protocol: TCP
       targetPort: 80
@@ -17,43 +18,46 @@ kind: Deployment
 metadata:
   name: contract-service-deployment
 spec:
-  replicas: 1
   minReadySeconds: 5
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+  replicas: 1
   selector:
     matchLabels:
       app: contract-service-pod
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
       labels:
         app: contract-service-pod
     spec:
       containers:
-        - name: contract-service
-          image: 'ghcr.io/antje12/ba/contract-service:latest'
+        -
+          image: "ghcr.io/antje12/ba/contract-service:latest"
           imagePullPolicy: Always
+          name: contract-service
           ports:
-            - containerPort: 80
+            -
+              containerPort: 80
           resources:
-            requests:
-              cpu: 100m
-              memory: 100Mi
             limits:
               cpu: 200m
               memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+      imagePullSecrets:
+        -
+          name: regcred
       readinessProbe:
         httpGet:
-          path: /Get
-          port: 80
           initialDelaySeconds: 5
+          path: /Get
           periodSeconds: 5
+          port: 80
           successThreshold: 1
-      imagePullSecrets:
-        - name: regcred
 ---
 apiVersion: v1
 kind: Service
@@ -61,7 +65,8 @@ metadata:
   name: contract-database
 spec:
   ports:
-    - port: 3306
+    -
+      port: 3306
       targetPort: 3306
   selector:
     app: contract-database-pod
@@ -71,51 +76,56 @@ kind: Deployment
 metadata:
   name: contract-database-deployment
 spec:
-  strategy:
-    type: Recreate
   replicas: 1
   selector:
     matchLabels:
       app: contract-database-pod
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         app: contract-database-pod
     spec:
       containers:
-        - name: mysql
-          image: 'ghcr.io/antje12/ba/contract-database:latest'
+        -
           args:
-            - '--default-authentication-plugin=mysql_native_password'
+            - "--default-authentication-plugin=mysql_native_password"
+          image: "ghcr.io/antje12/ba/contract-database:latest"
+          name: mysql
           ports:
-            - containerPort: 3306
+            -
+              containerPort: 3306
           resources:
-            requests:
-              cpu: 100m
-              memory: 400Mi
             limits:
               cpu: 200m
               memory: 600Mi
+            requests:
+              cpu: 100m
+              memory: 400Mi
           volumeMounts:
-            - name: contract-persistent-storage
+            -
               mountPath: /var/lib/mysql
+              name: contract-persistent-storage
+      imagePullSecrets:
+        -
+          name: regcred
       volumes:
-        - name: contract-persistent-storage
+        -
+          name: contract-persistent-storage
           persistentVolumeClaim:
             claimName: contract-pv-claim
-      imagePullSecrets:
-        - name: regcred
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: contract-pv-claim
   labels:
     app: contract-database-pod
+  name: contract-pv-claim
 spec:
   accessModes:
     - ReadWriteOnce
-  volumeMode: Filesystem
   resources:
     requests:
       storage: 1Gi
+  volumeMode: Filesystem
