@@ -48,16 +48,16 @@ spec:
             requests:
               cpu: 100m
               memory: 100Mi
+          readinessProbe:
+            httpGet:
+              initialDelaySeconds: 5
+              path: /Get
+              periodSeconds: 5
+              port: 80
+              successThreshold: 1
       imagePullSecrets:
         -
           name: regcred
-      readinessProbe:
-        httpGet:
-          initialDelaySeconds: 5
-          path: /Get
-          periodSeconds: 5
-          port: 80
-          successThreshold: 1
 ---
 apiVersion: v1
 kind: Service
