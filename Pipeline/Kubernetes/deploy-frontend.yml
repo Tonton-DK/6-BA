@@ -3,14 +3,15 @@ kind: Service
 metadata:
   name: frontend
 spec:
-  sessionAffinity: ClientIP
   ports:
-    - name: http
+    -
+      name: http
       port: 80
       protocol: TCP
       targetPort: 80
   selector:
     app: frontend-pod
+  sessionAffinity: ClientIP
   type: NodePort
 ---
 apiVersion: apps/v1
@@ -18,40 +19,43 @@ kind: Deployment
 metadata:
   name: frontend-deployment
 spec:
+  minReadySeconds: 5
   replicas: 1
-    minReadySeconds: 5
-    strategy:
-      type: RollingUpdate
-      rollingUpdate:
-        maxSurge: 1
-        maxUnavailable: 1
   selector:
     matchLabels:
       app: frontend-pod
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
       labels:
         app: frontend-pod
     spec:
       containers:
-        - name: frontend
-          image: 'ghcr.io/antje12/ba/frontend:latest'
+        -
+          image: "ghcr.io/antje12/ba/frontend:latest"
           imagePullPolicy: Always
+          name: frontend
           ports:
-            - containerPort: 80
+            -
+              containerPort: 80
           resources:
-            requests:
-              cpu: 100m
-              memory: 100Mi
             limits:
               cpu: 200m
               memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+      imagePullSecrets:
+        -
+          name: regcred
       readinessProbe:
         httpGet:
           path: /Get
           port: 80
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          successThreshold: 1
-      imagePullSecrets:
-        - name: regcred
+        initialDelaySeconds: 5
+        periodSeconds: 5
+        successThreshold: 1
