@@ -1,5 +1,4 @@
-﻿
-# cd /
+﻿# cd /
 # docker build -f Frontend/Dockerfile -t frontend .
 # docker run -p 8080:80 frontend
 

@@ -9,12 +9,12 @@ on:
       - main
 
 env:
-  DB_DATABASE: db
+  DB_DATABASE: db               # Throwaway integration test database
   DB_USER: root
   DB_PASSWORD: root
-  PROJECT_ID: ba-project-349314
-  GKE_CLUSTER: cluster-1    # Add your cluster name here.
-  GKE_ZONE: europe-north1-a   # Add your cluster zone here.
+  PROJECT_ID: ba-project-349314 # Cloud project
+  GKE_CLUSTER: cluster-1        # Cluster name
+  GKE_ZONE: europe-north1-a     # Cluster zone
   
 jobs:
   unit-test-job:
@@ -209,7 +209,7 @@ jobs:
             }'
       
       # Deploy the Docker image to the GKE cluster
-      - name: Deploy
+      - name: Deploy Kubernetes
         run: |
           kubectl apply \
             -f Pipeline/Kubernetes/deploy-frontend.yml \
@@ -219,3 +219,12 @@ jobs:
             -f Pipeline/Kubernetes/deploy-contract.yml \
             -f Pipeline/Kubernetes/deploy-review.yml \
             -f Pipeline/Kubernetes/deploy-metric-server.yaml \
+
+      - name: Configure Auto Scaling
+        run: |
+          kubectl autoscale deployment frontend-deployment --cpu-percent=80 --min=1 --max=10 \
+          kubectl autoscale deployment user-service-deployment --cpu-percent=80 --min=1 --max=10 \
+          kubectl autoscale deployment job-service-deployment --cpu-percent=80 --min=1 --max=10 \
+          kubectl autoscale deployment offer-service-deployment --cpu-percent=80 --min=1 --max=10 \
+          kubectl autoscale deployment contract-service-deployment --cpu-percent=80 --min=1 --max=10 \
+          kubectl autoscale deployment review-service-deployment --cpu-percent=80 --min=1 --max=10 \
