@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
         -
-          image: "ghcr.io/antje12/ba/offer-service:latest"
+          image: "ghcr.io/antje12/ba/offer-service:{IMG_TAG}"
           imagePullPolicy: Always
           name: offer-service
           ports:
@@ -83,7 +83,7 @@ spec:
         -
           args:
             - "--default-authentication-plugin=mysql_native_password"
-          image: "ghcr.io/antje12/ba/offer-database:latest"
+          image: "ghcr.io/antje12/ba/offer-database:{IMG_TAG}"
           name: mysql
           ports:
             -

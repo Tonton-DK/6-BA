@@ -84,7 +84,7 @@ jobs:
         run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
       
       - name: Build and push frontend image to registry
-        run: docker buildx build --push --file Frontend/Dockerfile --tag ghcr.io/antje12/ba/frontend .
+        run: docker buildx build --push --file Frontend/Dockerfile --tag ghcr.io/antje12/ba/frontend:GA-${{ github.sha }} .
 
   build-and-deploy-user-images:
     runs-on: ubuntu-latest
@@ -97,10 +97,10 @@ jobs:
         run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
 
       - name: Build and push user-database image to registry
-        run: docker buildx build --push --tag ghcr.io/antje12/ba/user-database ./UserService/Database/
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/user-database:GA-${{ github.sha }} ./UserService/Database/
 
       - name: Build and push user-service image to registry
-        run: docker buildx build --push --file UserService/Dockerfile --tag ghcr.io/antje12/ba/user-service .
+        run: docker buildx build --push --file UserService/Dockerfile --tag ghcr.io/antje12/ba/user-service:GA-${{ github.sha }} .
   
   build-and-deploy-job-images:
     runs-on: ubuntu-latest
@@ -113,10 +113,10 @@ jobs:
         run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
       
       - name: Build and push job-database image to registry
-        run: docker buildx build --push --tag ghcr.io/antje12/ba/job-database ./JobService/Database/
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/job-database:GA-${{ github.sha }} ./JobService/Database/
 
       - name: Build and push job-service image to registry
-        run: docker buildx build --push --file JobService/Dockerfile --tag ghcr.io/antje12/ba/job-service .
+        run: docker buildx build --push --file JobService/Dockerfile --tag ghcr.io/antje12/ba/job-service:GA-${{ github.sha }} .
 
   build-and-deploy-offer-images:
     runs-on: ubuntu-latest
@@ -129,10 +129,10 @@ jobs:
         run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
 
       - name: Build and push offer-database image to registry
-        run: docker buildx build --push --tag ghcr.io/antje12/ba/offer-database ./OfferService/Database/
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/offer-database:GA-${{ github.sha }} ./OfferService/Database/
 
       - name: Build and push offer-service image to registry
-        run: docker buildx build --push --file OfferService/Dockerfile --tag ghcr.io/antje12/ba/offer-service .
+        run: docker buildx build --push --file OfferService/Dockerfile --tag ghcr.io/antje12/ba/offer-service:GA-${{ github.sha }} .
 
   build-and-deploy-contract-images:
     runs-on: ubuntu-latest
@@ -145,10 +145,10 @@ jobs:
         run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
       
       - name: Build and push contract-database image to registry
-        run: docker buildx build --push --tag ghcr.io/antje12/ba/contract-database ./ContractService/Database/
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/contract-database:GA-${{ github.sha }} ./ContractService/Database/
 
       - name: Build and push contract-service image to registry
-        run: docker buildx build --push --file ContractService/Dockerfile --tag ghcr.io/antje12/ba/contract-service .
+        run: docker buildx build --push --file ContractService/Dockerfile --tag ghcr.io/antje12/ba/contract-service:GA-${{ github.sha }} .
 
   build-and-deploy-review-images:
     runs-on: ubuntu-latest
@@ -161,10 +161,10 @@ jobs:
         run: docker login https://ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_KEY }}
       
       - name: Build and push review-database image to registry
-        run: docker buildx build --push --tag ghcr.io/antje12/ba/review-database ./ReviewService/Database/
+        run: docker buildx build --push --tag ghcr.io/antje12/ba/review-database:GA-${{ github.sha }} ./ReviewService/Database/
 
       - name: Build and push review-service image to registry
-        run: docker buildx build --push --file ReviewService/Dockerfile --tag ghcr.io/antje12/ba/review-service .
+        run: docker buildx build --push --file ReviewService/Dockerfile --tag ghcr.io/antje12/ba/review-service:GA-${{ github.sha }} .
 
   google-cloud-deploy:
     runs-on: ubuntu-latest
@@ -207,6 +207,16 @@ jobs:
               "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
               "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/myserviceaccount%40ba-project-349314.iam.gserviceaccount.com"
             }'
+
+      # Use new tags
+      - name: Change deploy file tags
+        run: |
+          sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-frontend.yml \
+          sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-user.yml \
+          sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-job.yml \
+          sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-offer.yml \
+          sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-contract.yml \
+          sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-review.yml \
       
       # Deploy the Docker image to the GKE cluster
       - name: Deploy Kubernetes
