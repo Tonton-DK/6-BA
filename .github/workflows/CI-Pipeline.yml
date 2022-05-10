@@ -17,61 +17,61 @@ env:
   GKE_ZONE: europe-north1-a     # Cluster zone
   
 jobs:
-  unit-test-job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up MySQL
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
-
-      - name: Checkout code base
-        uses: actions/checkout@v2
-
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
-
-      - name: Install dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Test
-        run: dotnet test --nologo --no-restore --verbosity quiet
-  
-  integration-test-job:
-    runs-on: ubuntu-latest
-    needs: [unit-test-job]
-    steps:
-      - name: Checkout code base
-        uses: actions/checkout@v2
-      
-      - name: Build docker images
-        run: docker-compose build
-        
-      - name: Run docker containers
-        run: docker-compose up -d
-
-      - name: Sleep for 60 seconds
-        run: sleep 60s
-        shell: bash
-          
-      - name: Check running containers
-        run: docker ps -a
-
-      # smoke testing: https://github.com/peter-evans/smoke-testing
-      - name: Perform system healthcheck (smoke test)
-        run: bash ./Pipeline/Scripts/health-test.sh Services
-        
-      - name: Perform system healthcheck (integration test)
-        run: bash ./Pipeline/Scripts/health-test.sh ServiceFlow
-
-      - name: Stop docker containers
-        if: always()
-        run: docker-compose down
+#  unit-test-job:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Set up MySQL
+#        run: |
+#          sudo /etc/init.d/mysql start
+#          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+#
+#      - name: Checkout code base
+#        uses: actions/checkout@v2
+#
+#      - name: Setup .NET Core
+#        uses: actions/setup-dotnet@v1
+#        with:
+#          dotnet-version: '6.0.x'
+#
+#      - name: Install dependencies
+#        run: dotnet restore
+#
+#      - name: Build
+#        run: dotnet build --configuration Release --no-restore
+#
+#      - name: Test
+#        run: dotnet test --nologo --no-restore --verbosity quiet
+#  
+#  integration-test-job:
+#    runs-on: ubuntu-latest
+#    needs: [unit-test-job]
+#    steps:
+#      - name: Checkout code base
+#        uses: actions/checkout@v2
+#      
+#      - name: Build docker images
+#        run: docker-compose build
+#        
+#      - name: Run docker containers
+#        run: docker-compose up -d
+#
+#      - name: Sleep for 60 seconds
+#        run: sleep 60s
+#        shell: bash
+#          
+#      - name: Check running containers
+#        run: docker ps -a
+#
+#      # smoke testing: https://github.com/peter-evans/smoke-testing
+#      - name: Perform system healthcheck (smoke test)
+#        run: bash ./Pipeline/Scripts/health-test.sh Services
+#        
+#      - name: Perform system healthcheck (integration test)
+#        run: bash ./Pipeline/Scripts/health-test.sh ServiceFlow
+#
+#      - name: Stop docker containers
+#        if: always()
+#        run: docker-compose down
   
   build-and-deploy-frontend-image:
     runs-on: ubuntu-latest
@@ -210,13 +210,7 @@ jobs:
 
       # Use new tags
       - name: Change deploy file tags
-        run: |
-          sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-frontend.yml \
-          sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-user.yml \
-          sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-job.yml \
-          sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-offer.yml \
-          sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-contract.yml \
-          sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-review.yml \
+        run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-frontend.yml
       
       # Deploy the Docker image to the GKE cluster
       - name: Deploy Kubernetes
