@@ -176,18 +176,7 @@ jobs:
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@v0.2.0
         with:
-          service_account_key: '{
-              "type": "service_account",
-              "project_id": "ba-project-349314",
-              "private_key_id": "637fb8f06c613657eff6c709b35d30d033fed7a6",
-              "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDApoOXc8on/9+7\nE5piBILjmsioEYstnOi6Z/TQt3T1u0lAEYeV8IzKOsxZdknMEqGSjayiY/sZaZkX\nreg+Uff76IxywzRo/SouZEztXr0sfgKyxCPUocjp7M8+eXLbfIBQJJyxY6f4reCB\nk/boiLTZzj1ZPigHEwR+9WyoY7C7FJlPKbWizn08Gr5B2VKM5pdW241MKM/dP/ba\nDoAK3of9fQ5lqSI/0OxuVhj7xm3Jxx9Cs3caDiQKCBZ8gEiyHBNAUE7hccZK7+FZ\nw55Wgc/OPBFHmWCbozEpIC2GCN1trkNcQZoqtRWMrhRXTzzxWB+xdyF3l7+dVFbH\n/Sm7www1AgMBAAECggEABtrl+9Gm891q/KEp8Srv7WFomnJlXW4j6d4hG/wrMUNE\ny/7TsEYq/FczRkurPJO9JBXeerjMCo9zXyBVD0KjbFdOCBdiGgpIIfZ3tkqUuKyT\nNAE+tSY8m/ZNOY/gwmafujpTSQyewX6Oao31TzjuFoH8NNy9V+MZWdspzqQdecqm\nBJxNPVsWbunzmSRhm8kS87R50/ZM1I9LQAjTKiF1VosgJ5T4Q+a+Y349pHtKJ+od\nd11paR7uAXte4RG0InBSW4B5/JYUN7o1KlIu3DnlFv9bPfqAe2tD0CH3ZYUVPvsU\nS07GH+prLNEMwwiU5ZrUDJhT63ZJHgUaUNG8Jh/UUQKBgQDr1pGtXzwG2tmJQC0s\n18GZ/w43MsEEb/7KpJdzBNqjcbB54LIfhWJL1yTeoZ3JluD+xUt0pY6ldarvid/H\ntVagifCTaGqfUs8Pz7/OTpS/RENyhp0FBczKrYk8tkF8rFvm+hQUZln1OQIQQHeb\nQqe+lkm0skpnQknbtTcyhSa9xwKBgQDRHsLcnDxrnyBv8k5QuM1OfhE605K9gB9h\n2o+6lflpmHt88w69QOhyrYSIp1bltpoCd9IwSIzDeW1cCBRL1vU5NWd5DQAJyjHY\ngb5Nyl41w+JrO04zamTBcbvgnvw01lz6o7UMt4/rR1orKSMqca7hY5bBGj865t9p\nTEp4U5gWIwKBgQCVkQfkdwBfrI3HoJ7F0LNkkcAXO6XzxX9GTuoJtOtgOqrcMKdm\nnDYBuRkV5FNoVLqueLto59I2lxBoR/1W72dX+wNKyS7NijvtYCjZkzZ8srM/v6V3\nWP1PEI13pnKTuc+zBaiUY3Drt1LasbfpDHXLxg5KfcP4Bq9Gmn++F3nBYwKBgQCo\nk7KkIvJ2E4YTmHJXklI3B1ueX3Y4ezNRL96TnFi+LiTGOi3UlKGN6KEhhDyB26zV\ndoAjWijXX2iwOvcZmASBBLMQG1G/kpaSIS0nCo7dqrY4mUtWGVt1sdixn5hSg8fa\naOQHh2ZmVVOz3WqyyYgfu6eIrT7xnbHV8aFK1KCSnwKBgFN7hjng7GlaoQC3JaOS\nRtjyq9+zShmetSuIbeS/YwBElEsDweNywIaop784PbFSij3pW7sIkjjUyC83U0uT\nEdys1lnVjxQ9VMSIWfaGxOWMiKbgc8V0lCt1cS3wxG4cViy+q/GgCklAG4rvYGln\nzBcqxVwKImHHIh2ZUTlhPz5Q\n-----END PRIVATE KEY-----\n",
-              "client_email": "myserviceaccount@ba-project-349314.iam.gserviceaccount.com",
-              "client_id": "103023978877185413948",
-              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-              "token_uri": "https://oauth2.googleapis.com/token",
-              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/myserviceaccount%40ba-project-349314.iam.gserviceaccount.com"
-            }'
+          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
           project_id: ba-project-349314
       
       # Get the GKE credentials so we can deploy to the cluster
@@ -195,18 +184,7 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
-          credentials: '{
-              "type": "service_account",
-              "project_id": "ba-project-349314",
-              "private_key_id": "637fb8f06c613657eff6c709b35d30d033fed7a6",
-              "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDApoOXc8on/9+7\nE5piBILjmsioEYstnOi6Z/TQt3T1u0lAEYeV8IzKOsxZdknMEqGSjayiY/sZaZkX\nreg+Uff76IxywzRo/SouZEztXr0sfgKyxCPUocjp7M8+eXLbfIBQJJyxY6f4reCB\nk/boiLTZzj1ZPigHEwR+9WyoY7C7FJlPKbWizn08Gr5B2VKM5pdW241MKM/dP/ba\nDoAK3of9fQ5lqSI/0OxuVhj7xm3Jxx9Cs3caDiQKCBZ8gEiyHBNAUE7hccZK7+FZ\nw55Wgc/OPBFHmWCbozEpIC2GCN1trkNcQZoqtRWMrhRXTzzxWB+xdyF3l7+dVFbH\n/Sm7www1AgMBAAECggEABtrl+9Gm891q/KEp8Srv7WFomnJlXW4j6d4hG/wrMUNE\ny/7TsEYq/FczRkurPJO9JBXeerjMCo9zXyBVD0KjbFdOCBdiGgpIIfZ3tkqUuKyT\nNAE+tSY8m/ZNOY/gwmafujpTSQyewX6Oao31TzjuFoH8NNy9V+MZWdspzqQdecqm\nBJxNPVsWbunzmSRhm8kS87R50/ZM1I9LQAjTKiF1VosgJ5T4Q+a+Y349pHtKJ+od\nd11paR7uAXte4RG0InBSW4B5/JYUN7o1KlIu3DnlFv9bPfqAe2tD0CH3ZYUVPvsU\nS07GH+prLNEMwwiU5ZrUDJhT63ZJHgUaUNG8Jh/UUQKBgQDr1pGtXzwG2tmJQC0s\n18GZ/w43MsEEb/7KpJdzBNqjcbB54LIfhWJL1yTeoZ3JluD+xUt0pY6ldarvid/H\ntVagifCTaGqfUs8Pz7/OTpS/RENyhp0FBczKrYk8tkF8rFvm+hQUZln1OQIQQHeb\nQqe+lkm0skpnQknbtTcyhSa9xwKBgQDRHsLcnDxrnyBv8k5QuM1OfhE605K9gB9h\n2o+6lflpmHt88w69QOhyrYSIp1bltpoCd9IwSIzDeW1cCBRL1vU5NWd5DQAJyjHY\ngb5Nyl41w+JrO04zamTBcbvgnvw01lz6o7UMt4/rR1orKSMqca7hY5bBGj865t9p\nTEp4U5gWIwKBgQCVkQfkdwBfrI3HoJ7F0LNkkcAXO6XzxX9GTuoJtOtgOqrcMKdm\nnDYBuRkV5FNoVLqueLto59I2lxBoR/1W72dX+wNKyS7NijvtYCjZkzZ8srM/v6V3\nWP1PEI13pnKTuc+zBaiUY3Drt1LasbfpDHXLxg5KfcP4Bq9Gmn++F3nBYwKBgQCo\nk7KkIvJ2E4YTmHJXklI3B1ueX3Y4ezNRL96TnFi+LiTGOi3UlKGN6KEhhDyB26zV\ndoAjWijXX2iwOvcZmASBBLMQG1G/kpaSIS0nCo7dqrY4mUtWGVt1sdixn5hSg8fa\naOQHh2ZmVVOz3WqyyYgfu6eIrT7xnbHV8aFK1KCSnwKBgFN7hjng7GlaoQC3JaOS\nRtjyq9+zShmetSuIbeS/YwBElEsDweNywIaop784PbFSij3pW7sIkjjUyC83U0uT\nEdys1lnVjxQ9VMSIWfaGxOWMiKbgc8V0lCt1cS3wxG4cViy+q/GgCklAG4rvYGln\nzBcqxVwKImHHIh2ZUTlhPz5Q\n-----END PRIVATE KEY-----\n",
-              "client_email": "myserviceaccount@ba-project-349314.iam.gserviceaccount.com",
-              "client_id": "103023978877185413948",
-              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-              "token_uri": "https://oauth2.googleapis.com/token",
-              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/myserviceaccount%40ba-project-349314.iam.gserviceaccount.com"
-            }'
+          credentials: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
       # Use new tags
       - name: Change frontend deploy file tags
