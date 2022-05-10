@@ -75,7 +75,7 @@ jobs:
   
   build-and-deploy-frontend-image:
     runs-on: ubuntu-latest
-    needs: [integration-test-job]
+#    needs: [integration-test-job]
     steps:
       - name: Checkout code base
         uses: actions/checkout@v2
