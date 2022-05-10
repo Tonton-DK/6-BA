@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages;
 
+[IgnoreAntiforgeryToken]
 public class CreateUserModel : LayoutModel
 {
     private readonly ILogger<CreateUserModel> _logger;

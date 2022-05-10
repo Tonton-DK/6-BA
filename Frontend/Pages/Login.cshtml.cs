@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages;
 
+[IgnoreAntiforgeryToken]
 public class LoginModel : LayoutModel
 {
     private readonly ILogger<LoginModel> _logger;
