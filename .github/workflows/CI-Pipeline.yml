@@ -209,8 +209,18 @@ jobs:
             }'
 
       # Use new tags
-      - name: Change deploy file tags
+      - name: Change frontend deploy file tags
         run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-frontend.yml
+      - name: Change user deploy file tags
+        run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-user.yml
+      - name: Change job deploy file tags
+        run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-job.yml
+      - name: Change offer deploy file tags
+        run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-offer.yml
+      - name: Change contract deploy file tags
+        run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-contract.yml
+      - name: Change review deploy file tags
+        run: sed -i "s+{IMG_TAG}+GA-${{ github.sha }}+g" Pipeline/Kubernetes/deploy-review.yml
       
       # Deploy the Docker image to the GKE cluster
       - name: Deploy Kubernetes
