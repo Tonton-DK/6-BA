@@ -73,10 +73,7 @@ spec:
     matchLabels:
       app: review-database-pod
   strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-    type: RollingUpdate
+    type: Recreate
   template:
     metadata:
       labels:
@@ -119,7 +116,7 @@ metadata:
   name: review-pv-claim
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
