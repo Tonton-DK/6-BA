@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Frontend.Pages;
 
+[IgnoreAntiforgeryToken]
 public class CreateJobModel : LayoutModel
 {
     private readonly ILogger<CreateJobModel> _logger;

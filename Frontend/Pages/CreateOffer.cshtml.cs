@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages;
 
+[IgnoreAntiforgeryToken]
 public class CreateOfferModel : LayoutModel
 {
     private readonly ILogger<CreateOfferModel> _logger;
