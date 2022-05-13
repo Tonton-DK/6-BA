@@ -46,7 +46,7 @@ spec:
               memory: 100Mi
           readinessProbe:
             httpGet:
-              path: /Get
+              path: /UserService/Get
               port: 80
             initialDelaySeconds: 10
             periodSeconds: 3
