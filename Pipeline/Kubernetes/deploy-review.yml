@@ -47,6 +47,12 @@ spec:
             requests:
               cpu: 100m
               memory: 100Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 3
       imagePullSecrets:
         -
           name: regcred
