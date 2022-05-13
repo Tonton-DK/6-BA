@@ -9,11 +9,32 @@ public class MySQLDataProvider : IDataProvider
 {
     private string cs = @"server=user-database;userid=root;password=;database=db";
     public void setConnectionString(string connectionString) => cs = connectionString;
+    private readonly ILogger<MySQLDataProvider>? _logger;
+
+    public MySQLDataProvider(ILogger<MySQLDataProvider>? logger = null)
+    {
+        _logger = logger;
+    }
+
+    private bool Open(MySqlConnection con)
+    {
+        try
+        {
+            con.Open();
+            return true;
+        }
+        catch (Exception err)
+        {
+            _logger?.LogError(err, "Failed to connect to DB");
+            return false;
+        }
+    }
 
     public User? CreateUser(User user, string salt, string hash)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
 
         var sql =
             @"INSERT INTO User(ID, Email, PasswordSalt, PasswordHash, Firstname, Lastname, PhoneNumber, ProfilePicture, IsServiceProvider) 
@@ -39,7 +60,8 @@ public class MySQLDataProvider : IDataProvider
     public User? GetUserById(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
 
         var stm = @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.ProfilePicture, User.IsServiceProvider
                     FROM User
@@ -70,7 +92,8 @@ public class MySQLDataProvider : IDataProvider
     public IEnumerable<User> ListUsersByIDs(IEnumerable<Guid> userIds)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return new List<User>();
 
         var stm = @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.ProfilePicture, User.IsServiceProvider
                          FROM User
@@ -101,7 +124,8 @@ public class MySQLDataProvider : IDataProvider
     public UserValidator? GetUserValidator(string email)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
 
         var stm =
             @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.ProfilePicture, User.IsServiceProvider, User.PasswordSalt, User.PasswordHash
@@ -136,7 +160,8 @@ public class MySQLDataProvider : IDataProvider
     public UserValidator? GetUserValidator(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
 
         var stm =
             @"SELECT User.ID, User.Email, User.Firstname, User.Lastname, User.PhoneNumber, User.ProfilePicture, User.IsServiceProvider, User.PasswordSalt, User.PasswordHash
@@ -171,7 +196,8 @@ public class MySQLDataProvider : IDataProvider
     public User? UpdateUser(User user)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
 
         var sql = @"UPDATE User 
                     SET Email = @email, Firstname = @firstName, Lastname = @lastName, PhoneNumber = @phoneNumber, ProfilePicture = @profilePicture, IsServiceProvider = @isServiceProvider
@@ -194,7 +220,8 @@ public class MySQLDataProvider : IDataProvider
     public bool DeleteUserById(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return false;
 
         var sql = @"DELETE FROM User WHERE User.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
@@ -209,7 +236,8 @@ public class MySQLDataProvider : IDataProvider
     public bool ChangePassword(Guid userId, string newPasswordSalt, string newPasswordHash)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return false;
 
         var sql = @"UPDATE User 
                     SET PasswordSalt = @newPasswordSalt, PasswordHash = @newPasswordHash

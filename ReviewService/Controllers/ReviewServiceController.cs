@@ -58,7 +58,7 @@ public class ReviewServiceController : ControllerBase, IReviewService
     [HttpPost("GetRating/{userId}")]
     public decimal GetRating(Guid userId, [FromBody]ReviewType type)
     {
-        var reviews = _dataProvider.List(userId);
+        var reviews = _dataProvider.List(userId).ToList();
         switch (type)
         {
             case ReviewType.All:

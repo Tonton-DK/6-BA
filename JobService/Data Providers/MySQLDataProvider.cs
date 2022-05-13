@@ -9,19 +9,33 @@ public class MySQLDataProvider : IDataProvider
 {
     private string cs = @"server=job-database;userid=root;password=;database=db";
     public void setConnectionString(string connectionString) => cs = connectionString;
-    
     private readonly ILogger<MySQLDataProvider>? _logger;
 
     public MySQLDataProvider(ILogger<MySQLDataProvider>? logger = null)
     {
         _logger = logger;
     }
+
+    private bool Open(MySqlConnection con)
+    {
+        try
+        {
+            con.Open();
+            return true;
+        }
+        catch (Exception err)
+        {
+            _logger?.LogError(err, "Failed to connect to DB");
+            return false;
+        }
+    }
     
     # region Job
     public Job? CreateJob(Job job)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
 
         var sql = @"INSERT INTO Job(ID, Title, Description, Deadline, ClientID, CategoryID, Road, Number, Zip, State) 
                     VALUES(@id, @title, @description, @deadline, @client, @category, @road, @number, @zip, @state)";
@@ -48,7 +62,8 @@ public class MySQLDataProvider : IDataProvider
     public Job? GetJob(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
         
         var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
                         Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription, Job.State
@@ -78,10 +93,11 @@ public class MySQLDataProvider : IDataProvider
         return null;
     }
     
-    public List<Job> ListJobs(Filter filter)
+    public IEnumerable<Job> ListJobs(Filter filter)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return new List<Job>();
         
         var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
                         Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription, Job.State
@@ -151,7 +167,8 @@ public class MySQLDataProvider : IDataProvider
     public IEnumerable<Job> ListJobsByUser(Guid userId)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return new List<Job>();
         
         var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
                         Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription, Job.State
@@ -187,7 +204,8 @@ public class MySQLDataProvider : IDataProvider
     public IEnumerable<Job> ListJobsByIDs(IEnumerable<Guid> jobIds)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return new List<Job>();
         
         var stm = @"SELECT Job.ID, Job.Title, Job.Description, Job.Deadline, Job.Road, Job.Number, Job.Zip, Job.ClientID, 
                         Job.CategoryID, Category.Name AS CategoryName, Category.Description AS CategoryDescription, Job.State
@@ -220,7 +238,8 @@ public class MySQLDataProvider : IDataProvider
     public Job? UpdateJob(Job job)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
 
         var sql = @"UPDATE Job 
                     SET Title = @title, Description = @description, Deadline = @deadline, Road = @road, Number = @number, Zip = @zip, State = @state
@@ -244,7 +263,8 @@ public class MySQLDataProvider : IDataProvider
     public bool DeleteJob(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return false;
 
         var sql = @"DELETE FROM Job WHERE Job.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
@@ -259,7 +279,8 @@ public class MySQLDataProvider : IDataProvider
     public Job? CloseJobById(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
         
         var sql = "UPDATE Job SET Job.State = @state WHERE Job.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
@@ -277,7 +298,8 @@ public class MySQLDataProvider : IDataProvider
     public Category? CreateCategory(Category category)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
 
         var sql = @"INSERT INTO Category(ID, Name, Description) 
                     VALUES(@id, @name, @description)";
@@ -294,10 +316,11 @@ public class MySQLDataProvider : IDataProvider
         return result > 0 ? category : null;
     }
     
-    public Category GetCategory(Guid id)
+    public Category? GetCategory(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
         
         var stm = @"SELECT Category.ID, Category.Name, Category.Description 
                     FROM Category WHERE Category.ID = @id";
@@ -321,10 +344,11 @@ public class MySQLDataProvider : IDataProvider
         return null;
     }
     
-    public List<Category> ListCategories()
+    public IEnumerable<Category> ListCategories()
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return new List<Category>();
         
         var stm = @"SELECT Category.ID, Category.Name, Category.Description 
                     FROM Category";
@@ -347,10 +371,11 @@ public class MySQLDataProvider : IDataProvider
         return categories;
     }
     
-    public Category UpdateCategory(Category category)
+    public Category? UpdateCategory(Category category)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
 
         var sql = @"UPDATE Category 
                     SET Name = @name, Description = @description
@@ -371,7 +396,8 @@ public class MySQLDataProvider : IDataProvider
     public bool DeleteCategory(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return false;
 
         var sql = @"DELETE FROM Category WHERE Category.ID = @id";
         using var cmd = new MySqlCommand(sql, con);

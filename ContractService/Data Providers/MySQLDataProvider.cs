@@ -9,11 +9,32 @@ public class MySQLDataProvider : IDataProvider
 {
     private string cs = @"server=contract-database;userid=root;password=;database=db";
     public void setConnectionString(string connectionString) => cs = connectionString;
+    private readonly ILogger<MySQLDataProvider>? _logger;
 
+    public MySQLDataProvider(ILogger<MySQLDataProvider>? logger = null)
+    {
+        _logger = logger;
+    }
+
+    private bool Open(MySqlConnection con)
+    {
+        try
+        {
+            con.Open();
+            return true;
+        }
+        catch (Exception err)
+        {
+            _logger?.LogError(err, "Failed to connect to DB");
+            return false;
+        }
+    }
+    
     public Contract? Create(Contract contract)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
 
         var sql = "INSERT INTO Contract(ID, JobId, OfferId, ClientId, ProviderId, CreationDate, ClosedDate, State) VALUES(@id, @jobId, @offerId, @clientId, @providerId, @creationDate, @closedDate, @state)";
         using var cmd = new MySqlCommand(sql, con);
@@ -37,7 +58,8 @@ public class MySQLDataProvider : IDataProvider
     public Contract? Get(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
 
         var sql = "SELECT * FROM Contract WHERE Contract.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
@@ -70,10 +92,11 @@ public class MySQLDataProvider : IDataProvider
         return null;
     }
 
-    public List<Contract> List(Guid userId)
+    public IEnumerable<Contract> List(Guid userId)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return new List<Contract>();
 
         var sql = "SELECT * FROM Contract WHERE Contract.ClientId = @userId OR Contract.ProviderId = @userId";
         using var cmd = new MySqlCommand(sql, con);
@@ -111,7 +134,8 @@ public class MySQLDataProvider : IDataProvider
     public Contract? Update(Contract contract)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
 
         var sql =
             "UPDATE Contract SET Contract.JobId = @jobId, Contract.OfferId = @offerId, Contract.ClientId = @clientId, Contract.ProviderId = @providerId, Contract.CreationDate = @creationDate, Contract.ClosedDate = @closedDate, Contract.State = @state WHERE Contract.ID = @id";
@@ -134,7 +158,8 @@ public class MySQLDataProvider : IDataProvider
     public bool Delete(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return false;
 
         var sql = "DELETE FROM Contract WHERE Contract.ID = @id";
         using var cmd = new MySqlCommand(sql, con);

@@ -9,11 +9,32 @@ public class MySQLDataProvider : IDataProvider
 {
     private string cs = @"server=review-database;userid=root;password=;database=db";
     public void setConnectionString(string connectionString) => cs = connectionString;
+    private readonly ILogger<MySQLDataProvider>? _logger;
+
+    public MySQLDataProvider(ILogger<MySQLDataProvider>? logger = null)
+    {
+        _logger = logger;
+    }
+
+    private bool Open(MySqlConnection con)
+    {
+        try
+        {
+            con.Open();
+            return true;
+        }
+        catch (Exception err)
+        {
+            _logger?.LogError(err, "Failed to connect to DB");
+            return false;
+        }
+    }
 
     public Review? Create(Review review)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
         
         var sql = "INSERT INTO Review(ID, ContractId, CreatorId, TargetId, Comment, Rating, Type) VALUES(@id, @contractId, @creatorId, @targetId, @comment, @rating, @type)";
         using var cmd = new MySqlCommand(sql, con);
@@ -36,7 +57,8 @@ public class MySQLDataProvider : IDataProvider
     public Review? Get(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
         
         var sql = "SELECT * FROM Review WHERE Review.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
@@ -67,7 +89,8 @@ public class MySQLDataProvider : IDataProvider
     public Review? Get(Guid contractId, Guid creatorId)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
         
         var sql = "SELECT * FROM Review WHERE Review.ContractId = @contractId AND Review.CreatorId = @creatorId";
         using var cmd = new MySqlCommand(sql, con);
@@ -96,10 +119,11 @@ public class MySQLDataProvider : IDataProvider
         return null;
     }
 
-    public List<Review> List(Guid userId)
+    public IEnumerable<Review> List(Guid userId)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return new List<Review>();
         
         var sql = "SELECT * FROM Review WHERE Review.TargetId = @userId";
         using var cmd = new MySqlCommand(sql, con);
@@ -132,7 +156,8 @@ public class MySQLDataProvider : IDataProvider
     public Review? Update(Review review)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
         
         var sql = "UPDATE Review SET Review.Comment = @comment, Review.Rating = @rating WHERE Review.ID = @id";
 
@@ -150,7 +175,8 @@ public class MySQLDataProvider : IDataProvider
     public bool Delete(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return false;
         
         var sql = "DELETE FROM Review WHERE Review.ID = @id";
         using var cmd = new MySqlCommand(sql, con);

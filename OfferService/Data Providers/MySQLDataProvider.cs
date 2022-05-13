@@ -9,11 +9,32 @@ public class MySQLDataProvider : IDataProvider
 {
     private string cs = @"server=offer-database;userid=root;password=;database=db";
     public void setConnectionString(string connectionString) => cs = connectionString;
+    private readonly ILogger<MySQLDataProvider>? _logger;
+
+    public MySQLDataProvider(ILogger<MySQLDataProvider>? logger = null)
+    {
+        _logger = logger;
+    }
+
+    private bool Open(MySqlConnection con)
+    {
+        try
+        {
+            con.Open();
+            return true;
+        }
+        catch (Exception err)
+        {
+            _logger?.LogError(err, "Failed to connect to DB");
+            return false;
+        }
+    }
 
     public Offer? Create(Offer offer)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
         
         var sql = "INSERT INTO Offer(ID, JobId, ProviderId, PreviousOfferId, Price, Duration, Date, State, Comment) VALUES(@id, @jobId, @providerId, @previousOfferId, @price, @duration, @date, @state, @comment)";
         using var cmd = new MySqlCommand(sql, con);
@@ -38,7 +59,8 @@ public class MySQLDataProvider : IDataProvider
     public Offer? Get(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
         
         var sql = "SELECT * FROM Offer WHERE Offer.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
@@ -72,10 +94,11 @@ public class MySQLDataProvider : IDataProvider
         return null;
     }
 
-    public List<Offer> ListForJob(Guid jobId)
+    public IEnumerable<Offer> ListForJob(Guid jobId)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return new List<Offer>();
         
         var sql = "SELECT * FROM Offer WHERE Offer.JobId = @jobId";
         using var cmd = new MySqlCommand(sql, con);
@@ -111,10 +134,11 @@ public class MySQLDataProvider : IDataProvider
         return offers;
     }
 
-    public List<Offer> ListForUser(Guid userId)
+    public IEnumerable<Offer> ListForUser(Guid userId)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return new List<Offer>();
         
         var sql = "SELECT * FROM Offer WHERE Offer.ProviderId = @userId";
         using var cmd = new MySqlCommand(sql, con);
@@ -150,10 +174,11 @@ public class MySQLDataProvider : IDataProvider
         return offers;
     }
 
-    public List<Offer> ListForIDs(IEnumerable<Guid> offerIds)
+    public IEnumerable<Offer> ListForIDs(IEnumerable<Guid> offerIds)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return new List<Offer>();
 
         var stm = @"SELECT * FROM Offer WHERE Offer.ID in ('" + string.Join("','", offerIds) + "')";
 
@@ -190,7 +215,8 @@ public class MySQLDataProvider : IDataProvider
     public Offer? Update(Offer offer)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
         
         var sql = "UPDATE Offer SET Offer.Price = @price, Offer.Duration = @duration, Offer.Date = @date, Offer.State = @state, Offer.Comment = @comment WHERE Offer.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
@@ -210,7 +236,8 @@ public class MySQLDataProvider : IDataProvider
     public bool Delete(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return false;
         
         var sql = "DELETE FROM Offer WHERE Offer.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
@@ -225,7 +252,8 @@ public class MySQLDataProvider : IDataProvider
     public Offer? AcceptOffer(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return null;
         
         var sql = "UPDATE Offer SET Offer.State = @state WHERE Offer.ID = @id";
         using var cmd = new MySqlCommand(sql, con);
@@ -241,7 +269,8 @@ public class MySQLDataProvider : IDataProvider
     public bool DeclineOffer(Guid id)
     {
         using var con = new MySqlConnection(cs);
-        con.Open();
+        if (!Open(con))
+            return false;
         
         var sql = "UPDATE Offer SET Offer.State = @state WHERE Offer.ID = @id";
         using var cmd = new MySqlCommand(sql, con);

@@ -6,7 +6,7 @@ public interface IDataProvider
 {
     public User? CreateUser(User user, string salt, string hash);
     public User? GetUserById(Guid id);
-    IEnumerable<User> ListUsersByIDs(IEnumerable<Guid> userIds);
+    public IEnumerable<User> ListUsersByIDs(IEnumerable<Guid> userIds);
     public UserValidator? GetUserValidator(string email);
     public UserValidator? GetUserValidator(Guid id);
     public User? UpdateUser(User user);

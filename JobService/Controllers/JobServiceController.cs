@@ -73,7 +73,6 @@ public class JobServiceController : ControllerBase, IJobService
         return _dataProvider.DeleteJob(id);
     }
 
-
     [HttpPut("CloseJobById/{id}")]
     public Job? CloseJobById(Guid id)
     {
