@@ -62,10 +62,16 @@ spec:
             requests:
               cpu: 100m
               memory: 100Mi
-          lifecycle:
-            preStop:
-              exec:
-                command: [ "/bin/bash", "-c", "sleep 20" ]
+          #lifecycle:
+          #  preStop:
+          #    exec:
+          #      command: [ "/bin/bash", "-c", "sleep 20" ]
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 3
       imagePullSecrets:
         -
           name: regcred
