@@ -15,7 +15,7 @@ metadata:
   name: ingress-config
 spec:
   sessionAffinity:
-    affinityType: "CLIENT_IP"
+    affinityType: "GENERATED_COOKIE"
 ---
 apiVersion: v1
 kind: Service
