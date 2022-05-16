@@ -22,7 +22,6 @@ kind: Service
 metadata:
   name: frontend
   annotations:
-    ingress.kubernetes.io/affinity: "cookie"
     cloud.google.com/backend-config: '{"default": "ingress-config"}'
 spec:
   ports:
