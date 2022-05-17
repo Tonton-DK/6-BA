@@ -18,7 +18,7 @@ kind: Deployment
 metadata:
   name: job-service-deployment
 spec:
-  replicas: 5
+  replicas: 3
   selector:
     matchLabels:
       app: job-service-pod
