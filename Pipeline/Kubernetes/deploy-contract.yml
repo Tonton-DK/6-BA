@@ -18,7 +18,7 @@ kind: Deployment
 metadata:
   name: contract-service-deployment
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: contract-service-pod
