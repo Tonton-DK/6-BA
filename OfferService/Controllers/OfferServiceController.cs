@@ -51,15 +51,6 @@ public class OfferServiceController : ControllerBase, IOfferService
     [HttpGet("ListOffersForUser/{userId}")]
     public IEnumerable<Offer> ListOffersForUser(Guid userId)
     {
-        // TODO: Add to IDataProvider as well?
-        // We need to rethink this one. If i make an offer on your job, and then you make a counteroffer, i still need to get that counter offer.
-        // Currently we can only collect offers for my job or offers i made.
-        // We can't get counter offers to offers i made
-        
-        // New Strategy: Always save Provider as ProviderId on an offer
-        // The Client ID is found via the Job itself
-        // The first offer in a chain = providers offer
-        // Every second offer in the chain = client offer
         var offers = _dataProvider.ListForUser(userId);
         return offers.ToArray();
     }
@@ -85,10 +76,8 @@ public class OfferServiceController : ControllerBase, IOfferService
     [HttpPut("AcceptOffer/{id}")]
     public Contract? AcceptOffer(Guid id)
     {
-        // TODO
         // Accept offer
         var offer = _dataProvider.AcceptOffer(id);
-        //var job = _jobService.GetJobById(offer.JobId);
         var job = _jobService.CloseJobById(offer.JobId);
         
         // Create contract
@@ -107,8 +96,6 @@ public class OfferServiceController : ControllerBase, IOfferService
     [HttpPut("CreateCounterOffer/{id}")]
     public Offer? CreateCounterOffer(Guid id, [FromBody]Offer counterOffer)
     {
-        // TODO: Is this needed? We could simply use CreateOffer and simply add "PreviousOfferId" before making the API call.
-        // Good point
         counterOffer.PreviousOfferId = id;
         return _dataProvider.Create(counterOffer);
     }
@@ -116,8 +103,6 @@ public class OfferServiceController : ControllerBase, IOfferService
     [HttpPut("DeclineOffer/{id}")]
     public bool DeclineOffer(Guid id)
     {
-        // TODO: Should we just delete declined offers?
-        // We need to decline it, to show the offer maker that he was rejected
         return _dataProvider.DeclineOffer(id);
     }
 }

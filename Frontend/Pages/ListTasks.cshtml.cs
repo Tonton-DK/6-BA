@@ -51,7 +51,6 @@ public class ListJobsModel : LayoutModel
         Categories = new SelectList(_jobService.ListCategories(), nameof(Category.Id), nameof(Category.Name));
         if (categoryId != null)
         {
-            //TODO: Should be done before listing jobs, but nvm, we dont use this
             CustomFilter.CategoryId = categoryId;
         }
         
